@@ -5,7 +5,7 @@ import logo from "../assets/logo.png";
 
 function NavComponent() {
   const [isOpen, setIsOpen] = useState(false);
-  const primaryColor = "#284ea1";
+  //const primaryColor = "#284ea1";
 
   return (
     <nav className="bg-white shadow-md">
