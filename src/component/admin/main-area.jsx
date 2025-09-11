@@ -37,7 +37,7 @@ function MainArea() {
     {
       label: "Manage Students",
       icon: <FaUsers className="w-8 h-8 text-yellow-500" />,
-      link: "/students",
+      link: "/manage-students",
       description:
         "Add, edit, or view student profiles. Track their enrollment status, performance, and attendance records.",
     },

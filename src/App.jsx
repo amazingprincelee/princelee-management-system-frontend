@@ -9,6 +9,11 @@ import NavComponent from './component/Nav';
 import Features from './page/Features';
 import Dashboard from './page/admin/Dashboard';
 import AddTeacher from './page/admin/add-teacher';
+import ManageStudents from './page/admin/manage-students';
+import ManageTeachers from './page/admin/manage-teachers';
+import Reports from './page/admin/reports';
+import ApprovePayment from './page/admin/approve-payment';
+
 import './App.css';
 
 function App() {
@@ -26,6 +31,10 @@ function App() {
        <Route path='/features' element={<Features />} />
        <Route path='/dashboard' element={<Dashboard />} />
        <Route path='/add-teachers' element={<AddTeacher />} />
+       <Route path='/manage-teachers' element={<ManageStudents />} />
+       <Route path='/manage-students' element={<ManageTeachers />} />
+       <Route path='/reports' element={<Reports />} />
+       <Route path='/approve-payment' element={<ApprovePayment />} />
 
     </Routes>
     </Provider>
