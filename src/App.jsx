@@ -7,6 +7,7 @@ import Register from './page/Register';
 import Contact from './page/Contact';
 import NavComponent from './component/Nav';
 import Features from './page/Features';
+import Dashboard from './page/admin/Dashboard';
 import './App.css';
 
 function App() {
@@ -22,6 +23,8 @@ function App() {
        <Route path='/register' element={<Register />} />
        <Route path='/contact' element={<Contact />} />
        <Route path='/features' element={<Features />} />
+       <Route path='/dashboard' element={<Dashboard />} />
+
     </Routes>
     </Provider>
       

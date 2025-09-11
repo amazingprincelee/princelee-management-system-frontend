@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { useSelector, useDispatch} from "react-redux";
 import { loginUser } from '../redux/features/authSlice'
@@ -10,35 +10,48 @@ function Login() {
 
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
-    const dispatch = useDispatch()
-    const { loading} = useSelector((state)=> state.auth);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { loading, token, user} = useSelector((state)=> state.auth);
+
+    
+    
 
 
     const handleSubmit = (e) => {
          e.preventDefault(); 
          console.log({username, password});
-         
-        dispatch(loginUser({username, password}))
+        dispatch(loginUser({username, password}));
+
+        
     }
+
+    useEffect(()=>{ 
+      if(user || token){
+        navigate("/dashboard")
+      } 
+    }, [user, token, navigate])
+
+    
 
 
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
+    <div className="flex flex-col items-center justify-center min-h-screen px-4 bg-gray-50">
       {/* Logo */}
       <img
         src={logo}
         alt="School Logo"
-        className="w-32 h-auto md:w-40 lg:w-48 mb-6"
+        className="w-32 h-auto mb-6 md:w-40 lg:w-48"
       />
 
       {/* Heading */}
-      <h1 className="text-2xl md:text-3xl font-bold text-gray-500 mb-6">
+      <h1 className="mb-6 text-2xl font-bold text-gray-500 md:text-3xl">
         Login
       </h1>
 
       
-      <form onSubmit={handleSubmit} className="w-full max-w-sm bg-white p-6 rounded-2xl shadow-md space-y-4">
+      <form onSubmit={handleSubmit} className="w-full max-w-sm p-6 space-y-4 bg-white shadow-md rounded-2xl">
         
         <input
           type="text"
@@ -64,7 +77,7 @@ function Login() {
         </button>
 
         
-        <p className="text-center text-sm text-gray-600">
+        <p className="text-sm text-center text-gray-600">
           Go back to{" "}
           <Link to="/" className="text-blue-600 hover:underline">
             Home
