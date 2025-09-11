@@ -8,6 +8,7 @@ import Contact from './page/Contact';
 import NavComponent from './component/Nav';
 import Features from './page/Features';
 import Dashboard from './page/admin/Dashboard';
+import AddTeacher from './page/admin/add-teacher';
 import './App.css';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
        <Route path='/contact' element={<Contact />} />
        <Route path='/features' element={<Features />} />
        <Route path='/dashboard' element={<Dashboard />} />
+       <Route path='/add-teachers' element={<AddTeacher />} />
 
     </Routes>
     </Provider>
