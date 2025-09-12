@@ -51,7 +51,7 @@ function AddTeacherComponent() {
   };
 
   return (
-    <div className="max-w-md p-5 mx-auto mt-5 bg-white rounded-lg shadow-lg">
+    <div className="max-w-3xl p-5 mx-auto mt-5 bg-white rounded-lg shadow-lg">
       <h2 className="mb-4 text-xl font-bold text-center">Add New Teacher</h2>
 
       {message && (
@@ -163,7 +163,7 @@ function AddTeacherComponent() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full p-2 text-white transition bg-blue-500 rounded hover:bg-blue-600"
+          className="w-full p-2 text-white transition bg-[#284ea1] rounded hover:bg-primary-light"
         >
           {loading ? "Adding Teacher..." : "Add Teacher"}
         </button>

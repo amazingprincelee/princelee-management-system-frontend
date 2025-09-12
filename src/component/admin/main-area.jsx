@@ -16,7 +16,7 @@ function MainArea() {
     {
       label: "Approve Payment",
       icon: <FaMoneyCheckAlt className="w-8 h-8 text-blue-500" />,
-      link: "/approve-payment",
+      link: "/dashboard/approve-payment",
       description:
         "Approve student payments quickly and efficiently. Review pending transactions and ensure all fees are settled.",
     },
@@ -30,21 +30,21 @@ function MainArea() {
     {
       label: "Add Teachers",
       icon: <FaUserGraduate className="w-8 h-8 text-purple-500" />,
-      link: "/add-teachers",
+      link: "/dashboard/add-teachers",
       description:
         "Register new teachers and assign them to classes. Keep track of all staff members and their responsibilities.",
     },
     {
       label: "Manage Students",
       icon: <FaUsers className="w-8 h-8 text-yellow-500" />,
-      link: "/manage-students",
+      link: "/dashboard/students",
       description:
         "Add, edit, or view student profiles. Track their enrollment status, performance, and attendance records.",
     },
     {
       label: "View Reports & Analytics",
       icon: <FaChartBar className="w-8 h-8 text-red-500" />,
-      link: "/reports",
+      link: "/dashboard/reports",
       description:
         "Access key performance indicators, financial summaries, and academic reports for informed decision-making.",
     },

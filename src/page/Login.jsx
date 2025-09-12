@@ -15,15 +15,9 @@ function Login() {
     const { loading, token, user} = useSelector((state)=> state.auth);
 
     
-    
-
-
     const handleSubmit = (e) => {
          e.preventDefault(); 
-         console.log({username, password});
-        dispatch(loginUser({username, password}));
-
-        
+        dispatch(loginUser({username, password})); 
     }
 
     useEffect(()=>{ 

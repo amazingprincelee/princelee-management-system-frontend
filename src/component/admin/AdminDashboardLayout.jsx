@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import {
   FaSchool,
   FaTachometerAlt,
@@ -12,7 +12,7 @@ import {
   FaChevronLeft,
 } from "react-icons/fa";
 
-function DashboardLayout({ children }) {
+function AdminDashboardLayout() {
   const [schoolName] = useState("Bedetels In'l Academy");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -52,7 +52,7 @@ function DashboardLayout({ children }) {
           </Link>
 
           <Link
-            to="/teachers"
+            to="/dashboard/teachers"
             className="flex items-center px-3 py-2 space-x-3 text-gray-700 transition rounded-lg hover:bg-blue-100 hover:text-blue-600"
           >
             <FaChalkboardTeacher />
@@ -60,7 +60,7 @@ function DashboardLayout({ children }) {
           </Link>
 
           <Link
-            to="/students"
+            to="/dashboard/students"
             className="flex items-center px-3 py-2 space-x-3 text-gray-700 transition rounded-lg hover:bg-blue-100 hover:text-blue-600"
           >
             <FaUsers />
@@ -68,7 +68,7 @@ function DashboardLayout({ children }) {
           </Link>
 
           <Link
-            to="/billing"
+            to="/dashboard/billing"
             className="flex items-center px-3 py-2 space-x-3 text-gray-700 transition rounded-lg hover:bg-blue-100 hover:text-blue-600"
           >
             <FaMoneyBill />
@@ -76,7 +76,7 @@ function DashboardLayout({ children }) {
           </Link>
 
           <Link
-            to="/settings"
+            to="/dashboard/settings"
             className="flex items-center px-3 py-2 space-x-3 text-gray-700 transition rounded-lg hover:bg-blue-100 hover:text-blue-600"
           >
             <FaCog />
@@ -84,7 +84,7 @@ function DashboardLayout({ children }) {
           </Link>
 
           <Link
-            to="/exams"
+            to="/dashboard/exams"
             className="flex items-center px-3 py-2 space-x-3 text-gray-700 transition rounded-lg hover:bg-blue-100 hover:text-blue-600"
           >
             <FaBook />
@@ -113,7 +113,7 @@ function DashboardLayout({ children }) {
         {/* Main Content */}
         <main className="flex-1 p-6 overflow-y-auto">
           <div className="p-6 bg-white shadow rounded-2xl">
-            {children}
+            <Outlet />
           </div>
         </main>
       </div>
@@ -121,4 +121,4 @@ function DashboardLayout({ children }) {
   );
 }
 
-export default DashboardLayout;
+export default AdminDashboardLayout;

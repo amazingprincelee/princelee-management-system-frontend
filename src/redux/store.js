@@ -2,7 +2,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import authSliceReducer from "./features/authSlice";
 import userReducer from "./features/userSlice";
 import adminReducer from "./features/adminSlice";
-import teacherReducer from "./features/teacherSlice"
+import teacherReducer from "./features/teacherSlice";
+import paymentReducer from "./features/paymentSlice"
 
 
 
@@ -11,7 +12,8 @@ const store = configureStore({
         auth: authSliceReducer,
         user: userReducer,
         admin: adminReducer,
-        teachers: teacherReducer
+        teachers: teacherReducer,
+        payment: paymentReducer
     }
 })
 

@@ -4,15 +4,23 @@ import store from './redux/store'
 import LandingPage from './page/LandingPage';
 import Login from './page/Login';
 import Register from './page/Register';
+import ProtectedRoute from './component/ProtectedRoute';
+import Unauthorized from './page/Unauthorized';
 import Contact from './page/Contact';
 import NavComponent from './component/Nav';
 import Features from './page/Features';
-import Dashboard from './page/admin/Dashboard';
+import AdminDashboardLayout from './component/admin/AdminDashboardLayout';
+import StatCard from './component/admin/statcard';
+import MainArea from './component/admin/main-area';
 import AddTeacher from './page/admin/add-teacher';
-import ManageStudents from './page/admin/manage-students';
-import ManageTeachers from './page/admin/manage-teachers';
+import ManageStudents from './component/admin/manage-students';
+import ManageTeachers from './component/admin/manage-teachers';
 import Reports from './page/admin/reports';
 import ApprovePayment from './page/admin/approve-payment';
+import Billing from './component/admin/billing';
+import Settings from './component/admin/settings';
+import Exams from './component/admin/exams';
+
 
 import './App.css';
 
@@ -22,21 +30,30 @@ function App() {
   return (
     <>
     <Provider store={store}>
-    <NavComponent />
-    <Routes>
-       <Route path='/' element={<LandingPage />} />
-       <Route path='/login' element={<Login />} />
-       <Route path='/register' element={<Register />} />
-       <Route path='/contact' element={<Contact />} />
-       <Route path='/features' element={<Features />} />
-       <Route path='/dashboard' element={<Dashboard />} />
-       <Route path='/add-teachers' element={<AddTeacher />} />
-       <Route path='/manage-teachers' element={<ManageStudents />} />
-       <Route path='/manage-students' element={<ManageTeachers />} />
-       <Route path='/reports' element={<Reports />} />
-       <Route path='/approve-payment' element={<ApprovePayment />} />
+      <NavComponent />
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/features" element={<Features />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
 
-    </Routes>
+        {/* Dashboard with nested routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<AdminDashboardLayout />}>
+            <Route index element={<><StatCard /><MainArea /></>} /> 
+            <Route path="add-teachers" element={<AddTeacher />} />
+            <Route path="students" element={<ManageStudents />} />
+            <Route path="teachers" element={<ManageTeachers />} />
+            <Route path="billing" element={<Billing />} />
+            <Route path="settings" element={<Settings />} />
+            <Route path="exams" element={<Exams />} />
+            <Route path="reports" element={<Reports />} />
+          <Route path="approve-payment" element={<ApprovePayment />} />
+        </Route>
+        </Route>
+      </Routes>
     </Provider>
       
     </>

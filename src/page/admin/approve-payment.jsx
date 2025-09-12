@@ -1,11 +1,11 @@
-
+import ApprovePaymentComponent from "../../component/admin/ApprovePayment"
 
 
 function ApprovePayment(){
 
     return (
         <>
-          <h1> Approve payment</h1>
+          <ApprovePaymentComponent />
         </>
     )
 };
