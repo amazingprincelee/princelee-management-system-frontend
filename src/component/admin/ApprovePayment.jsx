@@ -1,6 +1,8 @@
+import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPayment } from "../../redux/features/paymentSlice";
 import { useEffect, useState } from "react";
+import { baseUrl } from "../../utils/baseUrl"
 import { 
   FiSearch, 
   FiFilter, 
@@ -69,34 +71,56 @@ function ApprovePaymentComponent() {
 
   // Handle payment approval
   const handleApproval = async (paymentId, installmentId) => {
-    setApproving(prev => ({ ...prev, [`${paymentId}-${installmentId}`]: true }));
-    
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/payment/approve-payment', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ paymentId, installmentId })
-      });
+  setApproving(prev => ({ ...prev, [`${paymentId}-${installmentId}`]: true }));
 
-      if (response.ok) {
-        // Refresh payments data
-        dispatch(fetchPayment());
-        alert('Payment approved successfully!');
-      } else {
-        throw new Error('Failed to approve payment');
-      }
-    } catch (error) {
-      console.error('Approval error:', error);
-      alert('Failed to approve payment. Please try again.');
-    } finally {
-      setApproving(prev => ({ ...prev, [`${paymentId}-${installmentId}`]: false }));
+  try {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      throw new Error('No authentication token found');
     }
-  };
 
+    const response = await axios.put(
+      `${baseUrl}/payment/approve-payment`,
+      {
+        paymentId,
+        installmentId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    // Check if the response indicates success
+    if (response.data.success) {
+      // Refresh payments data
+      dispatch(fetchPayment());
+      alert('Payment approved successfully!');
+    } else {
+      throw new Error(response.data.message || 'Failed to approve payment');
+    }
+  } catch (error) {
+    console.error('Approval error:', error);
+    let errorMessage = 'Failed to approve payment. Please try again.';
+    
+    if (error.response) {
+      // Handle specific backend errors
+      if (error.response.status === 401) {
+        errorMessage = 'Unauthorized: Invalid or expired token';
+      } else if (error.response.status === 404) {
+        errorMessage = error.response.data.message || 'Payment or installment not found';
+      } else if (error.response.status === 400) {
+        errorMessage = error.response.data.message || 'Installment already approved';
+      }
+    }
+    
+    alert(errorMessage);
+  } finally {
+    setApproving(prev => ({ ...prev, [`${paymentId}-${installmentId}`]: false }));
+  }
+};
   // Format currency
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-NG', {
