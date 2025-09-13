@@ -2,161 +2,215 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { baseUrl } from "../../utils/baseUrl";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchTeachers } from "../../redux/features/teacherSlice";
-import { FaEdit, FaTrash, FaPlus, FaSearch, FaTimes } from "react-icons/fa";
+import { fetchStudents } from "../../redux/features/studentSlice";
+import { FaEdit, FaTrash, FaArrowUp, FaArrowDown, FaPlus, FaSearch, FaTimes } from "react-icons/fa";
 
-function ManageTeachers() {
-  const { teachers, loading, error } = useSelector((state) => state.teacher);
+function ManageStudents() {
+  const { students, loading, error } = useSelector((state) => state.students);
   const dispatch = useDispatch();
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedTeacher, setSelectedTeacher] = useState(null);
+  const [showPromoteModal, setShowPromoteModal] = useState(false);
+  const [showBulkPromoteModal, setShowBulkPromoteModal] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
   const [formData, setFormData] = useState({});
+  const [promotionRules, setPromotionRules] = useState({});
+  const [selectedStudents, setSelectedStudents] = useState([]);
+  const [promotionSuggestions, setPromotionSuggestions] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
-    designation: "",
+    classLevel: "",
+    section: "",
     gender: "",
-    subject: "",
   });
-  const [filteredTeachers, setFilteredTeachers] = useState([]);
+  const [filteredStudents, setFilteredStudents] = useState([]);
   const [filterError, setFilterError] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchTeachers()).then(() => {
-      console.log("Fetched teachers:", teachers);
-    });
+    dispatch(fetchStudents());
   }, [dispatch]);
 
-  // Update filtered teachers when teachers or filters change
+  // Update filtered students when students or filters change
   useEffect(() => {
-    let result = teachers || [];
-    console.log("Raw teachers data:", result);
+    const applyFilters = async () => {
+      let result = students || [];
 
-    // Apply search filter
-    if (searchTerm) {
-      result = result.filter(
-        (teacher) =>
-          teacher.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          teacher.email.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      console.log("After search filter:", result);
-    }
+      // Apply class level filter using backend endpoint
+      if (filters.classLevel) {
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            setFilterError("No authentication token found");
+            return;
+          }
+          const response = await axios.get(`${baseUrl}/student/class/${filters.classLevel}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          result = response.data.classFound || [];
+          setFilterError(null);
+        } catch (err) {
+          setFilterError(err.response?.data?.message || "Failed to fetch students by class");
+          result = [];
+        }
+      }
 
-    // Apply designation filter
-    if (filters.designation) {
-      result = result.filter(
-        (teacher) => teacher.designation.toLowerCase() === filters.designation.toLowerCase()
-      );
-      console.log("After designation filter:", result);
-    }
+      // Apply search filter
+      if (searchTerm) {
+        result = result.filter(
+          (student) =>
+            student.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            student.surName.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
 
-    // Apply gender filter
-    if (filters.gender) {
-      result = result.filter(
-        (teacher) => teacher.gender.toLowerCase() === filters.gender.toLowerCase()
-      );
-      console.log("After gender filter:", result);
-    }
+      // Apply section filter
+      if (filters.section) {
+        result = result.filter((student) => student.section.toLowerCase() === filters.section.toLowerCase());
+      }
 
-    // Apply subject filter
-    if (filters.subject) {
-      result = result.filter((teacher) =>
-        teacher.subjects.some((subject) => subject.toLowerCase() === filters.subject.toLowerCase())
-      );
-      console.log("After subject filter:", result);
-    }
+      // Apply gender filter
+      if (filters.gender) {
+        result = result.filter((student) => student.gender.toLowerCase() === filters.gender.toLowerCase());
+      }
 
-    setFilteredTeachers(result);
-    setFilterError(null);
-  }, [teachers, searchTerm, filters]);
+      setFilteredStudents(result);
+    };
 
-  const handleAddTeacher = async (e) => {
+    applyFilters();
+  }, [students, searchTerm, filters]);
+
+  const handleAddStudent = async (e) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      console.log("Adding teacher with data:", formData, "Token:", token);
-      await axios.post(`${baseUrl}/teacher/add-teacher`, formData, {
+      await axios.post(`${baseUrl}/student/add`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      dispatch(fetchTeachers());
+      dispatch(fetchStudents());
       setShowAddModal(false);
       setFormData({});
     } catch (err) {
-      console.error("Add teacher error:", err.response?.data || err.message);
-      setFilterError(
-        err.response?.status === 400
-          ? "Teacher with this email or phone already exists"
-          : "Failed to add teacher"
-      );
+      console.error("Error adding student:", err);
     }
   };
 
-  const handleUpdateTeacher = async (e) => {
+  const handleUpdateStudent = async (e) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      console.log("Updating teacher with data:", { ...formData, userId: selectedTeacher._id }, "Token:", token);
-      await axios.put(
-        `${baseUrl}/teacher/update`,
-        { ...formData, userId: selectedTeacher._id },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      dispatch(fetchTeachers());
+      await axios.put(`${baseUrl}/student/update/${selectedStudent._id}`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      dispatch(fetchStudents());
       setShowEditModal(false);
-      setSelectedTeacher(null);
+      setSelectedStudent(null);
       setFormData({});
     } catch (err) {
-      console.error("Update teacher error:", err.response?.data || err.message);
-      setFilterError("Failed to update teacher");
+      console.error("Error updating student:", err);
     }
   };
 
-  const handleDeleteTeacher = async (teacherId) => {
-    if (window.confirm("Are you sure you want to delete this teacher?")) {
+  const handleDeleteStudent = async (studentId) => {
+    if (window.confirm("Are you sure you want to delete this student?")) {
       try {
         const token = localStorage.getItem("token");
-        console.log("Deleting teacher with ID:", teacherId, "Token:", token);
-        await axios.delete(`${baseUrl}/teacher/${teacherId}`, {
+        await axios.delete(`${baseUrl}/student/${studentId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        dispatch(fetchTeachers());
+        dispatch(fetchStudents());
       } catch (err) {
-        console.error("Delete teacher error:", err.response?.data || err.message);
-        setFilterError("Failed to delete teacher");
+        console.error("Error deleting student:", err);
       }
     }
   };
 
+  const handlePromoteStudent = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(`${baseUrl}/student/promote/${selectedStudent._id}`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      dispatch(fetchStudents());
+      setShowPromoteModal(false);
+      setSelectedStudent(null);
+      setFormData({});
+    } catch (err) {
+      console.error("Error promoting student:", err);
+    }
+  };
+
+  const handleBulkPromote = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(
+        `${baseUrl}/student/bulk-promote`,
+        { studentIds: selectedStudents, promotionRules },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      dispatch(fetchStudents());
+      setShowBulkPromoteModal(false);
+      setSelectedStudents([]);
+      setPromotionRules({});
+    } catch (err) {
+      console.error("Error bulk promoting students:", err);
+    }
+  };
+
+  const fetchPromotionSuggestions = async (currentClass) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${baseUrl}/student/promotion-suggestions/${currentClass}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setPromotionSuggestions(response.data.data);
+    } catch (err) {
+      console.error("Error fetching promotion suggestions:", err);
+    }
+  };
+
+  const handleSelectStudent = (studentId) => {
+    setSelectedStudents((prev) =>
+      prev.includes(studentId) ? prev.filter((id) => id !== studentId) : [...prev, studentId]
+    );
+  };
+
   const handleResetFilters = () => {
     setSearchTerm("");
-    setFilters({ designation: "", gender: "", subject: "" });
+    setFilters({ classLevel: "", section: "", gender: "" });
     setFilterError(null);
   };
 
-  const TeacherForm = ({ onSubmit, initialData = {} }) => (
+  const StudentForm = ({ onSubmit, initialData = {} }) => (
     <form onSubmit={onSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <input
           type="text"
-          placeholder="Full Name"
-          value={formData.fullname || initialData.fullname || ""}
-          onChange={(e) => setFormData({ ...formData, fullname: e.target.value })}
-          className="p-2 border rounded"
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={formData.email || initialData.email || ""}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          placeholder="First Name"
+          value={formData.firstName || initialData.firstName || ""}
+          onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
           className="p-2 border rounded"
         />
         <input
           type="text"
-          placeholder="Phone"
-          value={formData.phone || initialData.phone || ""}
-          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+          placeholder="Surname"
+          value={formData.surName || initialData.surName || ""}
+          onChange={(e) => setFormData({ ...formData, surName: e.target.value })}
+          className="p-2 border rounded"
+        />
+        <input
+          type="text"
+          placeholder="Middle Name"
+          value={formData.middleName || initialData.middleName || ""}
+          onChange={(e) => setFormData({ ...formData, middleName: e.target.value })}
+          className="p-2 border rounded"
+        />
+        <input
+          type="date"
+          placeholder="Date of Birth"
+          value={formData.dateOfBirth || initialData.dateOfBirth || ""}
+          onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
           className="p-2 border rounded"
         />
         <select
@@ -170,46 +224,12 @@ function ManageTeachers() {
         </select>
         <input
           type="text"
-          placeholder="Designation"
-          value={formData.designation || initialData.designation || ""}
-          onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-          className="p-2 border rounded"
-        />
-        <input
-          type="text"
-          placeholder="Subjects (comma-separated)"
-          value={formData.subjects || initialData.subjects?.join(",") || ""}
-          onChange={(e) =>
-            setFormData({ ...formData, subjects: e.target.value.split(",").map((s) => s.trim()) })
-          }
-          className="p-2 border rounded"
-        />
-        <input
-          type="number"
-          placeholder="Salary"
-          value={formData.salary || initialData.salary || ""}
-          onChange={(e) => setFormData({ ...formData, salary: e.target.value })}
-          className="p-2 border rounded"
-        />
-        <input
-          type="text"
-          placeholder="Bank Name"
-          value={formData.bankName || initialData.bankDetails?.bankName || ""}
-          onChange={(e) => setFormData({ ...formData, bankName: e.target.value })}
-          className="p-2 border rounded"
-        />
-        <input
-          type="text"
-          placeholder="Bank Account"
-          value={formData.bankAccount || initialData.bankDetails?.bankAccount || ""}
-          onChange={(e) => setFormData({ ...formData, bankAccount: e.target.value })}
-          className="p-2 border rounded"
-        />
-        <input
-          type="text"
-          placeholder="Account Name"
-          value={formData.accountName || initialData.bankDetails?.accountName || ""}
-          onChange={(e) => setFormData({ ...formData, accountName: e.target.value })}
+          placeholder="Class Level"
+          value={formData.classLevel || initialData.classLevel || ""}
+          onChange={(e) => {
+            setFormData({ ...formData, classLevel: e.target.value });
+            fetchPromotionSuggestions(e.target.value);
+          }}
           className="p-2 border rounded"
         />
       </div>
@@ -219,19 +239,19 @@ function ManageTeachers() {
     </form>
   );
 
-  // Extract unique designations and subjects for filter dropdowns
-  const designations = [...new Set(teachers?.map((t) => t.designation) || [])].sort();
-  const subjects = [...new Set(teachers?.flatMap((t) => t.subjects || []) || [])].sort();
+  // Extract unique class levels and sections for filter dropdowns
+  const classLevels = [...new Set(students?.map((s) => s.classLevel) || [])].sort();
+  const sections = [...new Set(students?.map((s) => s.section) || [])].sort();
 
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Manage Teachers</h1>
+        <h1 className="text-2xl font-bold">Manage Students</h1>
         <button
           onClick={() => setShowAddModal(true)}
           className="flex items-center p-2 text-white bg-green-500 rounded"
         >
-          <FaPlus className="mr-2" /> Add Teacher
+          <FaPlus className="mr-2" /> Add Student
         </button>
       </div>
 
@@ -242,7 +262,7 @@ function ManageTeachers() {
             <FaSearch className="absolute text-gray-400 left-3 top-3" />
             <input
               type="text"
-              placeholder="Search by name or email..."
+              placeholder="Search by name..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full p-2 pl-10 border rounded"
@@ -257,14 +277,26 @@ function ManageTeachers() {
         </div>
         <div className="flex space-x-4">
           <select
-            value={filters.designation}
-            onChange={(e) => setFilters({ ...filters, designation: e.target.value })}
+            value={filters.classLevel}
+            onChange={(e) => setFilters({ ...filters, classLevel: e.target.value })}
             className="p-2 border rounded"
           >
-            <option value="">All Designations</option>
-            {designations.map((designation) => (
-              <option key={designation} value={designation}>
-                {designation}
+            <option value="">All Classes</option>
+            {classLevels.map((cls) => (
+              <option key={cls} value={cls}>
+                {cls}
+              </option>
+            ))}
+          </select>
+          <select
+            value={filters.section}
+            onChange={(e) => setFilters({ ...filters, section: e.target.value })}
+            className="p-2 border rounded"
+          >
+            <option value="">All Sections</option>
+            {sections.map((section) => (
+              <option key={section} value={section}>
+                {section}
               </option>
             ))}
           </select>
@@ -277,18 +309,6 @@ function ManageTeachers() {
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
-          <select
-            value={filters.subject}
-            onChange={(e) => setFilters({ ...filters, subject: e.target.value })}
-            className="p-2 border rounded"
-          >
-            <option value="">All Subjects</option>
-            {subjects.map((subject) => (
-              <option key={subject} value={subject}>
-                {subject}
-              </option>
-            ))}
-          </select>
         </div>
         {filterError && <p className="text-red-500">{filterError}</p>}
       </div>
@@ -300,42 +320,62 @@ function ManageTeachers() {
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-gray-100">
+              <th className="p-2 border">
+                <input
+                  type="checkbox"
+                  onChange={(e) =>
+                    setSelectedStudents(
+                      e.target.checked ? filteredStudents.map((s) => s._id) : []
+                    )
+                  }
+                />
+              </th>
               <th className="p-2 border">Name</th>
-              <th className="p-2 border">Email</th>
-              <th className="p-2 border">Designation</th>
-              <th className="p-2 border">Subjects</th>
+              <th className="p-2 border">Class</th>
+              <th className="p-2 border">Section</th>
               <th className="p-2 border">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {filteredTeachers.length > 0 ? (
-              filteredTeachers.map((teacher) => (
-                <tr key={teacher._id} className="hover:bg-gray-50">
-                  <td className="p-2 border">{teacher.fullname}</td>
-                  <td className="p-2 border">{teacher.email}</td>
-                  <td className="p-2 border">{teacher.designation}</td>
-                  <td className="p-2 border">{teacher.subjects?.join(", ") || "N/A"}</td>
+            {filteredStudents.length > 0 ? (
+              filteredStudents.map((student) => (
+                <tr key={student._id} className="hover:bg-gray-50">
+                  <td className="p-2 border">
+                    <input
+                      type="checkbox"
+                      checked={selectedStudents.includes(student._id)}
+                      onChange={() => handleSelectStudent(student._id)}
+                    />
+                  </td>
+                  <td className="p-2 border">{`${student.firstName} ${student.surName}`}</td>
+                  <td className="p-2 border">{student.classLevel}</td>
+                  <td className="p-2 border">{student.section}</td>
                   <td className="flex p-2 space-x-2 border">
                     <button
                       onClick={() => {
-                        setSelectedTeacher(teacher);
+                        setSelectedStudent(student);
                         setShowEditModal(true);
-                        setFormData({
-                          ...teacher,
-                          bankName: teacher.bankDetails?.bankName,
-                          bankAccount: teacher.bankDetails?.bankAccount,
-                          accountName: teacher.bankDetails?.accountName,
-                        });
+                        setFormData(student);
                       }}
                       className="text-blue-500"
                     >
                       <FaEdit />
                     </button>
                     <button
-                      onClick={() => handleDeleteTeacher(teacher._id)}
+                      onClick={() => handleDeleteStudent(student._id)}
                       className="text-red-500"
                     >
                       <FaTrash />
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedStudent(student);
+                        setShowPromoteModal(true);
+                        fetchPromotionSuggestions(student.classLevel);
+                      }}
+                      className="text-green-500"
+                    >
+                      <FaArrowUp />
                     </button>
                   </td>
                 </tr>
@@ -343,7 +383,7 @@ function ManageTeachers() {
             ) : (
               <tr>
                 <td colSpan="5" className="p-2 text-center border">
-                  No teachers found
+                  No students found
                 </td>
               </tr>
             )}
@@ -351,11 +391,20 @@ function ManageTeachers() {
         </table>
       </div>
 
+      {selectedStudents.length > 0 && (
+        <button
+          onClick={() => setShowBulkPromoteModal(true)}
+          className="p-2 mt-4 text-white bg-blue-500 rounded"
+        >
+          Bulk Promote Selected
+        </button>
+      )}
+
       {showAddModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="w-full max-w-2xl p-6 bg-white rounded-lg">
-            <h2 className="mb-4 text-xl font-bold">Add New Teacher</h2>
-            <TeacherForm onSubmit={handleAddTeacher} />
+            <h2 className="mb-4 text-xl font-bold">Add New Student</h2>
+            <StudentForm onSubmit={handleAddStudent} />
             <button
               onClick={() => setShowAddModal(false)}
               className="p-2 mt-4 text-white bg-gray-500 rounded"
@@ -366,13 +415,98 @@ function ManageTeachers() {
         </div>
       )}
 
-      {showEditModal && selectedTeacher && (
+      {showEditModal && selectedStudent && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="w-full max-w-2xl p-6 bg-white rounded-lg">
-            <h2 className="mb-4 text-xl font-bold">Edit Teacher</h2>
-            <TeacherForm onSubmit={handleUpdateTeacher} initialData={selectedTeacher} />
+            <h2 className="mb-4 text-xl font-bold">Edit Student</h2>
+            <StudentForm onSubmit={handleUpdateStudent} initialData={selectedStudent} />
             <button
               onClick={() => setShowEditModal(false)}
+              className="p-2 mt-4 text-white bg-gray-500 rounded"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showPromoteModal && selectedStudent && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-2xl p-6 bg-white rounded-lg">
+            <h2 className="mb-4 text-xl font-bold">Promote/Demote Student</h2>
+            <form onSubmit={handlePromoteStudent} className="space-y-4">
+              <select
+                value={formData.newClassLevel || ""}
+                onChange={(e) => setFormData({ ...formData, newClassLevel: e.target.value })}
+                className="w-full p-2 border rounded"
+              >
+                <option value="">Select New Class</option>
+                {promotionSuggestions.allAvailableClasses?.map((cls) => (
+                  <option key={cls} value={cls}>
+                    {cls}
+                  </option>
+                ))}
+              </select>
+              <p>Suggested Promotion: {promotionSuggestions.suggestedPromotion || "None"}</p>
+              <input
+                type="text"
+                placeholder="Section"
+                value={formData.newSection || ""}
+                onChange={(e) => setFormData({ ...formData, newSection: e.target.value })}
+                className="w-full p-2 border rounded"
+              />
+              <input
+                type="text"
+                placeholder="Reason"
+                value={formData.reason || ""}
+                onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
+                className="w-full p-2 border rounded"
+              />
+              <button type="submit" className="p-2 text-white bg-blue-500 rounded">
+                Promote/Demote
+              </button>
+            </form>
+            <button
+              onClick={() => setShowPromoteModal(false)}
+              className="p-2 mt-4 text-white bg-gray-500 rounded"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showBulkPromoteModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-2xl p-6 bg-white rounded-lg">
+            <h2 className="mb-4 text-xl font-bold">Bulk Promote Students</h2>
+            <form onSubmit={handleBulkPromote} className="space-y-4">
+              {[...new Set(filteredStudents
+                .filter((s) => selectedStudents.includes(s._id))
+                .map((s) => s.classLevel))].map((cls) => (
+                <div key={cls} className="flex space-x-2">
+                  <label>{cls} to:</label>
+                  <select
+                    onChange={(e) =>
+                      setPromotionRules({ ...promotionRules, [cls]: e.target.value })
+                    }
+                    className="p-2 border rounded"
+                  >
+                    <option value="">Select Target Class</option>
+                    {promotionSuggestions.allAvailableClasses?.map((targetCls) => (
+                      <option key={targetCls} value={targetCls}>
+                        {targetCls}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+              <button type="submit" className="p-2 text-white bg-blue-500 rounded">
+                Bulk Promote
+              </button>
+            </form>
+            <button
+              onClick={() => setShowBulkPromoteModal(false)}
               className="p-2 mt-4 text-white bg-gray-500 rounded"
             >
               Cancel
@@ -384,4 +518,4 @@ function ManageTeachers() {
   );
 }
 
-export default ManageTeachers;
+export default ManageStudents;
