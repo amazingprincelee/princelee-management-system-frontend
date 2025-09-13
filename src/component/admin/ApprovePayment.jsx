@@ -140,26 +140,26 @@ function ApprovePaymentComponent() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="flex items-center justify-center min-h-96">
+        <div className="w-12 h-12 border-b-2 border-blue-600 rounded-full animate-spin"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+      <div className="p-4 border border-red-200 rounded-lg bg-red-50">
         <p className="text-red-700">Error loading payments: {error}</p>
       </div>
     );
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="bg-white rounded-lg shadow-sm border">
+    <div className="p-6 mx-auto max-w-7xl">
+      <div className="bg-white border rounded-lg shadow-sm">
         {/* Header */}
         <div className="p-6 border-b border-gray-200">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Payment Management</h1>
               <p className="text-gray-600">Manage and approve student payments</p>
@@ -171,18 +171,18 @@ function ApprovePaymentComponent() {
         </div>
 
         {/* Filters Section */}
-        <div className="p-6 bg-gray-50 border-b">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4">
+        <div className="p-6 border-b bg-gray-50">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
             {/* Search */}
             <div className="lg:col-span-2">
               <div className="relative">
-                <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <FiSearch className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
                 <input
                   type="text"
                   placeholder="Search by student name, description, or ID..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full py-2 pl-10 pr-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
             </div>
@@ -196,7 +196,7 @@ function ApprovePaymentComponent() {
               <option value="all">All Status</option>
               <option value="pending">Pending</option>
               <option value="part payment">Part Payment</option>
-              <option value="paid">Paid</option>
+              <option value="full payment">Full Payment</option>
             </select>
 
             {/* Fee Type Filter */}
@@ -255,12 +255,12 @@ function ApprovePaymentComponent() {
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee Details</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Installments</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Student</th>
+                <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Fee Details</th>
+                <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Amount</th>
+                <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Status</th>
+                <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Installments</th>
+                <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -269,9 +269,9 @@ function ApprovePaymentComponent() {
                   {/* Student Info */}
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10">
-                        <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
-                          <FiUser className="h-5 w-5 text-gray-600" />
+                      <div className="flex-shrink-0 w-10 h-10">
+                        <div className="flex items-center justify-center w-10 h-10 bg-gray-300 rounded-full">
+                          <FiUser className="w-5 h-5 text-gray-600" />
                         </div>
                       </div>
                       <div className="ml-4">
@@ -322,8 +322,8 @@ function ApprovePaymentComponent() {
                   <td className="px-6 py-4">
                     <div className="space-y-2">
                       {payment.installments.map((installment) => (
-                        <div key={installment._id} className="text-xs bg-gray-50 p-2 rounded">
-                          <div className="flex justify-between items-center mb-1">
+                        <div key={installment._id} className="p-2 text-xs rounded bg-gray-50">
+                          <div className="flex items-center justify-between mb-1">
                             <span className="font-medium">{formatCurrency(installment.amount)}</span>
                             <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium ${
                               installment.approved ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
@@ -342,9 +342,9 @@ function ApprovePaymentComponent() {
                                   setSelectedReceipt(installment.receiptUrl);
                                   setShowReceiptModal(true);
                                 }}
-                                className="inline-flex items-center px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                                className="inline-flex items-center px-2 py-1 text-xs text-blue-700 bg-blue-100 rounded hover:bg-blue-200"
                               >
-                                <FiEye className="h-3 w-3 mr-1" />
+                                <FiEye className="w-3 h-3 mr-1" />
                                 View Receipt
                               </button>
                             )}
@@ -353,16 +353,16 @@ function ApprovePaymentComponent() {
                               <button
                                 onClick={() => handleApproval(payment._id, installment._id)}
                                 disabled={approving[`${payment._id}-${installment._id}`]}
-                                className="inline-flex items-center px-2 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 disabled:opacity-50"
+                                className="inline-flex items-center px-2 py-1 text-xs text-green-700 bg-green-100 rounded hover:bg-green-200 disabled:opacity-50"
                               >
                                 {approving[`${payment._id}-${installment._id}`] ? (
                                   <>
-                                    <FiClock className="h-3 w-3 mr-1 animate-spin" />
+                                    <FiClock className="w-3 h-3 mr-1 animate-spin" />
                                     Approving...
                                   </>
                                 ) : (
                                   <>
-                                    <FiCheckCircle className="h-3 w-3 mr-1" />
+                                    <FiCheckCircle className="w-3 h-3 mr-1" />
                                     Approve
                                   </>
                                 )}
@@ -375,8 +375,8 @@ function ApprovePaymentComponent() {
                   </td>
 
                   {/* Actions */}
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-indigo-600 hover:text-indigo-900 mr-2">
+                  <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
+                    <button className="mr-2 text-indigo-600 hover:text-indigo-900">
                       View Details
                     </button>
                   </td>
@@ -387,7 +387,7 @@ function ApprovePaymentComponent() {
         </div>
 
         {filteredPayments.length === 0 && (
-          <div className="text-center py-12">
+          <div className="py-12 text-center">
             <p className="text-gray-500">No payments found matching your criteria.</p>
           </div>
         )}
@@ -395,22 +395,22 @@ function ApprovePaymentComponent() {
 
       {/* Receipt Modal */}
       {showReceiptModal && selectedReceipt && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
           <div className="bg-white rounded-lg max-w-2xl max-h-[90vh] overflow-auto">
-            <div className="p-4 border-b flex justify-between items-center">
+            <div className="flex items-center justify-between p-4 border-b">
               <h3 className="text-lg font-medium">Payment Receipt</h3>
               <button
                 onClick={() => setShowReceiptModal(false)}
                 className="text-gray-400 hover:text-gray-600"
               >
-                <FiX className="h-6 w-6" />
+                <FiX className="w-6 h-6" />
               </button>
             </div>
             <div className="p-4">
               <img
                 src={selectedReceipt}
                 alt="Payment Receipt"
-                className="max-w-full h-auto"
+                className="h-auto max-w-full"
                 onError={(e) => {
                   e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xMDAgNzBWMTMwTTcwIDEwMEgxMzAiIHN0cm9rZT0iIzlDQTNBRiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+';
                 }}
@@ -421,9 +421,9 @@ function ApprovePaymentComponent() {
                 href={selectedReceipt}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="inline-flex items-center px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
               >
-                <FiDownload className="h-4 w-4 mr-2" />
+                <FiDownload className="w-4 h-4 mr-2" />
                 Download Receipt
               </a>
             </div>

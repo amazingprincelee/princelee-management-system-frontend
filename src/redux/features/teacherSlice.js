@@ -1,66 +1,57 @@
 import axios from "axios";
-import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
-import { baseUrl } from "../../utils/baseUrl"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { baseUrl } from "../../utils/baseUrl";
 
-
-
-export const fetchTeachers = createAsyncThunk("teacher/fetchTeachers", async (_, thunkApi)=>{
-
+export const fetchTeachers = createAsyncThunk(
+  "teacher/fetchTeachers",
+  async (_, { rejectWithValue }) => {
     try {
-          const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
+      if (!token) {
+        return rejectWithValue("No token found");
+      }
 
-          console.log("the token wey i won send", token);
-          
-
-          if(!token){
-            return thunkApi.rejectWithValue("No token found")
-          }
-
-        const response = await axios.get(`${baseUrl}/teacher`, {
-            headers: {
+      const response = await axios.get(`${baseUrl}/teacher/all`, {
+        headers: {
           Authorization: `Bearer ${token}`,
         },
-        });
+      });
 
-        return response.data
-        
+      return response.data.teachers; // Return the teachers array directly
     } catch (error) {
-       return thunkApi.rejectWithValue(error.response?.data || "failed") 
+      return rejectWithValue(error.response?.data?.message || "Failed to fetch teachers");
     }
-
-});
-
+  }
+);
 
 const initialState = {
-    teachers: null,
-    loading: false,
-    error: null
+  teachers: [],
+  loading: false,
+  error: null,
 };
 
 const teachersSlice = createSlice({
-    name: 'teacher',
-    initialState,
-    reducers: {},
-    extraReducers: (builder)=>{
-        builder
-        .addCase(fetchTeachers.pending, (state)=>{
-          state.loading = true;
-          state.error = null;
-          state.teachers = null
-        })
-        .addCase(fetchTeachers.fulfilled, (state, action)=>{
-            state.loading = false;
-            state.teachers = action.payload;
-            state.error = null
-        })
-        .addCase(fetchTeachers.rejected, (state, action)=>{
-            state.loading = false;
-            state.error = action.payload;
-            state.teachers = null;
-        })
-    }
-
+  name: "teacher",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchTeachers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.teachers = [];
+      })
+      .addCase(fetchTeachers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.teachers = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchTeachers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.teachers = [];
+      });
+  },
 });
 
-
-export default teachersSlice.reducer
+export default teachersSlice.reducer;
