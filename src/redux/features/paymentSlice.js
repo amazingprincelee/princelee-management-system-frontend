@@ -46,24 +46,27 @@ export const approvePayment = createAsyncThunk("payment/approvePayment", async (
   }
 });
 
-export const getReceipt = createAsyncThunk("payment/getReceipt", async ({ paymentId, installmentId }, thunkApi) => {
-  try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      return thunkApi.rejectWithValue("Token not found");
+// In your paymentSlice
+export const getReceipt = createAsyncThunk(
+  'payment/getReceipt',
+  async ({ paymentId, installmentId }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        return rejectWithValue("Token not found");
+      }
+
+      const response = await axios.get(`${baseUrl}/payment/get-receipt/${paymentId}/${installmentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
     }
-
-    const response = await axios.get(`${baseUrl}/payment/${paymentId}/installments/${installmentId}/receipt`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return response.data;
-  } catch (error) {
-    return thunkApi.rejectWithValue(error.response?.data || 'Failed to fetch receipt');
   }
-});
+);
 
 const paymentSlice = createSlice({
   name: 'payment',

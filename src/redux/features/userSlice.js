@@ -50,7 +50,7 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchUserProfile.fulfilled, (state, action) => {
-        (state.loading = false), (state.profile = action.payload);
+        (state.loading = false), (state.profile = action.payload.user);
       })
       .addCase(fetchUserProfile.rejected, (state, action) => {
         state.loading = false;
