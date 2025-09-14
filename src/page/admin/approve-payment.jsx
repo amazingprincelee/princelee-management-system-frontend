@@ -1,11 +1,11 @@
-import ApprovePaymentComponent from "../../component/admin/ApprovePayment"
+import BillingTable from "../../component/admin/BillingTable"
 
 
 function ApprovePayment(){
 
     return (
         <>
-          <ApprovePaymentComponent />
+          <BillingTable />
         </>
     )
 };

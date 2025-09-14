@@ -17,7 +17,7 @@ import ManageStudents from './component/admin/manage-students';
 import ManageTeachers from './component/admin/manage-teachers';
 import Reports from './page/admin/reports';
 import ApprovePayment from './page/admin/approve-payment';
-import Billing from './component/admin/billing';
+import BillingTable from './component/admin/BillingTable';
 import Settings from './component/admin/settings';
 import Exams from './component/admin/exams';
 
@@ -46,7 +46,7 @@ function App() {
             <Route path="add-teachers" element={<AddTeacher />} />
             <Route path="students" element={<ManageStudents />} />
             <Route path="teachers" element={<ManageTeachers />} />
-            <Route path="billing" element={<Billing />} />
+            <Route path="billing" element={<BillingTable />} />
             <Route path="settings" element={<Settings />} />
             <Route path="exams" element={<Exams />} />
             <Route path="reports" element={<Reports />} />

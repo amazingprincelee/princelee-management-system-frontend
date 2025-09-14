@@ -64,7 +64,7 @@ function AdminDashboardLayout() {
             className="flex items-center px-3 py-2 space-x-3 text-gray-700 transition rounded-lg hover:bg-blue-100 hover:text-blue-600"
           >
             <FaUsers />
-            <span>Students / Classes</span>
+            <span>Students</span>
           </Link>
 
           <Link
@@ -80,7 +80,7 @@ function AdminDashboardLayout() {
             className="flex items-center px-3 py-2 space-x-3 text-gray-700 transition rounded-lg hover:bg-blue-100 hover:text-blue-600"
           >
             <FaCog />
-            <span>Settings & Profile</span>
+            <span>Settings</span>
           </Link>
 
           <Link
