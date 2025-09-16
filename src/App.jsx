@@ -18,7 +18,9 @@ import ManageTeachers from './component/admin/manage-teachers';
 import Reports from './page/admin/reports';
 import ApprovePayment from './page/admin/approve-payment';
 import BillingTable from './component/admin/BillingTable';
-import Settings from './component/admin/settings';
+import Settings from './page/admin/settings';
+import Profile from './page/Profile';
+import AddPayment from './component/admin/modal/add-payment';
 import Exams from './component/admin/exams';
 
 
@@ -38,11 +40,12 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/features" element={<Features />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
+       
 
         {/* Dashboard with nested routes */}
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<AdminDashboardLayout />}>
-            <Route index element={<><StatCard /><MainArea /></>} /> 
+            <Route index element={<><StatCard /><AddPayment /><MainArea /></>} /> 
             <Route path="add-teachers" element={<AddTeacher />} />
             <Route path="students" element={<ManageStudents />} />
             <Route path="teachers" element={<ManageTeachers />} />
@@ -50,6 +53,7 @@ function App() {
             <Route path="settings" element={<Settings />} />
             <Route path="exams" element={<Exams />} />
             <Route path="reports" element={<Reports />} />
+             <Route path='profile' element={<Profile />} />
           <Route path="approve-payment" element={<ApprovePayment />} />
         </Route>
         </Route>

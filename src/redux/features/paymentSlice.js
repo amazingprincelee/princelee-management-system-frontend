@@ -46,6 +46,34 @@ export const approvePayment = createAsyncThunk("payment/approvePayment", async (
   }
 });
 
+
+export const addPayment = createAsyncThunk('payment/addPayment', async ({formData}, thunkApi) => {
+    
+   try {
+       const token = localStorage.getItem('token');
+
+       if(!token){
+        return thunkApi.rejectWithValue("token not found")
+       }
+
+       const response = await axios.post(`${baseUrl}/payment/add-payment`, 
+        formData,
+        {headers: {
+          Authorization: `Bearer ${token}`
+        }}
+        
+      );
+
+      return response.data
+    
+   } catch (error) {
+     return thunkApi.rejectWithValue(error.response?.data || "addPayment Failted")
+   }
+
+
+
+} )
+
 // In your paymentSlice
 export const getReceipt = createAsyncThunk(
   'payment/getReceipt',
@@ -79,6 +107,9 @@ const paymentSlice = createSlice({
     receipt: null,
     receiptLoading: false,
     receiptError: null,
+    addPayment: null,
+    addPaymentLoading: false,
+    addPaymentError: null
   },
   reducers: {
     clearPayment: (state) => {
@@ -131,7 +162,7 @@ const paymentSlice = createSlice({
         state.receipt = null;
       })
       .addCase(getReceipt.fulfilled, (state, action) => {
-        state.receipt = action.payload;
+        state.receipt = action.payload.receiptUrl;
         state.receiptLoading = false;
         state.receiptError = null;
       })
@@ -139,7 +170,18 @@ const paymentSlice = createSlice({
         state.receiptError = action.payload;
         state.receiptLoading = false;
         state.receipt = null;
-      });
+      })
+      .addCase(addPayment.pending, (state)=>{
+        state.addPaymentLoading = true;
+        state.addPaymentError = null;
+      })
+      .addCase(addPayment.fulfilled, (state, action)=>{
+        state.addPayment = action.payload
+      })
+      .addCase(addPayment.rejected, (state, action)=> {
+        state.addPaymentError = action.payload;
+        state.addPaymentError = null
+      })
   },
 });
 

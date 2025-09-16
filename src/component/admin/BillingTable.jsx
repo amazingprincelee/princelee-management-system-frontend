@@ -1,13 +1,13 @@
 import { FaEye, FaCheckCircle, FaReceipt, FaDownload, FaWhatsapp } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchPayment, approvePayment, getReceipt } from "../../redux/features/paymentSlice";
+import { fetchPayment, approvePayment } from "../../redux/features/paymentSlice";
 import { fetchUserProfile } from "../../redux/features/userSlice";
 import { FiSearch } from "react-icons/fi";
 
 const BillingTable = () => {
   const dispatch = useDispatch();
-  const { payments, loading, error, approving, approveError, receipt, receiptLoading, receiptError } = useSelector(
+  const { payments, loading, error, approving, approveError } = useSelector(
     (state) => state.payment || {}
   );
   const { profile, loading: userLoading, error: userError } = useSelector((state) => state.user || {});
@@ -40,10 +40,6 @@ const BillingTable = () => {
 
   const handleApprove = (paymentId, installmentId) => {
     dispatch(approvePayment({ paymentId, installmentId }));
-  };
-
-  const handleViewReceipt = (paymentId, installmentId) => {
-    dispatch(getReceipt({ paymentId, installmentId }));
   };
 
   const handleViewProof = (proofUrl) => {
@@ -161,30 +157,6 @@ const BillingTable = () => {
       {userLoading && <p className="text-blue-600">Loading user profile...</p>}
       {userError && <p className="text-red-600">User Error: {userError.message || userError}</p>}
       {approveError && <p className="text-red-600">Approve Error: {approveError.message || approveError}</p>}
-      {receiptError && <p className="text-red-600">Receipt Error: {receiptError.message || receiptError}</p>}
-
-      {/* Receipt Notification */}
-      {receipt && receipt.receiptUrl && (
-        <div className="p-4 mb-4 border border-green-200 rounded-md bg-green-50">
-          <p className="font-medium text-green-600">Receipt available!</p>
-          <div className="flex flex-col gap-2 mt-2 sm:flex-row">
-            <a
-              href={receipt.receiptUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1 px-3 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700"
-            >
-              <FaDownload /> Download Receipt
-            </a>
-            <button
-              onClick={() => handleShareOnWhatsApp(receipt.receiptUrl, "Student", 0)}
-              className="inline-flex items-center justify-center gap-1 px-3 py-2 text-sm text-white bg-green-600 rounded-md hover:bg-green-700"
-            >
-              <FaWhatsapp /> Share on WhatsApp
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Modal for Proof of Payment */}
       {modalOpen && (
@@ -272,14 +244,15 @@ const BillingTable = () => {
                         )}
 
                         {installment.approved && installment.receiptUrl && (
-                          <button
-                            className="flex items-center justify-center gap-1 px-2 py-1 text-xs text-white bg-purple-600 rounded-md hover:bg-purple-700 disabled:bg-gray-400"
-                            onClick={() => handleViewReceipt(payment._id, installment._id)}
-                            disabled={receiptLoading}
+                          <a
+                            href={installment.receiptUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-1 px-2 py-1 text-xs text-white bg-purple-600 rounded-md hover:bg-purple-700"
                             title="View/Download receipt"
                           >
-                            <FaReceipt /> {receiptLoading ? "Loading..." : "Receipt"}
-                          </button>
+                            <FaReceipt /> Receipt
+                          </a>
                         )}
 
                         {installment.receiptUrl && (

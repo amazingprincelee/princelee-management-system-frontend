@@ -5,7 +5,7 @@ function Exams(){
 
     return (
         <>
-         <h1>Exams</h1>
+         <h1>See List of Exams created by teachers for the term</h1>
         </>
     )
 };
