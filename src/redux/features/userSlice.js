@@ -28,7 +28,7 @@ export const fetchUserProfile = createAsyncThunk(
 );
 
 const initialState = {
-  profile: null,
+  user: null,
   loading: false,
   error: null,
 };
@@ -37,7 +37,7 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    clearProfile: (state) => {
+    clearUser: (state) => {
       state.profile = null;
     },
   },
@@ -50,7 +50,7 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchUserProfile.fulfilled, (state, action) => {
-        (state.loading = false), (state.profile = action.payload.user);
+        (state.loading = false), (state.user = action.payload.user);
       })
       .addCase(fetchUserProfile.rejected, (state, action) => {
         state.loading = false;

@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 
 const ProfileSettings = () => {
   const dispatch = useDispatch();
-  const { profile, loading, error } = useSelector((state) => state.user);
+  const { user, loading, error } = useSelector((state) => state.user);
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -22,6 +22,9 @@ const ProfileSettings = () => {
   useEffect(() => {
     dispatch(fetchUserProfile());
   }, [dispatch]);
+
+  
+  
 
   // handle profile photo
   const handleImageChange = (e) => {
@@ -97,9 +100,9 @@ const ProfileSettings = () => {
     <div className="max-w-3xl p-6 mx-auto mt-10 bg-white shadow-md rounded-2xl">
       {/* Profile Photo Section */}
       <div className="relative flex flex-col items-center">
-        {profile?.profilePhoto ? (
+        {user?.profilePhoto ? (
           <img
-            src={profile.profilePhoto}
+            src={user.profilePhoto}
             alt="Profile"
             className="object-cover w-32 h-32 border-4 border-gray-200 rounded-full"
           />
@@ -125,12 +128,12 @@ const ProfileSettings = () => {
 
       {/* Profile Info */}
       <div className="mt-6 space-y-4">
-        <h2 className="text-2xl font-semibold text-center">{profile?.fullname || "No Name"}</h2>
+        <h2 className="text-2xl font-semibold text-center">{user?.fullname || "No Name"}</h2>
         <div className="flex items-center justify-center gap-2 text-gray-600">
-          <FaEnvelope /> <span>{profile?.email}</span>
+          <FaEnvelope /> <span>{user?.email}</span>
         </div>
         <div className="flex items-center justify-center gap-2 text-gray-600">
-          <FaMapMarkerAlt /> <span>{profile?.address || "No address provided"}</span>
+          <FaMapMarkerAlt /> <span>{user?.address || "No address provided"}</span>
         </div>
       </div>
 
@@ -138,9 +141,9 @@ const ProfileSettings = () => {
       <div className="pt-6 mt-8 border-t">
         <h3 className="mb-3 text-lg font-medium">Account Info</h3>
         <ul className="space-y-2 text-gray-700">
-          <li><strong>Username:</strong> {profile?.username}</li>
-          <li><strong>User ID:</strong> {profile?._id}</li>
-          <li><strong>Status:</strong> {profile?.isVerified ? "✅ Verified" : "❌ Not Verified"}</li>
+          <li><strong>Username:</strong> {user?.username}</li>
+          <li><strong>User ID:</strong> {user?._id}</li>
+          <li><strong>Status:</strong> {user?.isVerified ? "✅ Verified" : "❌ Not Verified"}</li>
         </ul>
       </div>
 

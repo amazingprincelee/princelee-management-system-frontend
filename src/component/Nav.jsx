@@ -3,12 +3,16 @@ import { useState, useRef, useEffect } from "react";
 import { FaBars, FaTimes, FaBell, FaUserCircle } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/features/authSlice";
+import { fetchUserProfile } from "../redux/features/userSlice"
 import logo from "../assets/logo.png";
 
 function NavComponent() {
   const { token } = useSelector((state) => state.auth);
-  const { profile } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+
+  
+  
 
   const [isOpen, setIsOpen] = useState(false); // mobile nav
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // profile dropdown
@@ -16,6 +20,7 @@ function NavComponent() {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(fetchUserProfile());
     setIsDropdownOpen(false);
   };
 
@@ -35,7 +40,8 @@ function NavComponent() {
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center flex-shrink-0 space-x-3">
+          {token ? <p>{`Welcome ${user?.fullname}`}</p> : (<>
+             <div className="flex items-center flex-shrink-0 space-x-3">
             <img
               src={logo}
               alt="School Logo"
@@ -45,9 +51,11 @@ function NavComponent() {
               School Manager
             </Link>
           </div>
+          </>)}
+          
 
           {/* Desktop Menu */}
-          <div className="hidden space-x-6 md:flex items-center">
+          <div className="items-center hidden space-x-6 md:flex">
             {token ? (
               <>
                 {/* Notification */}
@@ -63,11 +71,11 @@ function NavComponent() {
                     className="flex items-center space-x-2 px-3 py-2 rounded-md text-gray-700 hover:text-[#284ea1] hover:bg-gray-100 focus:outline-none"
                   >
                     <FaUserCircle className="w-6 h-6" />
-                    <span className="hidden sm:block">{profile?.user?.fullname || "User"}</span>
+                    <span className="hidden sm:block">{user?.user?.fullname || "User"}</span>
                   </button>
 
                   {isDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md py-2 z-50">
+                    <div className="absolute right-0 z-50 w-48 py-2 mt-2 bg-white rounded-md shadow-lg">
                       <Link
                         to="/dashboard"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -76,7 +84,7 @@ function NavComponent() {
                         Dashboard
                       </Link>
                       <Link
-                        to="/profile"
+                        to="/dashboard/profile"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         onClick={() => setIsDropdownOpen(false)}
                       >
@@ -84,7 +92,7 @@ function NavComponent() {
                       </Link>
                       <button
                         onClick={handleLogout}
-                        className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                        className="block w-full px-4 py-2 text-sm text-left text-red-600 hover:bg-gray-100"
                       >
                         Logout
                       </button>
@@ -141,14 +149,14 @@ function NavComponent() {
             <>
               <Link
                 to="/dashboard"
-                className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
+                className="block px-3 py-2 text-gray-700 rounded-md hover:bg-gray-100"
                 onClick={() => setIsOpen(false)}
               >
                 Dashboard
               </Link>
               <Link
                 to="/profile"
-                className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
+                className="block px-3 py-2 text-gray-700 rounded-md hover:bg-gray-100"
                 onClick={() => setIsOpen(false)}
               >
                 Profile
@@ -158,7 +166,7 @@ function NavComponent() {
                   handleLogout();
                   setIsOpen(false);
                 }}
-                className="block w-full text-left px-3 py-2 text-red-600 hover:bg-gray-100 rounded-md"
+                className="block w-full px-3 py-2 text-left text-red-600 rounded-md hover:bg-gray-100"
               >
                 Logout
               </button>
