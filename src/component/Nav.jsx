@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { FaBars, FaTimes, FaBell, FaUserCircle } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
+import { fetchSchoolInfo } from "../redux/features/schoolSlice";
 import { logout } from "../redux/features/authSlice";
 import { fetchUserProfile } from "../redux/features/userSlice";
 import logo from "../assets/logo.png";
@@ -9,6 +10,7 @@ import logo from "../assets/logo.png";
 function NavComponent() {
   const { token } = useSelector((state) => state.auth);
   const { user, loading } = useSelector((state) => state.user);
+  const { school, loading: schoolLoading } = useSelector((state) => state.school);
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -22,12 +24,18 @@ function NavComponent() {
     }
   }, [token, dispatch]);
 
+  useEffect(() => {
+    if (!school) {
+      dispatch(fetchSchoolInfo());
+    }
+  }, [dispatch, school]);
+
+  
+
   const handleLogout = () => {
     dispatch(logout());
     setIsDropdownOpen(false);
   };
-
-  
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -48,18 +56,29 @@ function NavComponent() {
           {token ? (
             <div className="flex items-center">
               <p className="text-sm sm:text-base">
-                {loading ? "Loading..." : `Welcome ${user?.fullname || user?.username || "User"}`}
+                {loading
+                  ? "Loading..."
+                  : `Welcome ${user?.fullname || user?.username || "User"}`}
               </p>
             </div>
           ) : (
             <div className="flex items-center flex-shrink-0 space-x-3">
               <img
-                src={logo}
+                src={school?.schoolLogo || logo}
                 alt="School Logo"
-                className="w-auto h-8 sm:h-10"
+                className={`w-auto h-8 sm:h-10 ${
+                  schoolLoading ? "animate-pulse" : ""
+                }`}
               />
-              <Link to="/" className="text-xl sm:text-2xl font-bold text-[#284ea1]">
-                School Manager
+              <Link
+                to="/"
+                className="text-xl sm:text-2xl font-bold text-[#284ea1]"
+              >
+                {schoolLoading ? (
+                  <span className="animate-pulse">Loading...</span>
+                ) : (
+                  school?.schoolName || "School Manager"
+                )}
               </Link>
             </div>
           )}
@@ -82,7 +101,9 @@ function NavComponent() {
                   >
                     <FaUserCircle className="w-6 h-6" />
                     <span className="hidden sm:block">
-                      {loading ? "Loading..." : user?.fullname || user?.username || "User"}
+                      {loading
+                        ? "Loading..."
+                        : user?.fullname || user?.username || "User"}
                     </span>
                   </button>
 
@@ -148,7 +169,11 @@ function NavComponent() {
               onClick={() => setIsOpen(!isOpen)}
               className="text-gray-700 hover:text-[#284ea1] focus:outline-none"
             >
-              {isOpen ? <FaTimes className="w-6 h-6" /> : <FaBars className="w-6 h-6" />}
+              {isOpen ? (
+                <FaTimes className="w-6 h-6" />
+              ) : (
+                <FaBars className="w-6 h-6" />
+              )}
             </button>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux"
+import { useSelector } from "react-redux";
+import PhotoGallery from "../component/photo-gallery";
 import {
   FaUserGraduate,
   FaChalkboardTeacher,
@@ -184,6 +185,17 @@ function LandingPage() {
               fees, results, and school events.
             </p>
           </div>
+        </div>
+      </section>
+      
+      {/* Photo Gallery */}
+
+      <section>
+        <div className="max-w-5xl px-4 mx-auto text-center sm:px-6 lg:px-8">
+          <h2 className="mb-10 text-3xl font-bold text-gray-900 md:text-4xl">
+            School Photo Gallery
+          </h2>
+        <PhotoGallery />
         </div>
       </section>
 

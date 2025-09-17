@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, Outlet } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchSchoolInfo } from '../../redux/features/schoolSlice';
 import {
   FaSchool,
   FaTachometerAlt,
@@ -13,9 +15,11 @@ import {
 } from "react-icons/fa";
 
 function AdminDashboardLayout() {
-  const [schoolName] = useState("Bedetels In'l Academy");
+  const [schoolName, setSchoolName] = useState("Bedetels In'l Academy");
   const [isOpen, setIsOpen] = useState(false);
   const sidebarRef = useRef(null);
+  const {school, loading, error} = useSelector((state)=> state.school)
+  const dispatch = useDispatch()
 
   // Close sidebar on mobile when a menu item is clicked
   const handleMenuClick = () => {
@@ -26,6 +30,8 @@ function AdminDashboardLayout() {
 
   // Close sidebar if clicking outside
   useEffect(() => {
+    dispatch(fetchSchoolInfo())
+    setSchoolName(school?.schoolName)
     const handleClickOutside = (event) => {
       if (
         sidebarRef.current &&
@@ -39,7 +45,20 @@ function AdminDashboardLayout() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [dispatch, school?.schoolName]);
+
+  // whenever school updates, update the local state
+useEffect(() => {
+  if (school?.schoolName) {
+    setSchoolName(school.schoolName);
+  }else if(error){
+    console.log(error);
+    
+  }
+}, [error, school]);
+
+  
+  
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -50,15 +69,38 @@ function AdminDashboardLayout() {
         ${isOpen ? "translate-x-0" : "-translate-x-full"} 
         md:translate-x-0 md:relative md:flex md:flex-col`}
       >
-        {/* Logo + School Name */}
-        <div className="flex items-center justify-between p-4 border-b">
-          <div className="flex items-center space-x-3">
-            <FaSchool className="text-3xl text-blue-600" />
-            <span className="text-lg font-bold text-gray-800 truncate">
-              {schoolName}
-            </span>
-          </div>
-        </div>
+   {/* Logo + School Name */}
+<div className="flex items-center justify-between p-4 border-b">
+  <div className="flex items-center space-x-3">
+    {loading ? (
+      // Skeleton loader
+      <>
+        <div className="w-10 h-10 bg-gray-300 rounded-full animate-pulse"></div>
+        <div className="w-24 h-4 bg-gray-300 rounded animate-pulse"></div>
+      </>
+    ) : (
+      <>
+        {school?.schoolLogo ? (
+          <img
+            src={school.schoolLogo}
+            alt="School Logo"
+            className="object-contain w-10 h-10 rounded-full"
+          />
+        ) : (
+          <FaSchool className="w-10 h-10 text-blue-600" />
+        )}
+        <span
+          className="text-lg font-bold text-gray-800 truncate max-w-[150px] md:max-w-[200px]"
+          title={schoolName}
+        >
+          {schoolName || "School Name"}
+        </span>
+      </>
+    )}
+  </div>
+</div>
+
+
 
         {/* Navigation */}
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
