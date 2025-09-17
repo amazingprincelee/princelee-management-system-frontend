@@ -23,6 +23,7 @@ function Login() {
         dispatch(loginUser({username, password})); 
     }
 
+    console.log("login component", message);
     
     
     
