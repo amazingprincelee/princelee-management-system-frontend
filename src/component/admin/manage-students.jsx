@@ -6,7 +6,6 @@ import { fetchStudents } from "../../redux/features/studentSlice";
 import {
   FaEdit,
   FaTrash,
-  FaArrowUp,
   FaPlus,
   FaSearch,
   FaTimes,
@@ -15,15 +14,14 @@ import {
 function ManageStudents() {
   const { students, loading, error } = useSelector((state) => state.students);
   const dispatch = useDispatch();
+
+  // modal states
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [showPromoteModal, setShowPromoteModal] = useState(false);
-  const [showBulkPromoteModal, setShowBulkPromoteModal] = useState(false);
+
+  // data states
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [formData, setFormData] = useState({});
-  const [promotionRules, setPromotionRules] = useState({});
-  const [selectedStudents, setSelectedStudents] = useState([]);
-  const [promotionSuggestions, setPromotionSuggestions] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
     classLevel: "",
@@ -31,89 +29,123 @@ function ManageStudents() {
     gender: "",
   });
   const [filteredStudents, setFilteredStudents] = useState([]);
-  const [filterError, setFilterError] = useState(null);
+
+  // multi-step add student
+  const [step, setStep] = useState(1); // 1 = parent, 2 = student
+  const [parentOption, setParentOption] = useState(""); // "new" | "existing"
+  const [parents, setParents] = useState([]);
+  const [selectedParentId, setSelectedParentId] = useState(null);
+  const [parentForm, setParentForm] = useState({});
 
   useEffect(() => {
     dispatch(fetchStudents());
   }, [dispatch]);
 
   useEffect(() => {
-    const applyFilters = async () => {
-      let result = students || [];
+    let result = students || [];
 
-      if (filters.classLevel) {
-        try {
-          const token = localStorage.getItem("token");
-          if (!token) {
-            setFilterError("No authentication token found");
-            return;
-          }
-          const response = await axios.get(
-            `${baseUrl}/student/class/${filters.classLevel}`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-          result = response.data.classFound || [];
-          setFilterError(null);
-        } catch (err) {
-          setFilterError(
-            err.response?.data?.message || "Failed to fetch students by class"
-          );
-          result = [];
-        }
-      }
+    if (searchTerm) {
+      result = result.filter(
+        (student) =>
+          student.firstName
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          student.surName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
 
-      if (searchTerm) {
-        result = result.filter(
-          (student) =>
-            student.firstName
-              .toLowerCase()
-              .includes(searchTerm.toLowerCase()) ||
-            student.surName.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      }
+    if (filters.section) {
+      result = result.filter(
+        (student) =>
+          student.section.toLowerCase() === filters.section.toLowerCase()
+      );
+    }
 
-      if (filters.section) {
-        result = result.filter(
-          (student) =>
-            student.section.toLowerCase() === filters.section.toLowerCase()
-        );
-      }
+    if (filters.gender) {
+      result = result.filter(
+        (student) =>
+          student.gender.toLowerCase() === filters.gender.toLowerCase()
+      );
+    }
 
-      if (filters.gender) {
-        result = result.filter(
-          (student) => student.gender.toLowerCase() === filters.gender.toLowerCase()
-        );
-      }
+    if (filters.classLevel) {
+      result = result.filter(
+        (student) =>
+          student.classLevel.toLowerCase() === filters.classLevel.toLowerCase()
+      );
+    }
 
-      setFilteredStudents(result);
-    };
-
-    applyFilters();
+    setFilteredStudents(result);
   }, [students, searchTerm, filters]);
 
-  const handleAddStudent = async (e) => {
-    e.preventDefault();
+  // ---------- PARENT & STUDENT HANDLERS ----------
+  const fetchParents = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.post(`${baseUrl}/student/add`, formData, {
+      const res = await axios.get(`${baseUrl}/admin/all-parents`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      dispatch(fetchStudents());
-      setShowAddModal(false);
-      setFormData({});
+      setParents(res.data.parents || []);
     } catch (err) {
-      console.error("Error adding student:", err);
+      console.error("Error fetching parents:", err);
     }
   };
 
+  useEffect(() => {
+    if (parentOption === "existing") {
+      fetchParents();
+    }
+  }, [parentOption]);
+
+  const handleRegisterParent = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.post(
+        `${baseUrl}/admin/register-parent`,
+        { ...parentForm, role: "parent" }, // ensure role is parent
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setSelectedParentId(res.data.newUser._id);
+      setStep(2);
+    } catch (err) {
+      console.error("Error registering parent:", err);
+    }
+  };
+
+  const handleRegisterStudent = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      const finalData = { ...formData, parentId: selectedParentId };
+      await axios.post(`${baseUrl}/student/add`, finalData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      dispatch(fetchStudents());
+      resetAddModal();
+    } catch (err) {
+      console.error("Error registering student:", err);
+    }
+  };
+
+  const resetAddModal = () => {
+    setShowAddModal(false);
+    setStep(1);
+    setParentOption("");
+    setFormData({});
+    setParentForm({});
+    setSelectedParentId(null);
+  };
+
+  // ---------- STUDENT HANDLERS ----------
   const handleUpdateStudent = async (e) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `${baseUrl}/student/update/${selectedStudent._id}`,
+        `${baseUrl}/student/${selectedStudent._id}`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -142,73 +174,6 @@ function ManageStudents() {
     }
   };
 
-  const handlePromoteStudent = async (e) => {
-    e.preventDefault();
-    try {
-      const token = localStorage.getItem("token");
-      await axios.put(
-        `${baseUrl}/student/promote/${selectedStudent._id}`,
-        formData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      dispatch(fetchStudents());
-      setShowPromoteModal(false);
-      setSelectedStudent(null);
-      setFormData({});
-    } catch (err) {
-      console.error("Error promoting student:", err);
-    }
-  };
-
-  const handleBulkPromote = async (e) => {
-    e.preventDefault();
-    try {
-      const token = localStorage.getItem("token");
-      await axios.post(
-        `${baseUrl}/student/bulk-promote`,
-        { studentIds: selectedStudents, promotionRules },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      dispatch(fetchStudents());
-      setShowBulkPromoteModal(false);
-      setSelectedStudents([]);
-      setPromotionRules({});
-    } catch (err) {
-      console.error("Error bulk promoting students:", err);
-    }
-  };
-
-  const fetchPromotionSuggestions = async (currentClass) => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `${baseUrl}/student/promotion-suggestions/${currentClass}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      setPromotionSuggestions(response.data.data);
-    } catch (err) {
-      console.error("Error fetching promotion suggestions:", err);
-    }
-  };
-
-  const handleSelectStudent = (studentId) => {
-    setSelectedStudents((prev) =>
-      prev.includes(studentId)
-        ? prev.filter((id) => id !== studentId)
-        : [...prev, studentId]
-    );
-  };
-
-  const handleResetFilters = () => {
-    setSearchTerm("");
-    setFilters({ classLevel: "", section: "", gender: "" });
-    setFilterError(null);
-  };
-
   const StudentForm = ({ onSubmit, initialData = {} }) => (
     <form onSubmit={onSubmit} className="space-y-4">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -227,15 +192,6 @@ function ManageStudents() {
           value={formData.surName || initialData.surName || ""}
           onChange={(e) =>
             setFormData({ ...formData, surName: e.target.value })
-          }
-          className="p-2 border rounded"
-        />
-        <input
-          type="text"
-          placeholder="Middle Name"
-          value={formData.middleName || initialData.middleName || ""}
-          onChange={(e) =>
-            setFormData({ ...formData, middleName: e.target.value })
           }
           className="p-2 border rounded"
         />
@@ -263,325 +219,295 @@ function ManageStudents() {
           type="text"
           placeholder="Class Level"
           value={formData.classLevel || initialData.classLevel || ""}
-          onChange={(e) => {
-            setFormData({ ...formData, classLevel: e.target.value });
-            fetchPromotionSuggestions(e.target.value);
-          }}
+          onChange={(e) =>
+            setFormData({ ...formData, classLevel: e.target.value })
+          }
+          className="p-2 border rounded"
+        />
+        <input
+          type="text"
+          placeholder="Section"
+          value={formData.section || initialData.section || ""}
+          onChange={(e) =>
+            setFormData({ ...formData, section: e.target.value })
+          }
           className="p-2 border rounded"
         />
       </div>
       <button
         type="submit"
-        className="px-3 py-2 text-sm text-white bg-blue-500 rounded sm:px-4 sm:py-2"
+        className="px-3 py-2 text-sm text-white bg-blue-500 rounded"
       >
         Submit
       </button>
     </form>
   );
 
-  const classLevels = [...new Set(students?.map((s) => s.classLevel) || [])].sort();
-  const sections = [...new Set(students?.map((s) => s.section) || [])].sort();
-
   return (
     <div className="p-4 sm:p-6">
-      <div className="flex flex-col items-start justify-between mb-4 space-y-2 sm:flex-row sm:items-center sm:space-y-0">
-        <h1 className="text-xl font-bold md:text-2xl">Manage Students</h1>
+      <div className="flex justify-between mb-4">
+        <h1 className="text-xl font-bold">Manage Students</h1>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center px-3 py-2 text-sm text-white bg-green-500 rounded sm:px-4 sm:py-2"
+          className="flex items-center px-3 py-2 text-sm text-white bg-green-500 rounded"
         >
           <FaPlus className="mr-2" /> Add Student
         </button>
       </div>
 
-      {/* Search and Filter Section */}
-      <div className="mb-4 space-y-4">
-        <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0">
-          <div className="relative flex-1">
-            <FaSearch className="absolute text-gray-400 left-3 top-3" />
-            <input
-              type="text"
-              placeholder="Search by name..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-2 pl-10 text-sm border rounded md:text-base"
+      {/* Search + Filters */}
+      <div className="flex flex-wrap gap-3 mb-4">
+        <div className="flex items-center px-2 border rounded">
+          <FaSearch className="text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search by name..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="p-2 outline-none"
+          />
+          {searchTerm && (
+            <FaTimes
+              className="ml-2 text-gray-500 cursor-pointer"
+              onClick={() => setSearchTerm("")}
             />
-          </div>
-          <button
-            onClick={handleResetFilters}
-            className="flex items-center justify-center px-3 py-2 text-sm text-white bg-gray-500 rounded sm:px-4 sm:py-2"
-          >
-            <FaTimes className="mr-2" /> Clear Filters
-          </button>
+          )}
         </div>
-        <div className="flex flex-col gap-2 sm:flex-row sm:space-x-4">
-          <select
-            value={filters.classLevel}
-            onChange={(e) =>
-              setFilters({ ...filters, classLevel: e.target.value })
-            }
-            className="p-2 text-sm border rounded md:text-base"
-          >
-            <option value="">All Classes</option>
-            {classLevels.map((cls) => (
-              <option key={cls} value={cls}>
-                {cls}
-              </option>
-            ))}
-          </select>
-          <select
-            value={filters.section}
-            onChange={(e) =>
-              setFilters({ ...filters, section: e.target.value })
-            }
-            className="p-2 text-sm border rounded md:text-base"
-          >
-            <option value="">All Sections</option>
-            {sections.map((section) => (
-              <option key={section} value={section}>
-                {section}
-              </option>
-            ))}
-          </select>
-          <select
-            value={filters.gender}
-            onChange={(e) =>
-              setFilters({ ...filters, gender: e.target.value })
-            }
-            className="p-2 text-sm border rounded md:text-base"
-          >
-            <option value="">All Genders</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
-        </div>
-        {filterError && <p className="text-red-500">{filterError}</p>}
+
+        <select
+          value={filters.classLevel}
+          onChange={(e) => setFilters({ ...filters, classLevel: e.target.value })}
+          className="p-2 border rounded"
+        >
+          <option value="">All Classes</option>
+          <option value="jss1">JSS1</option>
+          <option value="jss2">JSS2</option>
+          <option value="jss3">JSS3</option>
+          <option value="ss1">SS1</option>
+          <option value="ss2">SS2</option>
+          <option value="ss3">SS3</option>
+        </select>
+
+        <select
+          value={filters.section}
+          onChange={(e) => setFilters({ ...filters, section: e.target.value })}
+          className="p-2 border rounded"
+        >
+          <option value="">All Sections</option>
+          <option value="a">A</option>
+          <option value="b">B</option>
+        </select>
+
+        <select
+          value={filters.gender}
+          onChange={(e) => setFilters({ ...filters, gender: e.target.value })}
+          className="p-2 border rounded"
+        >
+          <option value="">All Genders</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
       </div>
 
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm border-collapse md:text-base">
+      {/* Student Table */}
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : (
+        <table className="w-full border border-collapse">
           <thead>
             <tr className="bg-gray-100">
-              <th className="p-2 border">
-                <input
-                  type="checkbox"
-                  onChange={(e) =>
-                    setSelectedStudents(
-                      e.target.checked ? filteredStudents.map((s) => s._id) : []
-                    )
-                  }
-                />
-              </th>
-              <th className="p-2 border">Name</th>
+              <th className="p-2 border">First Name</th>
+              <th className="p-2 border">Surname</th>
+              <th className="p-2 border">Gender</th>
               <th className="p-2 border">Class</th>
               <th className="p-2 border">Section</th>
               <th className="p-2 border">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {filteredStudents.length > 0 ? (
-              filteredStudents.map((student) => (
-                <tr key={student._id} className="hover:bg-gray-50">
-                  <td className="p-2 border">
-                    <input
-                      type="checkbox"
-                      checked={selectedStudents.includes(student._id)}
-                      onChange={() => handleSelectStudent(student._id)}
-                    />
-                  </td>
-                  <td className="p-2 border">{`${student.firstName} ${student.surName}`}</td>
-                  <td className="p-2 border">{student.classLevel}</td>
-                  <td className="p-2 border">{student.section}</td>
-                  <td className="flex p-2 space-x-2 border">
-                    <button
-                      onClick={() => {
-                        setSelectedStudent(student);
-                        setShowEditModal(true);
-                        setFormData(student);
-                      }}
-                      className="text-blue-500"
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteStudent(student._id)}
-                      className="text-red-500"
-                    >
-                      <FaTrash />
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedStudent(student);
-                        setShowPromoteModal(true);
-                        fetchPromotionSuggestions(student.classLevel);
-                      }}
-                      className="text-green-500"
-                    >
-                      <FaArrowUp />
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5" className="p-2 text-center border">
-                  No students found
+            {filteredStudents.map((student) => (
+              <tr key={student._id} className="text-center border-t">
+                <td className="p-2 border">{student.firstName}</td>
+                <td className="p-2 border">{student.surName}</td>
+                <td className="p-2 border">{student.gender}</td>
+                <td className="p-2 border">{student.classLevel}</td>
+                <td className="p-2 border">{student.section}</td>
+                <td className="flex justify-center gap-2 p-2 border">
+                  <button
+                    className="flex items-center px-2 py-1 text-sm text-white bg-blue-500 rounded"
+                    onClick={() => {
+                      setSelectedStudent(student);
+                      setFormData(student);
+                      setShowEditModal(true);
+                    }}
+                  >
+                    <FaEdit className="mr-1" /> Edit
+                  </button>
+                  <button
+                    className="flex items-center px-2 py-1 text-sm text-white bg-red-500 rounded"
+                    onClick={() => handleDeleteStudent(student._id)}
+                  >
+                    <FaTrash className="mr-1" /> Delete
+                  </button>
                 </td>
               </tr>
-            )}
+            ))}
           </tbody>
         </table>
-      </div>
-
-      {selectedStudents.length > 0 && (
-        <button
-          onClick={() => setShowBulkPromoteModal(true)}
-          className="px-3 py-2 mt-4 text-sm text-white bg-blue-500 rounded sm:px-4 sm:py-2"
-        >
-          Bulk Promote Selected
-        </button>
       )}
 
-      {/* Modals */}
+      {/* Add Student Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 flex items-center justify-center p-2 bg-black bg-opacity-50">
-          <div className="w-11/12 max-w-2xl p-6 bg-white rounded-lg sm:w-full">
-            <h2 className="mb-4 text-lg font-bold md:text-xl">Add New Student</h2>
-            <StudentForm onSubmit={handleAddStudent} />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 bg-black/30">
+          <div className="relative w-11/12 max-w-2xl p-6 bg-white rounded-lg">
+            {/* Close Button */}
             <button
-              onClick={() => setShowAddModal(false)}
-              className="px-3 py-2 mt-4 text-sm text-white bg-gray-500 rounded sm:px-4 sm:py-2"
+              onClick={resetAddModal}
+              className="absolute text-gray-600 top-2 right-2 hover:text-black"
             >
-              Cancel
+              <FaTimes size={20} />
             </button>
+
+            {step === 1 && (
+              <>
+                <h2 className="mb-4 text-lg font-bold">Step 1: Select Parent</h2>
+                <div className="flex gap-4 mb-4">
+                  <button
+                    className={`px-4 py-2 rounded ${
+                      parentOption === "new"
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200"
+                    }`}
+                    onClick={() => setParentOption("new")}
+                  >
+                    New Parent
+                  </button>
+                  <button
+                    className={`px-4 py-2 rounded ${
+                      parentOption === "existing"
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200"
+                    }`}
+                    onClick={() => setParentOption("existing")}
+                  >
+                    Existing Parent
+                  </button>
+                </div>
+
+                {parentOption === "new" && (
+                  <form onSubmit={handleRegisterParent} className="space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Full Name"
+                      value={parentForm.fullname || ""}
+                      onChange={(e) =>
+                        setParentForm({ ...parentForm, fullname: e.target.value })
+                      }
+                      className="w-full p-2 border rounded"
+                      required
+                    />
+                    <input
+                      type="text"
+                      placeholder="Phone"
+                      value={parentForm.phone || ""}
+                      onChange={(e) =>
+                        setParentForm({ ...parentForm, phone: e.target.value })
+                      }
+                      className="w-full p-2 border rounded"
+                      required
+                    />
+                    <input
+                      type="text"
+                      placeholder="Address"
+                      value={parentForm.address || ""}
+                      onChange={(e) =>
+                        setParentForm({ ...parentForm, address: e.target.value })
+                      }
+                      className="w-full p-2 border rounded"
+                      required
+                    />
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      value={parentForm.email || ""}
+                      onChange={(e) =>
+                        setParentForm({ ...parentForm, email: e.target.value })
+                      }
+                      className="w-full p-2 border rounded"
+                      required
+                    />
+                    <input
+                      type="password"
+                      placeholder="Password"
+                      value={parentForm.password || ""}
+                      onChange={(e) =>
+                        setParentForm({ ...parentForm, password: e.target.value })
+                      }
+                      className="w-full p-2 border rounded"
+                      required
+                    />
+                    <button
+                      type="submit"
+                      className="px-3 py-2 text-sm text-white bg-green-500 rounded"
+                    >
+                      Register Parent
+                    </button>
+                  </form>
+                )}
+
+                {parentOption === "existing" && (
+                  <select
+                    className="w-full p-2 border rounded"
+                    onChange={(e) => setSelectedParentId(e.target.value)}
+                  >
+                    <option value="">Select Parent</option>
+                    {parents.map((p) => (
+                      <option key={p._id} value={p._id}>
+                        {p.fullname} ({p.email})
+                      </option>
+                    ))}
+                  </select>
+                )}
+
+                {selectedParentId && (
+                  <button
+                    onClick={() => setStep(2)}
+                    className="px-3 py-2 mt-4 text-sm text-white bg-blue-500 rounded"
+                  >
+                    Continue to Student Form
+                  </button>
+                )}
+              </>
+            )}
+
+            {step === 2 && (
+              <>
+                <h2 className="mb-4 text-lg font-bold">Step 2: Add Student</h2>
+                <StudentForm onSubmit={handleRegisterStudent} />
+              </>
+            )}
           </div>
         </div>
       )}
 
-      {showEditModal && selectedStudent && (
-        <div className="fixed inset-0 flex items-center justify-center p-2 bg-black bg-opacity-50">
-          <div className="w-11/12 max-w-2xl p-6 bg-white rounded-lg sm:w-full">
-            <h2 className="mb-4 text-lg font-bold md:text-xl">Edit Student</h2>
+      {/* Edit Student Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 bg-black/30">
+          <div className="relative w-11/12 max-w-2xl p-6 bg-white rounded-lg">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowEditModal(false)}
+              className="absolute text-gray-600 top-2 right-2 hover:text-black"
+            >
+              <FaTimes size={20} />
+            </button>
+            <h2 className="mb-4 text-lg font-bold">Edit Student</h2>
             <StudentForm
               onSubmit={handleUpdateStudent}
               initialData={selectedStudent}
             />
-            <button
-              onClick={() => setShowEditModal(false)}
-              className="px-3 py-2 mt-4 text-sm text-white bg-gray-500 rounded sm:px-4 sm:py-2"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-
-      {showPromoteModal && selectedStudent && (
-        <div className="fixed inset-0 flex items-center justify-center p-2 bg-black bg-opacity-50">
-          <div className="w-11/12 max-w-2xl p-6 bg-white rounded-lg sm:w-full">
-            <h2 className="mb-4 text-lg font-bold md:text-xl">
-              Promote/Demote Student
-            </h2>
-            <form onSubmit={handlePromoteStudent} className="space-y-4">
-              <select
-                value={formData.newClassLevel || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, newClassLevel: e.target.value })
-                }
-                className="w-full p-2 border rounded"
-              >
-                <option value="">Select New Class</option>
-                {promotionSuggestions.allAvailableClasses?.map((cls) => (
-                  <option key={cls} value={cls}>
-                    {cls}
-                  </option>
-                ))}
-              </select>
-              <p>
-                Suggested Promotion:{" "}
-                {promotionSuggestions.suggestedPromotion || "None"}
-              </p>
-              <input
-                type="text"
-                placeholder="Section"
-                value={formData.newSection || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, newSection: e.target.value })
-                }
-                className="w-full p-2 border rounded"
-              />
-              <input
-                type="text"
-                placeholder="Reason"
-                value={formData.reason || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, reason: e.target.value })
-                }
-                className="w-full p-2 border rounded"
-              />
-              <button
-                type="submit"
-                className="px-3 py-2 text-sm text-white bg-green-500 rounded sm:px-4 sm:py-2"
-              >
-                Promote
-              </button>
-            </form>
-            <button
-              onClick={() => setShowPromoteModal(false)}
-              className="px-3 py-2 mt-4 text-sm text-white bg-gray-500 rounded sm:px-4 sm:py-2"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-
-      {showBulkPromoteModal && (
-        <div className="fixed inset-0 flex items-center justify-center p-2 bg-black bg-opacity-50">
-          <div className="w-11/12 max-w-2xl p-6 bg-white rounded-lg sm:w-full">
-            <h2 className="mb-4 text-lg font-bold md:text-xl">Bulk Promotion</h2>
-            <form onSubmit={handleBulkPromote} className="space-y-4">
-              <input
-                type="text"
-                placeholder="New Class Level"
-                value={promotionRules.newClassLevel || ""}
-                onChange={(e) =>
-                  setPromotionRules({
-                    ...promotionRules,
-                    newClassLevel: e.target.value,
-                  })
-                }
-                className="w-full p-2 border rounded"
-              />
-              <input
-                type="text"
-                placeholder="New Section"
-                value={promotionRules.newSection || ""}
-                onChange={(e) =>
-                  setPromotionRules({
-                    ...promotionRules,
-                    newSection: e.target.value,
-                  })
-                }
-                className="w-full p-2 border rounded"
-              />
-              <button
-                type="submit"
-                className="px-3 py-2 text-sm text-white bg-green-500 rounded sm:px-4 sm:py-2"
-              >
-                Promote Selected
-              </button>
-            </form>
-            <button
-              onClick={() => setShowBulkPromoteModal(false)}
-              className="px-3 py-2 mt-4 text-sm text-white bg-gray-500 rounded sm:px-4 sm:py-2"
-            >
-              Cancel
-            </button>
           </div>
         </div>
       )}
