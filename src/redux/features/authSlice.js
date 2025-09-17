@@ -27,7 +27,6 @@ const initialState = {
     message: null,
     token: localStorage.getItem('token') || null,
     loading: false,
-    success: false,
     error: null
 
 }
@@ -53,7 +52,6 @@ const authSlice = createSlice({
         })
         .addCase(loginUser.fulfilled, (state, action)=>{
             state.loading = false,
-            state.success = action.payload;
             state.token = action.payload.token;
             localStorage.setItem("token", action.payload.token)
 
