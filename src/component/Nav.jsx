@@ -3,26 +3,31 @@ import { useState, useRef, useEffect } from "react";
 import { FaBars, FaTimes, FaBell, FaUserCircle } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/features/authSlice";
-import { fetchUserProfile } from "../redux/features/userSlice"
+import { fetchUserProfile } from "../redux/features/userSlice";
 import logo from "../assets/logo.png";
 
 function NavComponent() {
   const { token } = useSelector((state) => state.auth);
-  const { user } = useSelector((state) => state.user);
+  const { user, loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  
-  
-
-  const [isOpen, setIsOpen] = useState(false); // mobile nav
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // profile dropdown
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  // Fetch user profile when component mounts and token exists
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchUserProfile());
+    }
+  }, [token, dispatch]);
 
   const handleLogout = () => {
     dispatch(logout());
-    dispatch(fetchUserProfile());
     setIsDropdownOpen(false);
   };
+
+  console.log("the fetched user", user);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -40,19 +45,24 @@ function NavComponent() {
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          {token ? <p>{`Welcome ${user?.fullname}`}</p> : (<>
-             <div className="flex items-center flex-shrink-0 space-x-3">
-            <img
-              src={logo}
-              alt="School Logo"
-              className="w-auto h-8 sm:h-10"
-            />
-            <Link to="/" className="text-xl sm:text-2xl font-bold text-[#284ea1]">
-              School Manager
-            </Link>
-          </div>
-          </>)}
-          
+          {token ? (
+            <div className="flex items-center">
+              <p className="text-sm sm:text-base">
+                {loading ? "Loading..." : `Welcome ${user?.fullname || user?.username || "User"}`}
+              </p>
+            </div>
+          ) : (
+            <div className="flex items-center flex-shrink-0 space-x-3">
+              <img
+                src={logo}
+                alt="School Logo"
+                className="w-auto h-8 sm:h-10"
+              />
+              <Link to="/" className="text-xl sm:text-2xl font-bold text-[#284ea1]">
+                School Manager
+              </Link>
+            </div>
+          )}
 
           {/* Desktop Menu */}
           <div className="items-center hidden space-x-6 md:flex">
@@ -71,7 +81,9 @@ function NavComponent() {
                     className="flex items-center space-x-2 px-3 py-2 rounded-md text-gray-700 hover:text-[#284ea1] hover:bg-gray-100 focus:outline-none"
                   >
                     <FaUserCircle className="w-6 h-6" />
-                    <span className="hidden sm:block">{user?.user?.fullname || "User"}</span>
+                    <span className="hidden sm:block">
+                      {loading ? "Loading..." : user?.fullname || user?.username || "User"}
+                    </span>
                   </button>
 
                   {isDropdownOpen && (
@@ -155,7 +167,7 @@ function NavComponent() {
                 Dashboard
               </Link>
               <Link
-                to="/profile"
+                to="/dashboard/profile"
                 className="block px-3 py-2 text-gray-700 rounded-md hover:bg-gray-100"
                 onClick={() => setIsOpen(false)}
               >
