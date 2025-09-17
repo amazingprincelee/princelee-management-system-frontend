@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, Outlet } from "react-router-dom";
 import {
   FaSchool,
@@ -15,6 +15,7 @@ import {
 function AdminDashboardLayout() {
   const [schoolName] = useState("Bedetels In'l Academy");
   const [isOpen, setIsOpen] = useState(false);
+  const sidebarRef = useRef(null);
 
   // Close sidebar on mobile when a menu item is clicked
   const handleMenuClick = () => {
@@ -23,10 +24,28 @@ function AdminDashboardLayout() {
     }
   };
 
+  // Close sidebar if clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target) &&
+        window.innerWidth < 768
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
       <aside
+        ref={sidebarRef}
         className={`fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-300 
         ${isOpen ? "translate-x-0" : "-translate-x-full"} 
         md:translate-x-0 md:relative md:flex md:flex-col`}
@@ -43,59 +62,24 @@ function AdminDashboardLayout() {
 
         {/* Navigation */}
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-          <Link
-            to="/dashboard"
-            onClick={handleMenuClick}
-            className="flex items-center px-3 py-2 space-x-3 text-gray-700 transition rounded-lg hover:bg-blue-100 hover:text-blue-600"
-          >
-            <FaTachometerAlt />
-            <span>Dashboard</span>
-          </Link>
-
-          <Link
-            to="/dashboard/teachers"
-            onClick={handleMenuClick}
-            className="flex items-center px-3 py-2 space-x-3 text-gray-700 transition rounded-lg hover:bg-blue-100 hover:text-blue-600"
-          >
-            <FaChalkboardTeacher />
-            <span>Teachers</span>
-          </Link>
-
-          <Link
-            to="/dashboard/students"
-            onClick={handleMenuClick}
-            className="flex items-center px-3 py-2 space-x-3 text-gray-700 transition rounded-lg hover:bg-blue-100 hover:text-blue-600"
-          >
-            <FaUsers />
-            <span>Students</span>
-          </Link>
-
-          <Link
-            to="/dashboard/billing"
-            onClick={handleMenuClick}
-            className="flex items-center px-3 py-2 space-x-3 text-gray-700 transition rounded-lg hover:bg-blue-100 hover:text-blue-600"
-          >
-            <FaMoneyBill />
-            <span>Billing</span>
-          </Link>
-
-          <Link
-            to="/dashboard/settings"
-            onClick={handleMenuClick}
-            className="flex items-center px-3 py-2 space-x-3 text-gray-700 transition rounded-lg hover:bg-blue-100 hover:text-blue-600"
-          >
-            <FaCog />
-            <span>Settings</span>
-          </Link>
-
-          <Link
-            to="/dashboard/exams"
-            onClick={handleMenuClick}
-            className="flex items-center px-3 py-2 space-x-3 text-gray-700 transition rounded-lg hover:bg-blue-100 hover:text-blue-600"
-          >
-            <FaBook />
-            <span>Exams</span>
-          </Link>
+          {[
+            { to: "/dashboard", icon: <FaTachometerAlt />, label: "Dashboard" },
+            { to: "/dashboard/teachers", icon: <FaChalkboardTeacher />, label: "Teachers" },
+            { to: "/dashboard/students", icon: <FaUsers />, label: "Students" },
+            { to: "/dashboard/billing", icon: <FaMoneyBill />, label: "Billing" },
+            { to: "/dashboard/settings", icon: <FaCog />, label: "Settings" },
+            { to: "/dashboard/exams", icon: <FaBook />, label: "Exams" },
+          ].map((item) => (
+            <Link
+              key={item.label}
+              to={item.to}
+              onClick={handleMenuClick}
+              className="flex items-center px-3 py-2 space-x-3 text-gray-700 transition rounded-lg hover:bg-blue-100 hover:text-blue-600"
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </Link>
+          ))}
         </nav>
       </aside>
 
