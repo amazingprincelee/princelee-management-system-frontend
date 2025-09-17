@@ -3,7 +3,14 @@ import axios from "axios";
 import { baseUrl } from "../../utils/baseUrl";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchStudents } from "../../redux/features/studentSlice";
-import { FaEdit, FaTrash, FaArrowUp, FaArrowDown, FaPlus, FaSearch, FaTimes } from "react-icons/fa";
+import {
+  FaEdit,
+  FaTrash,
+  FaArrowUp,
+  FaPlus,
+  FaSearch,
+  FaTimes,
+} from "react-icons/fa";
 
 function ManageStudents() {
   const { students, loading, error } = useSelector((state) => state.students);
@@ -30,12 +37,10 @@ function ManageStudents() {
     dispatch(fetchStudents());
   }, [dispatch]);
 
-  // Update filtered students when students or filters change
   useEffect(() => {
     const applyFilters = async () => {
       let result = students || [];
 
-      // Apply class level filter using backend endpoint
       if (filters.classLevel) {
         try {
           const token = localStorage.getItem("token");
@@ -43,34 +48,43 @@ function ManageStudents() {
             setFilterError("No authentication token found");
             return;
           }
-          const response = await axios.get(`${baseUrl}/student/class/${filters.classLevel}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          const response = await axios.get(
+            `${baseUrl}/student/class/${filters.classLevel}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
           result = response.data.classFound || [];
           setFilterError(null);
         } catch (err) {
-          setFilterError(err.response?.data?.message || "Failed to fetch students by class");
+          setFilterError(
+            err.response?.data?.message || "Failed to fetch students by class"
+          );
           result = [];
         }
       }
 
-      // Apply search filter
       if (searchTerm) {
         result = result.filter(
           (student) =>
-            student.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            student.firstName
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase()) ||
             student.surName.toLowerCase().includes(searchTerm.toLowerCase())
         );
       }
 
-      // Apply section filter
       if (filters.section) {
-        result = result.filter((student) => student.section.toLowerCase() === filters.section.toLowerCase());
+        result = result.filter(
+          (student) =>
+            student.section.toLowerCase() === filters.section.toLowerCase()
+        );
       }
 
-      // Apply gender filter
       if (filters.gender) {
-        result = result.filter((student) => student.gender.toLowerCase() === filters.gender.toLowerCase());
+        result = result.filter(
+          (student) => student.gender.toLowerCase() === filters.gender.toLowerCase()
+        );
       }
 
       setFilteredStudents(result);
@@ -98,9 +112,13 @@ function ManageStudents() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`${baseUrl}/student/update/${selectedStudent._id}`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.put(
+        `${baseUrl}/student/update/${selectedStudent._id}`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       dispatch(fetchStudents());
       setShowEditModal(false);
       setSelectedStudent(null);
@@ -128,9 +146,13 @@ function ManageStudents() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`${baseUrl}/student/promote/${selectedStudent._id}`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.put(
+        `${baseUrl}/student/promote/${selectedStudent._id}`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       dispatch(fetchStudents());
       setShowPromoteModal(false);
       setSelectedStudent(null);
@@ -161,9 +183,12 @@ function ManageStudents() {
   const fetchPromotionSuggestions = async (currentClass) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${baseUrl}/student/promotion-suggestions/${currentClass}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        `${baseUrl}/student/promotion-suggestions/${currentClass}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setPromotionSuggestions(response.data.data);
     } catch (err) {
       console.error("Error fetching promotion suggestions:", err);
@@ -172,7 +197,9 @@ function ManageStudents() {
 
   const handleSelectStudent = (studentId) => {
     setSelectedStudents((prev) =>
-      prev.includes(studentId) ? prev.filter((id) => id !== studentId) : [...prev, studentId]
+      prev.includes(studentId)
+        ? prev.filter((id) => id !== studentId)
+        : [...prev, studentId]
     );
   };
 
@@ -184,38 +211,48 @@ function ManageStudents() {
 
   const StudentForm = ({ onSubmit, initialData = {} }) => (
     <form onSubmit={onSubmit} className="space-y-4">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <input
           type="text"
           placeholder="First Name"
           value={formData.firstName || initialData.firstName || ""}
-          onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, firstName: e.target.value })
+          }
           className="p-2 border rounded"
         />
         <input
           type="text"
           placeholder="Surname"
           value={formData.surName || initialData.surName || ""}
-          onChange={(e) => setFormData({ ...formData, surName: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, surName: e.target.value })
+          }
           className="p-2 border rounded"
         />
         <input
           type="text"
           placeholder="Middle Name"
           value={formData.middleName || initialData.middleName || ""}
-          onChange={(e) => setFormData({ ...formData, middleName: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, middleName: e.target.value })
+          }
           className="p-2 border rounded"
         />
         <input
           type="date"
           placeholder="Date of Birth"
           value={formData.dateOfBirth || initialData.dateOfBirth || ""}
-          onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, dateOfBirth: e.target.value })
+          }
           className="p-2 border rounded"
         />
         <select
           value={formData.gender || initialData.gender || ""}
-          onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, gender: e.target.value })
+          }
           className="p-2 border rounded"
         >
           <option value="">Select Gender</option>
@@ -233,23 +270,25 @@ function ManageStudents() {
           className="p-2 border rounded"
         />
       </div>
-      <button type="submit" className="p-2 text-white bg-blue-500 rounded">
+      <button
+        type="submit"
+        className="px-3 py-2 text-sm text-white bg-blue-500 rounded sm:px-4 sm:py-2"
+      >
         Submit
       </button>
     </form>
   );
 
-  // Extract unique class levels and sections for filter dropdowns
   const classLevels = [...new Set(students?.map((s) => s.classLevel) || [])].sort();
   const sections = [...new Set(students?.map((s) => s.section) || [])].sort();
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Manage Students</h1>
+    <div className="p-4 sm:p-6">
+      <div className="flex flex-col items-start justify-between mb-4 space-y-2 sm:flex-row sm:items-center sm:space-y-0">
+        <h1 className="text-xl font-bold md:text-2xl">Manage Students</h1>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center p-2 text-white bg-green-500 rounded"
+          className="flex items-center px-3 py-2 text-sm text-white bg-green-500 rounded sm:px-4 sm:py-2"
         >
           <FaPlus className="mr-2" /> Add Student
         </button>
@@ -257,7 +296,7 @@ function ManageStudents() {
 
       {/* Search and Filter Section */}
       <div className="mb-4 space-y-4">
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0">
           <div className="relative flex-1">
             <FaSearch className="absolute text-gray-400 left-3 top-3" />
             <input
@@ -265,21 +304,23 @@ function ManageStudents() {
               placeholder="Search by name..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-2 pl-10 border rounded"
+              className="w-full p-2 pl-10 text-sm border rounded md:text-base"
             />
           </div>
           <button
             onClick={handleResetFilters}
-            className="flex items-center p-2 text-white bg-gray-500 rounded"
+            className="flex items-center justify-center px-3 py-2 text-sm text-white bg-gray-500 rounded sm:px-4 sm:py-2"
           >
             <FaTimes className="mr-2" /> Clear Filters
           </button>
         </div>
-        <div className="flex space-x-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:space-x-4">
           <select
             value={filters.classLevel}
-            onChange={(e) => setFilters({ ...filters, classLevel: e.target.value })}
-            className="p-2 border rounded"
+            onChange={(e) =>
+              setFilters({ ...filters, classLevel: e.target.value })
+            }
+            className="p-2 text-sm border rounded md:text-base"
           >
             <option value="">All Classes</option>
             {classLevels.map((cls) => (
@@ -290,8 +331,10 @@ function ManageStudents() {
           </select>
           <select
             value={filters.section}
-            onChange={(e) => setFilters({ ...filters, section: e.target.value })}
-            className="p-2 border rounded"
+            onChange={(e) =>
+              setFilters({ ...filters, section: e.target.value })
+            }
+            className="p-2 text-sm border rounded md:text-base"
           >
             <option value="">All Sections</option>
             {sections.map((section) => (
@@ -302,8 +345,10 @@ function ManageStudents() {
           </select>
           <select
             value={filters.gender}
-            onChange={(e) => setFilters({ ...filters, gender: e.target.value })}
-            className="p-2 border rounded"
+            onChange={(e) =>
+              setFilters({ ...filters, gender: e.target.value })
+            }
+            className="p-2 text-sm border rounded md:text-base"
           >
             <option value="">All Genders</option>
             <option value="male">Male</option>
@@ -316,8 +361,9 @@ function ManageStudents() {
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
 
+      {/* Table */}
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
+        <table className="w-full text-sm border-collapse md:text-base">
           <thead>
             <tr className="bg-gray-100">
               <th className="p-2 border">
@@ -394,20 +440,21 @@ function ManageStudents() {
       {selectedStudents.length > 0 && (
         <button
           onClick={() => setShowBulkPromoteModal(true)}
-          className="p-2 mt-4 text-white bg-blue-500 rounded"
+          className="px-3 py-2 mt-4 text-sm text-white bg-blue-500 rounded sm:px-4 sm:py-2"
         >
           Bulk Promote Selected
         </button>
       )}
 
+      {/* Modals */}
       {showAddModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-full max-w-2xl p-6 bg-white rounded-lg">
-            <h2 className="mb-4 text-xl font-bold">Add New Student</h2>
+        <div className="fixed inset-0 flex items-center justify-center p-2 bg-black bg-opacity-50">
+          <div className="w-11/12 max-w-2xl p-6 bg-white rounded-lg sm:w-full">
+            <h2 className="mb-4 text-lg font-bold md:text-xl">Add New Student</h2>
             <StudentForm onSubmit={handleAddStudent} />
             <button
               onClick={() => setShowAddModal(false)}
-              className="p-2 mt-4 text-white bg-gray-500 rounded"
+              className="px-3 py-2 mt-4 text-sm text-white bg-gray-500 rounded sm:px-4 sm:py-2"
             >
               Cancel
             </button>
@@ -416,13 +463,16 @@ function ManageStudents() {
       )}
 
       {showEditModal && selectedStudent && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-full max-w-2xl p-6 bg-white rounded-lg">
-            <h2 className="mb-4 text-xl font-bold">Edit Student</h2>
-            <StudentForm onSubmit={handleUpdateStudent} initialData={selectedStudent} />
+        <div className="fixed inset-0 flex items-center justify-center p-2 bg-black bg-opacity-50">
+          <div className="w-11/12 max-w-2xl p-6 bg-white rounded-lg sm:w-full">
+            <h2 className="mb-4 text-lg font-bold md:text-xl">Edit Student</h2>
+            <StudentForm
+              onSubmit={handleUpdateStudent}
+              initialData={selectedStudent}
+            />
             <button
               onClick={() => setShowEditModal(false)}
-              className="p-2 mt-4 text-white bg-gray-500 rounded"
+              className="px-3 py-2 mt-4 text-sm text-white bg-gray-500 rounded sm:px-4 sm:py-2"
             >
               Cancel
             </button>
@@ -431,13 +481,17 @@ function ManageStudents() {
       )}
 
       {showPromoteModal && selectedStudent && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-full max-w-2xl p-6 bg-white rounded-lg">
-            <h2 className="mb-4 text-xl font-bold">Promote/Demote Student</h2>
+        <div className="fixed inset-0 flex items-center justify-center p-2 bg-black bg-opacity-50">
+          <div className="w-11/12 max-w-2xl p-6 bg-white rounded-lg sm:w-full">
+            <h2 className="mb-4 text-lg font-bold md:text-xl">
+              Promote/Demote Student
+            </h2>
             <form onSubmit={handlePromoteStudent} className="space-y-4">
               <select
                 value={formData.newClassLevel || ""}
-                onChange={(e) => setFormData({ ...formData, newClassLevel: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, newClassLevel: e.target.value })
+                }
                 className="w-full p-2 border rounded"
               >
                 <option value="">Select New Class</option>
@@ -447,28 +501,38 @@ function ManageStudents() {
                   </option>
                 ))}
               </select>
-              <p>Suggested Promotion: {promotionSuggestions.suggestedPromotion || "None"}</p>
+              <p>
+                Suggested Promotion:{" "}
+                {promotionSuggestions.suggestedPromotion || "None"}
+              </p>
               <input
                 type="text"
                 placeholder="Section"
                 value={formData.newSection || ""}
-                onChange={(e) => setFormData({ ...formData, newSection: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, newSection: e.target.value })
+                }
                 className="w-full p-2 border rounded"
               />
               <input
                 type="text"
                 placeholder="Reason"
                 value={formData.reason || ""}
-                onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, reason: e.target.value })
+                }
                 className="w-full p-2 border rounded"
               />
-              <button type="submit" className="p-2 text-white bg-blue-500 rounded">
-                Promote/Demote
+              <button
+                type="submit"
+                className="px-3 py-2 text-sm text-white bg-green-500 rounded sm:px-4 sm:py-2"
+              >
+                Promote
               </button>
             </form>
             <button
               onClick={() => setShowPromoteModal(false)}
-              className="p-2 mt-4 text-white bg-gray-500 rounded"
+              className="px-3 py-2 mt-4 text-sm text-white bg-gray-500 rounded sm:px-4 sm:py-2"
             >
               Cancel
             </button>
@@ -477,37 +541,44 @@ function ManageStudents() {
       )}
 
       {showBulkPromoteModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-full max-w-2xl p-6 bg-white rounded-lg">
-            <h2 className="mb-4 text-xl font-bold">Bulk Promote Students</h2>
+        <div className="fixed inset-0 flex items-center justify-center p-2 bg-black bg-opacity-50">
+          <div className="w-11/12 max-w-2xl p-6 bg-white rounded-lg sm:w-full">
+            <h2 className="mb-4 text-lg font-bold md:text-xl">Bulk Promotion</h2>
             <form onSubmit={handleBulkPromote} className="space-y-4">
-              {[...new Set(filteredStudents
-                .filter((s) => selectedStudents.includes(s._id))
-                .map((s) => s.classLevel))].map((cls) => (
-                <div key={cls} className="flex space-x-2">
-                  <label>{cls} to:</label>
-                  <select
-                    onChange={(e) =>
-                      setPromotionRules({ ...promotionRules, [cls]: e.target.value })
-                    }
-                    className="p-2 border rounded"
-                  >
-                    <option value="">Select Target Class</option>
-                    {promotionSuggestions.allAvailableClasses?.map((targetCls) => (
-                      <option key={targetCls} value={targetCls}>
-                        {targetCls}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              ))}
-              <button type="submit" className="p-2 text-white bg-blue-500 rounded">
-                Bulk Promote
+              <input
+                type="text"
+                placeholder="New Class Level"
+                value={promotionRules.newClassLevel || ""}
+                onChange={(e) =>
+                  setPromotionRules({
+                    ...promotionRules,
+                    newClassLevel: e.target.value,
+                  })
+                }
+                className="w-full p-2 border rounded"
+              />
+              <input
+                type="text"
+                placeholder="New Section"
+                value={promotionRules.newSection || ""}
+                onChange={(e) =>
+                  setPromotionRules({
+                    ...promotionRules,
+                    newSection: e.target.value,
+                  })
+                }
+                className="w-full p-2 border rounded"
+              />
+              <button
+                type="submit"
+                className="px-3 py-2 text-sm text-white bg-green-500 rounded sm:px-4 sm:py-2"
+              >
+                Promote Selected
               </button>
             </form>
             <button
               onClick={() => setShowBulkPromoteModal(false)}
-              className="p-2 mt-4 text-white bg-gray-500 rounded"
+              className="px-3 py-2 mt-4 text-sm text-white bg-gray-500 rounded sm:px-4 sm:py-2"
             >
               Cancel
             </button>

@@ -6,7 +6,7 @@ import { fetchTeachers } from "../../redux/features/teacherSlice";
 import { FaEdit, FaTrash, FaPlus, FaSearch, FaTimes } from "react-icons/fa";
 
 function ManageTeachers() {
-  const { teachers, loading, error } = useSelector((state) => state.teacher);
+  const { teachers } = useSelector((state) => state.teacher);
   const dispatch = useDispatch();
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -25,11 +25,9 @@ function ManageTeachers() {
     dispatch(fetchTeachers());
   }, [dispatch]);
 
-  // Update filtered teachers when teachers or filters change
   useEffect(() => {
     let result = teachers || [];
 
-    // Apply search filter
     if (searchTerm) {
       result = result.filter(
         (teacher) =>
@@ -38,24 +36,24 @@ function ManageTeachers() {
       );
     }
 
-    // Apply designation filter
     if (filters.designation) {
       result = result.filter(
-        (teacher) => teacher.designation.toLowerCase() === filters.designation.toLowerCase()
+        (teacher) =>
+          teacher.designation.toLowerCase() === filters.designation.toLowerCase()
       );
     }
 
-    // Apply gender filter
     if (filters.gender) {
       result = result.filter(
         (teacher) => teacher.gender.toLowerCase() === filters.gender.toLowerCase()
       );
     }
 
-    // Apply subject filter
     if (filters.subject) {
       result = result.filter((teacher) =>
-        teacher.subjects.some((subject) => subject.toLowerCase() === filters.subject.toLowerCase())
+        teacher.subjects.some(
+          (subject) => subject.toLowerCase() === filters.subject.toLowerCase()
+        )
       );
     }
 
@@ -123,32 +121,40 @@ function ManageTeachers() {
 
   const TeacherForm = ({ onSubmit, initialData = {} }) => (
     <form onSubmit={onSubmit} className="space-y-4">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <input
           type="text"
           placeholder="Full Name"
           value={formData.fullname || initialData.fullname || ""}
-          onChange={(e) => setFormData({ ...formData, fullname: e.target.value })}
-          className="p-2 border rounded"
+          onChange={(e) =>
+            setFormData({ ...formData, fullname: e.target.value })
+          }
+          className="w-full p-2 border rounded"
         />
         <input
           type="email"
           placeholder="Email"
           value={formData.email || initialData.email || ""}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          className="p-2 border rounded"
+          onChange={(e) =>
+            setFormData({ ...formData, email: e.target.value })
+          }
+          className="w-full p-2 border rounded"
         />
         <input
           type="text"
           placeholder="Phone"
           value={formData.phone || initialData.phone || ""}
-          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-          className="p-2 border rounded"
+          onChange={(e) =>
+            setFormData({ ...formData, phone: e.target.value })
+          }
+          className="w-full p-2 border rounded"
         />
         <select
           value={formData.gender || initialData.gender || ""}
-          onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-          className="p-2 border rounded"
+          onChange={(e) =>
+            setFormData({ ...formData, gender: e.target.value })
+          }
+          className="w-full p-2 border rounded"
         >
           <option value="">Select Gender</option>
           <option value="male">Male</option>
@@ -158,74 +164,92 @@ function ManageTeachers() {
           type="text"
           placeholder="Designation"
           value={formData.designation || initialData.designation || ""}
-          onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-          className="p-2 border rounded"
+          onChange={(e) =>
+            setFormData({ ...formData, designation: e.target.value })
+          }
+          className="w-full p-2 border rounded"
         />
         <input
           type="text"
           placeholder="Subjects (comma-separated)"
           value={formData.subjects || initialData.subjects?.join(",") || ""}
           onChange={(e) =>
-            setFormData({ ...formData, subjects: e.target.value.split(",").map((s) => s.trim()) })
+            setFormData({
+              ...formData,
+              subjects: e.target.value.split(",").map((s) => s.trim()),
+            })
           }
-          className="p-2 border rounded"
+          className="w-full p-2 border rounded"
         />
         <input
           type="number"
           placeholder="Salary"
           value={formData.salary || initialData.salary || ""}
-          onChange={(e) => setFormData({ ...formData, salary: e.target.value })}
-          className="p-2 border rounded"
+          onChange={(e) =>
+            setFormData({ ...formData, salary: e.target.value })
+          }
+          className="w-full p-2 border rounded"
         />
         <input
           type="text"
           placeholder="Bank Name"
           value={formData.bankName || initialData.bankDetails?.bankName || ""}
-          onChange={(e) => setFormData({ ...formData, bankName: e.target.value })}
-          className="p-2 border rounded"
+          onChange={(e) =>
+            setFormData({ ...formData, bankName: e.target.value })
+          }
+          className="w-full p-2 border rounded"
         />
         <input
           type="text"
           placeholder="Bank Account"
-          value={formData.bankAccount || initialData.bankDetails?.bankAccount || ""}
-          onChange={(e) => setFormData({ ...formData, bankAccount: e.target.value })}
-          className="p-2 border rounded"
+          value={
+            formData.bankAccount || initialData.bankDetails?.bankAccount || ""
+          }
+          onChange={(e) =>
+            setFormData({ ...formData, bankAccount: e.target.value })
+          }
+          className="w-full p-2 border rounded"
         />
         <input
           type="text"
           placeholder="Account Name"
-          value={formData.accountName || initialData.bankDetails?.accountName || ""}
-          onChange={(e) => setFormData({ ...formData, accountName: e.target.value })}
-          className="p-2 border rounded"
+          value={
+            formData.accountName || initialData.bankDetails?.accountName || ""
+          }
+          onChange={(e) =>
+            setFormData({ ...formData, accountName: e.target.value })
+          }
+          className="w-full p-2 border rounded"
         />
       </div>
-      <button type="submit" className="p-2 text-white bg-blue-500 rounded">
+      <button
+        type="submit"
+        className="w-full p-2 text-white bg-blue-500 rounded sm:w-auto"
+      >
         Submit
       </button>
     </form>
   );
 
-  // Extract unique designations and subjects for filter dropdowns
   const designations = [...new Set(teachers?.map((t) => t.designation) || [])].sort();
-  const subjects = [
-    ...new Set(teachers?.flatMap((t) => t.subjects || []) || []),
-  ].sort();
+  const subjects = [...new Set(teachers?.flatMap((t) => t.subjects || []) || [])].sort();
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Manage Teachers</h1>
+    <div className="p-2 sm:p-4 md:p-6">
+      {/* Header */}
+      <div className="flex flex-col mb-4 space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+        <h1 className="text-lg font-bold sm:text-xl md:text-2xl">Manage Teachers</h1>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center p-2 text-white bg-green-500 rounded"
+          className="flex items-center justify-center w-full px-3 py-2 text-sm text-white bg-green-500 rounded sm:w-auto sm:text-base sm:px-4"
         >
           <FaPlus className="mr-2" /> Add Teacher
         </button>
       </div>
 
-      {/* Search and Filter Section */}
+      {/* Search and Filters */}
       <div className="mb-4 space-y-4">
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0">
           <div className="relative flex-1">
             <FaSearch className="absolute text-gray-400 left-3 top-3" />
             <input
@@ -233,21 +257,24 @@ function ManageTeachers() {
               placeholder="Search by name or email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-2 pl-10 border rounded"
+              className="w-full p-2 pl-10 text-sm border rounded sm:text-base"
             />
           </div>
           <button
             onClick={handleResetFilters}
-            className="flex items-center p-2 text-white bg-gray-500 rounded"
+            className="flex items-center justify-center w-full px-3 py-2 text-sm text-white bg-gray-500 rounded sm:w-auto sm:text-base sm:px-4"
           >
             <FaTimes className="mr-2" /> Clear Filters
           </button>
         </div>
-        <div className="flex space-x-4">
+
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4">
           <select
             value={filters.designation}
-            onChange={(e) => setFilters({ ...filters, designation: e.target.value })}
-            className="p-2 border rounded"
+            onChange={(e) =>
+              setFilters({ ...filters, designation: e.target.value })
+            }
+            className="w-full p-2 text-sm border rounded sm:text-base"
           >
             <option value="">All Designations</option>
             {designations.map((designation) => (
@@ -259,7 +286,7 @@ function ManageTeachers() {
           <select
             value={filters.gender}
             onChange={(e) => setFilters({ ...filters, gender: e.target.value })}
-            className="p-2 border rounded"
+            className="w-full p-2 text-sm border rounded sm:text-base"
           >
             <option value="">All Genders</option>
             <option value="male">Male</option>
@@ -268,7 +295,7 @@ function ManageTeachers() {
           <select
             value={filters.subject}
             onChange={(e) => setFilters({ ...filters, subject: e.target.value })}
-            className="p-2 border rounded"
+            className="w-full p-2 text-sm border rounded sm:text-base"
           >
             <option value="">All Subjects</option>
             {subjects.map((subject) => (
@@ -281,11 +308,9 @@ function ManageTeachers() {
         {filterError && <p className="text-red-500">{filterError}</p>}
       </div>
 
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-
+      {/* Table */}
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
+        <table className="w-full text-xs border-collapse sm:text-sm md:text-base">
           <thead>
             <tr className="bg-gray-100">
               <th className="p-2 border">Name</th>
@@ -302,7 +327,9 @@ function ManageTeachers() {
                   <td className="p-2 border">{teacher.fullname}</td>
                   <td className="p-2 border">{teacher.email}</td>
                   <td className="p-2 border">{teacher.designation}</td>
-                  <td className="p-2 border">{teacher.subjects?.join(", ") || "N/A"}</td>
+                  <td className="p-2 border">
+                    {teacher.subjects?.join(", ") || "N/A"}
+                  </td>
                   <td className="flex p-2 space-x-2 border">
                     <button
                       onClick={() => {
@@ -339,14 +366,15 @@ function ManageTeachers() {
         </table>
       </div>
 
+      {/* Add Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-full max-w-2xl p-6 bg-white rounded-lg">
-            <h2 className="mb-4 text-xl font-bold">Add New Teacher</h2>
+        <div className="fixed inset-0 flex items-center justify-center px-2 bg-black bg-opacity-50 sm:px-4">
+          <div className="w-full max-w-2xl p-4 bg-white rounded-lg sm:p-6 max-h-[90vh] overflow-y-auto">
+            <h2 className="mb-4 text-lg font-bold sm:text-xl">Add New Teacher</h2>
             <TeacherForm onSubmit={handleAddTeacher} />
             <button
               onClick={() => setShowAddModal(false)}
-              className="p-2 mt-4 text-white bg-gray-500 rounded"
+              className="w-full p-2 mt-4 text-white bg-gray-500 rounded sm:w-auto"
             >
               Cancel
             </button>
@@ -354,14 +382,18 @@ function ManageTeachers() {
         </div>
       )}
 
+      {/* Edit Modal */}
       {showEditModal && selectedTeacher && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-full max-w-2xl p-6 bg-white rounded-lg">
-            <h2 className="mb-4 text-xl font-bold">Edit Teacher</h2>
-            <TeacherForm onSubmit={handleUpdateTeacher} initialData={selectedTeacher} />
+        <div className="fixed inset-0 flex items-center justify-center px-2 bg-black bg-opacity-50 sm:px-4">
+          <div className="w-full max-w-2xl p-4 bg-white rounded-lg sm:p-6 max-h-[90vh] overflow-y-auto">
+            <h2 className="mb-4 text-lg font-bold sm:text-xl">Edit Teacher</h2>
+            <TeacherForm
+              onSubmit={handleUpdateTeacher}
+              initialData={selectedTeacher}
+            />
             <button
               onClick={() => setShowEditModal(false)}
-              className="p-2 mt-4 text-white bg-gray-500 rounded"
+              className="w-full p-2 mt-4 text-white bg-gray-500 rounded sm:w-auto"
             >
               Cancel
             </button>
