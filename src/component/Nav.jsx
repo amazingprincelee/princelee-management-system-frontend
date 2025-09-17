@@ -27,7 +27,7 @@ function NavComponent() {
     setIsDropdownOpen(false);
   };
 
-  console.log("the fetched user", user);
+  
 
   // Close dropdown when clicking outside
   useEffect(() => {

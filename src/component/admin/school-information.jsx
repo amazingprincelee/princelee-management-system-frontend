@@ -136,6 +136,56 @@ function SchoolInformation() {
     }
   };
 
+  // Delete school information
+  const deleteSchoolInfo = async (schoolId) => {
+    if (!window.confirm("Are you sure you want to delete this school information? This action cannot be undone.")) {
+      return false;
+    }
+
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const response = await fetch(`${baseUrl}/school-info/delete/${schoolId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        setSchool(null);
+        setFormData({
+          schoolName: "",
+          schoolDescription: "",
+          schoolAddress: "",
+          schoolMotto: "",
+          state: "",
+          country: ""
+        });
+        alert(data.message || "School information deleted successfully!");
+        return true;
+      } else {
+        throw new Error(data.message || "Failed to delete school information");
+      }
+    } catch (error) {
+      setError(error.message);
+      alert(`Error: ${error.message}`);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Upload school logo
   const uploadSchoolLogo = async (imageFile) => {
     setUploadLoading(true);
@@ -171,6 +221,48 @@ function SchoolInformation() {
     } catch (error) {
       setError(error.message);
       alert(`Upload Error: ${error.message}`);
+      return false;
+    } finally {
+      setUploadLoading(false);
+    }
+  };
+
+  // Delete school logo
+  const deleteSchoolLogo = async () => {
+    if (!window.confirm("Are you sure you want to delete the school logo?")) {
+      return false;
+    }
+
+    setUploadLoading(true);
+    setError(null);
+    
+    try {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const response = await fetch(`${baseUrl}/school-info/delete-logo`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        setSchool(prev => prev ? { ...prev, schoolLogo: undefined } : null);
+        alert(data.message || "Logo deleted successfully!");
+        return true;
+      } else {
+        throw new Error(data.message || "Failed to delete logo");
+      }
+    } catch (error) {
+      setError(error.message);
+      alert(`Delete Error: ${error.message}`);
       return false;
     } finally {
       setUploadLoading(false);
@@ -220,6 +312,58 @@ function SchoolInformation() {
     }
   };
 
+  // Delete gallery image
+  const deleteGalleryImage = async (imageUrl) => {
+    if (!window.confirm("Are you sure you want to delete this gallery image?")) {
+      return false;
+    }
+
+    setUploadLoading(true);
+    setError(null);
+    
+    try {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const response = await fetch(`${baseUrl}/school-info/delete-gallery-image`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ imageUrl })
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        // Remove the deleted image from local state
+        setSchool(prev => {
+          if (prev && prev.photoGallery) {
+            return {
+              ...prev,
+              photoGallery: prev.photoGallery.filter(url => url !== imageUrl)
+            };
+          }
+          return prev;
+        });
+        alert(data.message || "Gallery image deleted successfully!");
+        return true;
+      } else {
+        throw new Error(data.message || "Failed to delete gallery image");
+      }
+    } catch (error) {
+      setError(error.message);
+      alert(`Delete Error: ${error.message}`);
+      return false;
+    } finally {
+      setUploadLoading(false);
+    }
+  };
+
   // Load school info on component mount
   useEffect(() => {
     fetchSchoolInfo();
@@ -262,6 +406,16 @@ function SchoolInformation() {
     if (success) {
       // Refresh the data
       fetchSchoolInfo();
+    }
+  };
+
+  const handleDeleteSchool = async () => {
+    if (school && school._id) {
+      const success = await deleteSchoolInfo(school._id);
+      if (success) {
+        // Refresh the data
+        fetchSchoolInfo();
+      }
     }
   };
 
@@ -402,7 +556,18 @@ function SchoolInformation() {
       {/* Basic Information Tab */}
       {activeTab === 'info' && (
         <div className="p-6 rounded-lg bg-gray-50">
-          <h2 className="mb-6 text-2xl font-semibold text-gray-900">Basic Information</h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-semibold text-gray-900">Basic Information</h2>
+            {school && school._id && (
+              <button
+                onClick={handleDeleteSchool}
+                disabled={loading}
+                className="px-4 py-2 text-white transition duration-200 bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                {loading ? 'Deleting...' : 'Delete School Info'}
+              </button>
+            )}
+          </div>
           
           <div className="space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -517,7 +682,18 @@ function SchoolInformation() {
           
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             <div>
-              <h3 className="mb-4 text-lg font-medium text-gray-900">Current Logo</h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium text-gray-900">Current Logo</h3>
+                {school?.schoolLogo && (
+                  <button
+                    onClick={deleteSchoolLogo}
+                    disabled={uploadLoading}
+                    className="px-3 py-1 text-sm text-white transition duration-200 bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  >
+                    {uploadLoading ? 'Deleting...' : 'Delete Logo'}
+                  </button>
+                )}
+              </div>
               {school?.schoolLogo ? (
                 <div className="p-6 text-center bg-white border-2 border-gray-300 border-dashed rounded-lg">
                   <img
@@ -582,12 +758,21 @@ function SchoolInformation() {
             {school?.photoGallery && school.photoGallery.length > 0 ? (
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {school.photoGallery.map((image, index) => (
-                  <div key={index} className="overflow-hidden bg-white rounded-lg shadow-sm">
+                  <div key={index} className="relative overflow-hidden bg-white rounded-lg shadow-sm group">
                     <img
                       src={image}
                       alt={`Gallery ${index + 1}`}
                       className="object-cover w-full h-48"
                     />
+                    <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-200 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100">
+                      <button
+                        onClick={() => deleteGalleryImage(image)}
+                        disabled={uploadLoading}
+                        className="px-3 py-2 text-sm text-white transition duration-200 bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                      >
+                        {uploadLoading ? 'Deleting...' : 'Delete'}
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
