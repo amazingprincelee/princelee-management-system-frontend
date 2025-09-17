@@ -12,7 +12,10 @@ function Login() {
     const [password, setPassword] = useState();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, token, user} = useSelector((state)=> state.auth);
+    const { loading, token, message} = useSelector((state)=> state.auth);
+
+    
+    
 
     
     const handleSubmit = (e) => {
@@ -20,11 +23,14 @@ function Login() {
         dispatch(loginUser({username, password})); 
     }
 
+    
+    
+    
     useEffect(()=>{ 
-      if(user || token){
+      if(token){
         navigate("/dashboard")
       } 
-    }, [user, token, navigate])
+    }, [message, token, navigate])
 
     
 
@@ -44,7 +50,7 @@ function Login() {
         Login
       </h1>
 
-      
+       <p className="text-red-500">{message}</p>
       <form onSubmit={handleSubmit} className="w-full max-w-sm p-6 space-y-4 bg-white shadow-md rounded-2xl">
         
         <input

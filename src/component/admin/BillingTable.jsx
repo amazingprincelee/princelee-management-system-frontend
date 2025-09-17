@@ -10,7 +10,7 @@ const BillingTable = () => {
   const { payments, loading, error, approving, approveError } = useSelector(
     (state) => state.payment || {}
   );
-  const { profile, loading: userLoading, error: userError } = useSelector(
+  const { user, loading: userLoading, error: userError } = useSelector(
     (state) => state.user || {}
   );
   const [filters, setFilters] = useState({
@@ -27,7 +27,7 @@ const BillingTable = () => {
   useEffect(() => {
     dispatch(fetchUserProfile());
     dispatch(fetchPayment(filters));
-  }, [dispatch]);
+  }, [dispatch, filters]);
 
   useEffect(() => {
     dispatch(fetchPayment(filters));
@@ -75,7 +75,7 @@ const BillingTable = () => {
     `₦${amount.toLocaleString("en-NG", { minimumFractionDigits: 2 })}`;
 
   const isAdmin =
-    profile && (profile.role === "admin" || profile.role === "superadmin");
+    user && (user.role === "admin" || user.role === "superadmin");
 
   return (
     <div className="min-h-screen p-4 bg-gray-100 sm:p-6">
