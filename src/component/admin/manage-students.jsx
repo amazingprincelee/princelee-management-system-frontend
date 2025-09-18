@@ -13,6 +13,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 
+
 function ManageStudents() {
   const { students, loading, error } = useSelector((state) => state.students);
   const dispatch = useDispatch();
@@ -227,53 +228,89 @@ function ManageStudents() {
 
     return (
       <form id="studentForm" onSubmit={(e) => onSubmit(e, formData)} className="space-y-4">
-        {studentStep === 1 && (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      {studentStep === 1 && (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="w-full">
+            <label htmlFor="firstName" className="block mb-1 text-sm font-medium text-gray-700">
+              First Name
+            </label>
             <input
+              id="firstName"
               type="text"
-              placeholder="First Name"
+              placeholder="Enter First Name"
               value={formData.firstName || ""}
               onChange={(e) => handleFormInputChange("firstName", e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
+          </div>
+          <div className="w-full">
+            <label htmlFor="surName" className="block mb-1 text-sm font-medium text-gray-700">
+              Surname
+            </label>
             <input
+              id="surName"
               type="text"
-              placeholder="Surname"
+              placeholder="Enter Surname"
               value={formData.surName || ""}
               onChange={(e) => handleFormInputChange("surName", e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
+          </div>
+          <div className="w-full">
+            <label htmlFor="middleName" className="block mb-1 text-sm font-medium text-gray-700">
+              Middle Name
+            </label>
             <input
+              id="middleName"
               type="text"
-              placeholder="Middle Name"
+              placeholder="Enter Middle Name"
               value={formData.middleName || ""}
               onChange={(e) => handleFormInputChange("middleName", e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+          </div>
+          <div className="relative w-full">
+            <label htmlFor="dateOfBirth" className="block mb-1 text-sm font-medium text-gray-700">
+              Date of Birth
+            </label>
             <input
+              id="dateOfBirth"
               type="date"
-              placeholder="Date of Birth"
               value={formData.dateOfBirth || ""}
               onChange={(e) => handleFormInputChange("dateOfBirth", e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
+           
+            <p className="mt-1 text-xs text-gray-500">Select your date of birth</p>
+          </div>
+          <div className="w-full">
+            <label htmlFor="gender" className="block mb-1 text-sm font-medium text-gray-700">
+              Gender
+            </label>
             <select
+              id="gender"
               value={formData.gender || ""}
               onChange={(e) => handleFormInputChange("gender", e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
               <option value="">Select Gender</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
             </select>
+          </div>
+          <div className="w-full">
+            <label htmlFor="classLevel" className="block mb-1 text-sm font-medium text-gray-700">
+              Class Level
+            </label>
             <select
+              id="classLevel"
               value={formData.classLevel || ""}
               onChange={(e) => handleFormInputChange("classLevel", e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
               <option value="">Select Class Level</option>
@@ -283,117 +320,184 @@ function ManageStudents() {
                 </option>
               ))}
             </select>
+          </div>
+          <div className="w-full">
+            <label htmlFor="section" className="block mb-1 text-sm font-medium text-gray-700">
+              Section
+            </label>
             <input
+              id="section"
               type="text"
-              placeholder="Section"
+              placeholder="Enter Section"
               value={formData.section || ""}
               onChange={(e) => handleFormInputChange("section", e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+          </div>
+          <div className="w-full">
+            <label htmlFor="stateOfOrigin" className="block mb-1 text-sm font-medium text-gray-700">
+              State of Origin
+            </label>
             <input
+              id="stateOfOrigin"
               type="text"
-              placeholder="State of Origin"
+              placeholder="Enter State of Origin"
               value={formData.stateOfOrigin || ""}
               onChange={(e) => handleFormInputChange("stateOfOrigin", e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <div className="flex justify-end col-span-2 mt-4 space-x-4">
-              <button
-                type="button"
-                onClick={() => setStudentStep(2)}
-                className="px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded hover:bg-blue-600"
-              >
-                Next
-              </button>
-            </div>
           </div>
-        )}
-        {studentStep === 2 && (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="flex justify-end col-span-2 mt-4 space-x-4">
+            <button
+              type="button"
+              onClick={() => setStudentStep(2)}
+              className="px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md hover:bg-blue-600"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
+      {studentStep === 2 && (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="w-full">
+            <label htmlFor="nationality" className="block mb-1 text-sm font-medium text-gray-700">
+              Nationality
+            </label>
             <input
+              id="nationality"
               type="text"
-              placeholder="Nationality"
+              placeholder="Enter Nationality"
               value={formData.nationality || "Nigeria"}
               onChange={(e) => handleFormInputChange("nationality", e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+          </div>
+          <div className="w-full">
+            <label htmlFor="fatherName" className="block mb-1 text-sm font-medium text-gray-700">
+              Father's Name
+            </label>
             <input
+              id="fatherName"
               type="text"
-              placeholder="Father's Name"
+              placeholder="Enter Father's Name"
               value={formData.fatherName || ""}
               onChange={(e) => handleFormInputChange("fatherName", e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+          </div>
+          <div className="w-full">
+            <label htmlFor="motherName" className="block mb-1 text-sm font-medium text-gray-700">
+              Mother's Name
+            </label>
             <input
+              id="motherName"
               type="text"
-              placeholder="Mother's Name"
+              placeholder="Enter Mother's Name"
               value={formData.motherName || ""}
               onChange={(e) => handleFormInputChange("motherName", e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+          </div>
+          <div className="w-full">
+            <label htmlFor="guardianName" className="block mb-1 text-sm font-medium text-gray-700">
+              Guardian's Name
+            </label>
             <input
+              id="guardianName"
               type="text"
-              placeholder="Guardian's Name"
+              placeholder="Enter Guardian's Name"
               value={formData.guardianName || ""}
               onChange={(e) => handleFormInputChange("guardianName", e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+          </div>
+          <div className="w-full">
+            <label htmlFor="phoneNumber" className="block mb-1 text-sm font-medium text-gray-700">
+              Phone Number
+            </label>
             <input
+              id="phoneNumber"
               type="text"
-              placeholder="Phone Number"
+              placeholder="Enter Phone Number"
               value={formData.phoneNumber || ""}
               onChange={(e) => handleFormInputChange("phoneNumber", e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+          </div>
+          <div className="w-full">
+            <label htmlFor="email" className="block mb-1 text-sm font-medium text-gray-700">
+              Email
+            </label>
             <input
+              id="email"
               type="email"
-              placeholder="Email"
+              placeholder="Enter Email"
               value={formData.email || ""}
               onChange={(e) => handleFormInputChange("email", e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+          </div>
+          <div className="w-full">
+            <label htmlFor="address" className="block mb-1 text-sm font-medium text-gray-700">
+              Address
+            </label>
             <input
+              id="address"
               type="text"
-              placeholder="Address"
+              placeholder="Enter Address"
               value={formData.address || ""}
               onChange={(e) => handleFormInputChange("address", e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+          </div>
+          <div className="w-full">
+            <label htmlFor="currentSession" className="block mb-1 text-sm font-medium text-gray-700">
+              Current Session
+            </label>
             <input
+              id="currentSession"
               type="text"
-              placeholder="Current Session (e.g., 2025/2026)"
+              placeholder="Enter Current Session (e.g., 2025/2026)"
               value={formData.currentSession || ""}
               onChange={(e) => handleFormInputChange("currentSession", e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+          </div>
+          <div className="w-full">
+            <label htmlFor="currentTerm" className="block mb-1 text-sm font-medium text-gray-700">
+              Current Term
+            </label>
             <select
+              id="currentTerm"
               value={formData.currentTerm || ""}
               onChange={(e) => handleFormInputChange("currentTerm", e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select Term</option>
               <option value="first">First</option>
               <option value="second">Second</option>
               <option value="third">Third</option>
             </select>
-            <div className="flex justify-between col-span-2 mt-4 space-x-4">
-              <button
-                type="button"
-                onClick={() => setStudentStep(1)}
-                className="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
-              >
-                Back
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 text-sm text-white bg-green-500 rounded hover:bg-green-600"
-              >
-                Add Student
-              </button>
-            </div>
           </div>
-        )}
-      </form>
+          <div className="flex justify-between col-span-2 mt-4 space-x-4">
+            <button
+              type="button"
+              onClick={() => setStudentStep(1)}
+              className="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+            >
+              Back
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 text-sm text-white bg-green-500 rounded-md hover:bg-green-600"
+            >
+              Add Student
+            </button>
+          </div>
+        </div>
+      )}
+    </form>
     );
   };
 
@@ -568,7 +672,7 @@ function ManageStudents() {
                         <FaSearch className="text-xs text-gray-400" />
                         <input
                           type="text"
-                          placeholder="Type to search parents..."
+                          placeholder="Type to search parents name or parents email..."
                           value={parentSearchTerm}
                           onChange={(e) => setParentSearchTerm(e.target.value)}
                           className="w-full px-2 py-1 text-sm outline-none"
