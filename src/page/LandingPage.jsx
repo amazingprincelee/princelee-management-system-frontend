@@ -246,7 +246,7 @@ function LandingPage() {
       <footer className="py-6 text-sm text-center text-gray-400 bg-gray-900">
         © {new Date().getFullYear()} School Management System. All rights
         reserved.
-        <p>Designed By  <a href="https://prince-lee-portfolio.vercel.app/">Amazing Prince</a></p>
+        <p>Designed By  <a href="https://prince-lee-portfolio.vercel.app/">Amazing Prince Lee</a></p>
       </footer>
     </div>
   );
