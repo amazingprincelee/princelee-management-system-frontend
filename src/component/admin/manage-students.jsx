@@ -97,6 +97,9 @@ function ManageStudents() {
     }
   }, [parentOption]);
 
+  console.log(parents);
+  
+
   const handleRegisterParent = async (e) => {
     e.preventDefault();
     try {
@@ -372,6 +375,7 @@ function ManageStudents() {
 
             {step === 1 && (
               <>
+                 <p className="text-orange-400">You must select or creat a new parent before adding a student</p>
                 <h2 className="mb-4 text-lg font-bold">Step 1: Select Parent</h2>
                 <div className="flex gap-4 mb-4">
                   <button
