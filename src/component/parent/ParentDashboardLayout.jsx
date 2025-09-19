@@ -44,10 +44,8 @@ const ParentDashboardLayout = () => {
 
   const menuItems = [
     { path: "/parent-dashboard", icon: FaHome, label: "Dashboard", exact: true },
-    { path: "/parent-dashboard/children", icon: FaChild, label: "My Children" },
     { path: "/parent-dashboard/results", icon: FaGraduationCap, label: "Results" },
     { path: "/parent-dashboard/payments", icon: FaMoneyBillWave, label: "Payments" },
-    { path: "/parent-dashboard/notifications", icon: FaBell, label: "Notifications" },
     { path: "/parent-dashboard/calendar", icon: FaCalendarAlt, label: "School Calendar" },
     { path: "/parent-dashboard/messages", icon: FaEnvelope, label: "Messages" },
     { path: "/parent-dashboard/profile", icon: FaUser, label: "Profile" },
@@ -75,13 +73,13 @@ const ParentDashboardLayout = () => {
             {school?.logo && (
               <img src={school.logo} alt="School Logo" className="w-8 h-8 rounded-full" />
             )}
-            <span className="text-white font-semibold text-lg">
+            <span className="text-lg font-semibold text-white">
               {school?.name || "Parent Portal"}
             </span>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="lg:hidden text-white hover:text-gray-200"
+            className="text-white lg:hidden hover:text-gray-200"
           >
             <FaTimes size={20} />
           </button>
@@ -90,7 +88,7 @@ const ParentDashboardLayout = () => {
         {/* User Info */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+            <div className="flex items-center justify-center w-10 h-10 bg-green-100 rounded-full">
               <FaUser className="text-green-600" />
             </div>
             <div>
@@ -120,7 +118,7 @@ const ParentDashboardLayout = () => {
                 <Icon className="mr-3" size={18} />
                 {item.label}
                 {item.path.includes('notifications') && unreadNotifications > 0 && (
-                  <span className="ml-auto bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  <span className="flex items-center justify-center w-5 h-5 ml-auto text-xs text-white bg-red-500 rounded-full">
                     {unreadNotifications}
                   </span>
                 )}
@@ -133,7 +131,7 @@ const ParentDashboardLayout = () => {
         <div className="absolute bottom-0 w-full p-6">
           <button
             onClick={handleLogout}
-            className="flex items-center w-full px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
+            className="flex items-center w-full px-4 py-2 text-sm font-medium text-red-600 transition-colors duration-200 rounded-lg hover:bg-red-50"
           >
             <FaSignOutAlt className="mr-3" size={18} />
             Logout
@@ -142,13 +140,13 @@ const ParentDashboardLayout = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
+      <div className="flex flex-col flex-1 overflow-hidden lg:ml-0">
         {/* Top Header */}
-        <header className="bg-white shadow-sm border-b border-gray-200">
+        <header className="bg-white border-b border-gray-200 shadow-sm">
           <div className="flex items-center justify-between px-6 py-4">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden text-gray-600 hover:text-gray-900"
+              className="text-gray-600 lg:hidden hover:text-gray-900"
             >
               <FaBars size={20} />
             </button>
@@ -163,11 +161,11 @@ const ParentDashboardLayout = () => {
               {/* Notification Bell */}
               <Link
                 to="/parent-dashboard/notifications"
-                className="relative p-2 text-gray-600 hover:text-gray-900 transition-colors"
+                className="relative p-2 text-gray-600 transition-colors hover:text-gray-900"
               >
                 <FaBell size={20} />
                 {unreadNotifications > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  <span className="absolute flex items-center justify-center w-5 h-5 text-xs text-white bg-red-500 rounded-full -top-1 -right-1">
                     {unreadNotifications}
                   </span>
                 )}
@@ -182,7 +180,7 @@ const ParentDashboardLayout = () => {
 
         {/* Main Content Area */}
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-          <div className="container mx-auto px-6 py-8">
+          <div className="container px-6 py-8 mx-auto">
             <Outlet />
           </div>
         </main>
