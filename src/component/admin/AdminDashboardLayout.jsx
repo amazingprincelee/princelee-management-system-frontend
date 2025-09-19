@@ -11,6 +11,7 @@ import {
   FaMoneyBill,
   FaCog,
   FaBook,
+  FaCalendarAlt,
   FaChevronRight,
   FaChevronLeft,
   FaEye,
@@ -130,6 +131,7 @@ useEffect(() => {
             { to: "/dashboard/billing", icon: <FaMoneyBill />, label: "Billing" },
             { to: "/dashboard/settings", icon: <FaCog />, label: "Settings" },
             { to: "/dashboard/exams", icon: <FaBook />, label: "Exams" },
+            { to: "/dashboard/calendar", icon: <FaCalendarAlt />, label: "Calendar" },
             { to: "/dashboard/profile", icon: <FaUser />, label: "Profile" },
           ].map((item) => (
             <Link

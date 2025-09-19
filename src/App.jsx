@@ -35,7 +35,9 @@ import Exams from './component/admin/exams';
 
 import ParentNotifications from './component/parent/ParentNotifications';
 import ParentPayments from './component/parent/ParentPayments';
+import Messages from './component/parent/Messages';
 import TeacherExams from './component/teacher/TeacherExams';
+import Calendar from './components/Calendar/Calendar';
 
 
 import './App.css';
@@ -72,6 +74,7 @@ function AppContent() {
             <Route path="settings" element={<Settings />} />
             <Route path="exams" element={<Exams />} />
             <Route path="reports" element={<Reports />} />
+            <Route path="calendar" element={<Calendar />} />
             <Route path='profile' element={<Profile />} />
             <Route path="approve-payment" element={<ApprovePayment />} />
           </Route>
@@ -86,6 +89,7 @@ function AppContent() {
             <Route path="add-scores" element={<AddScores />} />
             <Route path="add-ca" element={<AddScores />} />
             <Route path="generate-results" element={<GenerateResults />} />
+            <Route path="calendar" element={<Calendar />} />
             <Route path='profile' element={<Profile />} />
           </Route>
         </Route>
@@ -98,7 +102,9 @@ function AppContent() {
             <Route path="children/:childId/results" element={<ViewResults />} />
             <Route path="notifications" element={<ParentNotifications />} />
             <Route path="payments" element={<ParentPayments />} />
+            <Route path="calendar" element={<Calendar />} />
             <Route path='profile' element={<Profile />} />
+            <Route path='messages' element={<Messages />} />
           </Route>
         </Route>
       </Routes>

@@ -11,7 +11,8 @@ import {
   FaBars, 
   FaTimes,
   FaBookOpen,
-  FaUsers
+  FaUsers,
+  FaCalendarAlt
 } from "react-icons/fa";
 import { logout } from "../../redux/features/authSlice";
 import { fetchSchoolInfo } from "../../redux/features/schoolSlice";
@@ -42,6 +43,7 @@ const TeacherDashboardLayout = () => {
     { path: "/teacher-dashboard/generate-results", icon: FaChartLine, label: "Generate Results" },
     { path: "/teacher-dashboard/subjects", icon: FaBookOpen, label: "My Subjects" },
     { path: "/teacher-dashboard/reports", icon: FaChartLine, label: "Reports" },
+    { path: "/teacher-dashboard/calendar", icon: FaCalendarAlt, label: "Calendar" },
     { path: "/teacher-dashboard/profile", icon: FaUser, label: "Profile" },
   ];
 

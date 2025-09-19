@@ -6,6 +6,7 @@ import teacherReducer from "./features/teacherSlice";
 import paymentReducer from "./features/paymentSlice";
 import studentReducer from "./features/studentSlice";
 import schoolReducer from "./features/schoolSlice";
+import calendarReducer from "./features/calendarSlice";
 
 
 
@@ -18,6 +19,7 @@ const store = configureStore({
         payment: paymentReducer,
         students: studentReducer,
         school: schoolReducer,
+        calendar: calendarReducer,
     }
 })
 
