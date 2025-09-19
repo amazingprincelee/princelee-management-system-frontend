@@ -235,46 +235,49 @@ function ManageTeachers() {
   const subjects = [...new Set(teachers?.flatMap((t) => t.subjects || []) || [])].sort();
 
   return (
-    <div className="p-2 sm:p-4 md:p-6">
-      {/* Header */}
-      <div className="flex flex-col mb-4 space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-        <h1 className="text-lg font-bold sm:text-xl md:text-2xl">Manage Teachers</h1>
+    <div className="space-y-6">
+      {/* Header Section */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Manage Teachers</h1>
+          <p className="text-sm text-gray-600 mt-1">Add, edit, and manage teacher records</p>
+        </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center justify-center w-full px-3 py-2 text-sm text-white bg-green-500 rounded sm:w-auto sm:text-base sm:px-4"
+          className="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm"
         >
-          <FaPlus className="mr-2" /> Add Teacher
+          <FaPlus className="mr-2 w-4 h-4" /> Add Teacher
         </button>
       </div>
 
-      {/* Search and Filters */}
-      <div className="mb-4 space-y-4">
-        <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0">
+      {/* Search and Filters Section */}
+      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm space-y-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <div className="relative flex-1">
-            <FaSearch className="absolute text-gray-400 left-3 top-3" />
+            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
               type="text"
               placeholder="Search by name or email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-2 pl-10 text-sm border rounded sm:text-base"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
             />
           </div>
           <button
             onClick={handleResetFilters}
-            className="flex items-center justify-center w-full px-3 py-2 text-sm text-white bg-gray-500 rounded sm:w-auto sm:text-base sm:px-4"
+            className="flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200"
           >
-            <FaTimes className="mr-2" /> Clear Filters
+            <FaTimes className="mr-2 w-4 h-4" /> Clear Filters
           </button>
         </div>
 
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <select
             value={filters.designation}
             onChange={(e) =>
               setFilters({ ...filters, designation: e.target.value })
             }
-            className="w-full p-2 text-sm border rounded sm:text-base"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
           >
             <option value="">All Designations</option>
             {designations.map((designation) => (
@@ -286,7 +289,7 @@ function ManageTeachers() {
           <select
             value={filters.gender}
             onChange={(e) => setFilters({ ...filters, gender: e.target.value })}
-            className="w-full p-2 text-sm border rounded sm:text-base"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
           >
             <option value="">All Genders</option>
             <option value="male">Male</option>
@@ -295,7 +298,7 @@ function ManageTeachers() {
           <select
             value={filters.subject}
             onChange={(e) => setFilters({ ...filters, subject: e.target.value })}
-            className="w-full p-2 text-sm border rounded sm:text-base"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
           >
             <option value="">All Subjects</option>
             {subjects.map((subject) => (
@@ -305,98 +308,156 @@ function ManageTeachers() {
             ))}
           </select>
         </div>
-        {filterError && <p className="text-red-500">{filterError}</p>}
+        {filterError && (
+          <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-sm text-red-600">{filterError}</p>
+          </div>
+        )}
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-xs border-collapse sm:text-sm md:text-base">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="p-2 border">Name</th>
-              <th className="p-2 border">Email</th>
-              <th className="p-2 border">Designation</th>
-              <th className="p-2 border">Subjects</th>
-              <th className="p-2 border">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredTeachers.length > 0 ? (
-              filteredTeachers.map((teacher) => (
-                <tr key={teacher._id} className="hover:bg-gray-50">
-                  <td className="p-2 border">{teacher.fullname}</td>
-                  <td className="p-2 border">{teacher.email}</td>
-                  <td className="p-2 border">{teacher.designation}</td>
-                  <td className="p-2 border">
-                    {teacher.subjects?.join(", ") || "N/A"}
-                  </td>
-                  <td className="flex p-2 space-x-2 border">
-                    <button
-                      onClick={() => {
-                        setSelectedTeacher(teacher);
-                        setShowEditModal(true);
-                        setFormData({
-                          ...teacher,
-                          bankName: teacher.bankDetails?.bankName,
-                          bankAccount: teacher.bankDetails?.bankAccount,
-                          accountName: teacher.bankDetails?.accountName,
-                        });
-                      }}
-                      className="text-blue-500"
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteTeacher(teacher._id)}
-                      className="text-red-500"
-                    >
-                      <FaTrash />
-                    </button>
+      {/* Teachers Table */}
+      <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="bg-gray-50 border-b border-gray-200">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Designation</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subjects</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {filteredTeachers.length > 0 ? (
+                filteredTeachers.map((teacher, index) => (
+                  <tr key={teacher._id} className={`hover:bg-gray-50 transition-colors duration-200 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-10 w-10">
+                          <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                            <span className="text-sm font-medium text-blue-600">
+                              {teacher.fullname?.charAt(0)?.toUpperCase()}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900">{teacher.fullname}</div>
+                          <div className="text-sm text-gray-500">{teacher.phone || 'No phone'}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{teacher.email}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                        {teacher.designation}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      <div className="max-w-xs truncate" title={teacher.subjects?.join(", ") || "N/A"}>
+                        {teacher.subjects?.join(", ") || "N/A"}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => {
+                            setSelectedTeacher(teacher);
+                            setShowEditModal(true);
+                            setFormData({
+                              ...teacher,
+                              bankName: teacher.bankDetails?.bankName,
+                              bankAccount: teacher.bankDetails?.bankAccount,
+                              accountName: teacher.bankDetails?.accountName,
+                            });
+                          }}
+                          className="text-blue-600 hover:text-blue-900 transition-colors duration-200 p-1 rounded hover:bg-blue-50"
+                          title="Edit teacher"
+                        >
+                          <FaEdit className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteTeacher(teacher._id)}
+                          className="text-red-600 hover:text-red-900 transition-colors duration-200 p-1 rounded hover:bg-red-50"
+                          title="Delete teacher"
+                        >
+                          <FaTrash className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="px-6 py-12 text-center">
+                    <div className="text-gray-500">
+                      <div className="text-lg mb-2">No teachers found</div>
+                      <div className="text-sm">Try adjusting your search or filter criteria</div>
+                    </div>
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5" className="p-2 text-center border">
-                  No teachers found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      {/* Add Modal */}
+      {/* Add Teacher Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 flex items-center justify-center px-2 bg-black bg-opacity-50 sm:px-4">
-          <div className="w-full max-w-2xl p-4 bg-white rounded-lg sm:p-6 max-h-[90vh] overflow-y-auto">
-            <h2 className="mb-4 text-lg font-bold sm:text-xl">Add New Teacher</h2>
-            <TeacherForm onSubmit={handleAddTeacher} />
-            <button
-              onClick={() => setShowAddModal(false)}
-              className="w-full p-2 mt-4 text-white bg-gray-500 rounded sm:w-auto"
-            >
-              Cancel
-            </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-xl shadow-2xl">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-xl">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-gray-900">Add New Teacher</h2>
+                <button
+                  onClick={() => setShowAddModal(false)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className="p-6">
+              <TeacherForm
+                formData={formData}
+                setFormData={setFormData}
+                onSubmit={handleAddTeacher}
+                onCancel={() => setShowAddModal(false)}
+                isEditing={false}
+              />
+            </div>
           </div>
         </div>
       )}
 
-      {/* Edit Modal */}
+      {/* Edit Teacher Modal */}
       {showEditModal && selectedTeacher && (
-        <div className="fixed inset-0 flex items-center justify-center px-2 bg-black bg-opacity-50 sm:px-4">
-          <div className="w-full max-w-2xl p-4 bg-white rounded-lg sm:p-6 max-h-[90vh] overflow-y-auto">
-            <h2 className="mb-4 text-lg font-bold sm:text-xl">Edit Teacher</h2>
-            <TeacherForm
-              onSubmit={handleUpdateTeacher}
-              initialData={selectedTeacher}
-            />
-            <button
-              onClick={() => setShowEditModal(false)}
-              className="w-full p-2 mt-4 text-white bg-gray-500 rounded sm:w-auto"
-            >
-              Cancel
-            </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-xl shadow-2xl">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-xl">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-gray-900">Edit Teacher</h2>
+                <button
+                  onClick={() => setShowEditModal(false)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className="p-6">
+              <TeacherForm
+                formData={formData}
+                setFormData={setFormData}
+                onSubmit={handleUpdateTeacher}
+                onCancel={() => setShowEditModal(false)}
+                isEditing={true}
+              />
+            </div>
           </div>
         </div>
       )}

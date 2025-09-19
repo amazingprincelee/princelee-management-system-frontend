@@ -5,6 +5,7 @@ import { FaEye, FaTimes, FaSearch } from "react-icons/fa";
 
 function ManageParents() {
   const [parents, setParents] = useState([]);
+  const [filteredParents, setFilteredParents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedParent, setSelectedParent] = useState(null);
@@ -31,10 +32,10 @@ function ManageParents() {
   }, []);
 
   useEffect(() => {
-    let filteredParents = [...parents];
+    let filtered = [...parents];
 
     if (searchTerm) {
-      filteredParents = filteredParents.filter(
+      filtered = filtered.filter(
         (parent) =>
           parent.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
           parent.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -43,16 +44,16 @@ function ManageParents() {
     }
 
     if (filters.hasChildren === "yes") {
-      filteredParents = filteredParents.filter(
+      filtered = filtered.filter(
         (parent) => parent.children && parent.children.length > 0
       );
     } else if (filters.hasChildren === "no") {
-      filteredParents = filteredParents.filter(
+      filtered = filtered.filter(
         (parent) => !parent.children || parent.children.length === 0
       );
     }
 
-    setParents(filteredParents);
+    setFilteredParents(filtered);
   }, [searchTerm, filters, parents]);
 
   const handleViewDetails = (parent) => {
@@ -107,7 +108,7 @@ function ManageParents() {
               </tr>
             </thead>
             <tbody>
-              {parents.map((parent) => (
+              {filteredParents.map((parent) => (
                 <tr key={parent._id} className="text-center border-t">
                   <td className="p-2 border">{parent.fullname}</td>
                   <td className="p-2 border">{parent.email}</td>

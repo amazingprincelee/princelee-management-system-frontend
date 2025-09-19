@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { Provider } from 'react-redux'
 import store from './redux/store'
 import LandingPage from './page/LandingPage';
@@ -27,13 +27,15 @@ import Exams from './component/admin/exams';
 
 import './App.css';
 
-function App() {
- 
+function AppContent() {
+  const location = useLocation();
+  const isDashboardRoute = location.pathname.startsWith('/dashboard');
 
   return (
     <>
-    <Provider store={store}>
-      <NavComponent />
+      {/* Only show NavComponent for non-dashboard routes */}
+      {!isDashboardRoute && <NavComponent />}
+      
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
@@ -60,9 +62,15 @@ function App() {
         </Route>
         </Route>
       </Routes>
-    </Provider>
-      
     </>
+  )
+}
+
+function App() {
+  return (
+    <Provider store={store}>
+      <AppContent />
+    </Provider>
   )
 }
 

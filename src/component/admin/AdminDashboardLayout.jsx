@@ -61,13 +61,21 @@ useEffect(() => {
   
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-50">
+      {/* Overlay for mobile */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 z-30 bg-black bg-opacity-50 md:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <aside
         ref={sidebarRef}
-        className={`fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-300 
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "-translate-x-full"} 
-        md:translate-x-0 md:relative md:flex md:flex-col`}
+        md:translate-x-0 md:relative md:flex md:flex-col border-r border-gray-200`}
       >
    {/* Logo + School Name */}
 <div className="flex items-center justify-between p-4 border-b">
@@ -103,7 +111,7 @@ useEffect(() => {
 
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {[
             { to: "/dashboard", icon: <FaTachometerAlt />, label: "Dashboard" },
             { to: "/dashboard/teachers", icon: <FaChalkboardTeacher />, label: "Teachers" },
@@ -117,38 +125,43 @@ useEffect(() => {
               key={item.label}
               to={item.to}
               onClick={handleMenuClick}
-              className="flex items-center px-3 py-2 space-x-3 text-gray-700 transition rounded-lg hover:bg-blue-100 hover:text-blue-600"
+              className="flex items-center px-4 py-3 space-x-3 text-gray-700 transition-all duration-200 rounded-lg hover:bg-blue-50 hover:text-blue-700 hover:shadow-sm group"
             >
-              {item.icon}
-              <span>{item.label}</span>
+              <span className="text-lg group-hover:scale-110 transition-transform duration-200">
+                {item.icon}
+              </span>
+              <span className="font-medium">{item.label}</span>
             </Link>
           ))}
         </nav>
       </aside>
 
       {/* Content area */}
-      <div className="flex flex-col flex-1">
-        {/* Top bar (only visible on mobile) */}
-        <header className="flex items-center justify-between p-4 bg-white shadow-md md:hidden">
+      <div className="flex flex-col flex-1 min-w-0">
+        {/* Top bar */}
+        <header className="flex items-center justify-between p-4 bg-white shadow-sm border-b border-gray-200 md:hidden">
           <button
-            className="text-gray-700"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? (
-              <FaChevronLeft className="w-6 h-6" />
+              <FaChevronLeft className="w-5 h-5" />
             ) : (
-              <FaChevronRight className="w-6 h-6" />
+              <FaChevronRight className="w-5 h-5" />
             )}
           </button>
           <h2 className="text-lg font-semibold text-gray-800 truncate">
             Dashboard
           </h2>
+          <div className="w-9 h-9"></div> {/* Spacer for centering */}
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 p-2 overflow-y-auto sm:p-4 md:p-6">
-          <div className="p-4 bg-white shadow rounded-xl sm:p-6">
-            <Outlet />
+        <main className="flex-1 p-4 overflow-y-auto bg-gray-50 md:p-6 lg:p-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="p-6 bg-white shadow-sm rounded-xl border border-gray-200 min-h-[calc(100vh-8rem)]">
+              <Outlet />
+            </div>
           </div>
         </main>
       </div>
