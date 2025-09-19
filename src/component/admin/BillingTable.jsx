@@ -1,13 +1,14 @@
 import { FaEye, FaCheckCircle, FaReceipt, FaDownload, FaWhatsapp } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchPayment, approvePayment } from "../../redux/features/paymentSlice";
+import { fetchPayment, approvePayment, getReceiptData } from "../../redux/features/paymentSlice";
 import { fetchUserProfile } from "../../redux/features/userSlice";
 import { FiSearch } from "react-icons/fi";
+import Receipt from "./modal/Receipt";
 
 const BillingTable = () => {
   const dispatch = useDispatch();
-  const { payments, loading, error, approving, approveError } = useSelector(
+  const { payments, loading, error, approving, approveError, receiptData, receiptLoading } = useSelector(
     (state) => state.payment || {}
   );
   const { user, loading: userLoading, error: userError } = useSelector(
@@ -23,6 +24,7 @@ const BillingTable = () => {
   });
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProofUrl, setSelectedProofUrl] = useState(null);
+  const [receiptModalOpen, setReceiptModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchUserProfile());
@@ -47,15 +49,18 @@ const BillingTable = () => {
     setModalOpen(true);
   };
 
-  const handleShareOnWhatsApp = (receiptUrl, studentName, amount) => {
-    const message = `Payment Receipt for ${studentName}\nAmount: ${formatCurrency(amount)}\nReceipt: ${receiptUrl}`;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
+  const handleViewReceipt = (paymentId, installmentId) => {
+    dispatch(getReceiptData({ paymentId, installmentId }));
+    setReceiptModalOpen(true);
   };
 
   const closeModal = () => {
     setModalOpen(false);
     setSelectedProofUrl(null);
+  };
+
+  const closeReceiptModal = () => {
+    setReceiptModalOpen(false);
   };
 
   const getStatusClasses = (status) => {
@@ -276,28 +281,12 @@ const BillingTable = () => {
                                 {approving ? "Approving..." : "Approve"}
                               </button>
                             )}
-                          {installment.approved && installment.receiptUrl && (
-                            <a
-                              href={installment.receiptUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                          {installment.approved && (
+                            <button
+                              onClick={() => handleViewReceipt(payment._id, installment._id)}
                               className="flex items-center justify-center gap-1 px-2 py-1 text-xs text-white bg-purple-600 rounded-md hover:bg-purple-700"
                             >
                               <FaReceipt /> Receipt
-                            </a>
-                          )}
-                          {installment.receiptUrl && (
-                            <button
-                              className="flex items-center justify-center gap-1 px-2 py-1 text-xs text-white bg-green-500 rounded-md hover:bg-green-600"
-                              onClick={() =>
-                                handleShareOnWhatsApp(
-                                  installment.receiptUrl,
-                                  `${payment.studentId.firstName} ${payment.studentId.surName}`,
-                                  installment.amount
-                                )
-                              }
-                            >
-                              <FaWhatsapp /> Share
                             </button>
                           )}
                           <span
@@ -382,28 +371,12 @@ const BillingTable = () => {
                           {approving ? "Approving..." : "Approve"}
                         </button>
                       )}
-                    {installment.approved && installment.receiptUrl && (
-                      <a
-                        href={installment.receiptUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    {installment.approved && (
+                      <button
+                        onClick={() => handleViewReceipt(payment._id, installment._id)}
                         className="flex items-center gap-1 px-2 py-1 text-xs text-white bg-purple-600 rounded-md hover:bg-purple-700"
                       >
                         <FaReceipt /> Receipt
-                      </a>
-                    )}
-                    {installment.receiptUrl && (
-                      <button
-                        className="flex items-center gap-1 px-2 py-1 text-xs text-white bg-green-500 rounded-md hover:bg-green-600"
-                        onClick={() =>
-                          handleShareOnWhatsApp(
-                            installment.receiptUrl,
-                            `${payment.studentId.firstName} ${payment.studentId.surName}`,
-                            installment.amount
-                          )
-                        }
-                      >
-                        <FaWhatsapp /> Share
                       </button>
                     )}
                   </div>
@@ -422,6 +395,13 @@ const BillingTable = () => {
       ) : (
         !loading && <p className="text-gray-600">No payments found.</p>
       )}
+
+      {/* Receipt Modal */}
+      <Receipt
+        isOpen={receiptModalOpen}
+        onClose={closeReceiptModal}
+        receiptData={receiptData}
+      />
     </div>
   );
 };

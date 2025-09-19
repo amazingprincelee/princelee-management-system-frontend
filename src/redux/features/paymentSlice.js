@@ -74,9 +74,9 @@ export const addPayment = createAsyncThunk('payment/addPayment', async ({formDat
 
 } )
 
-// In your paymentSlice
-export const getReceipt = createAsyncThunk(
-  'payment/getReceipt',
+// Get receipt data for frontend display
+export const getReceiptData = createAsyncThunk(
+  'payment/getReceiptData',
   async ({ paymentId, installmentId }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
@@ -84,7 +84,7 @@ export const getReceipt = createAsyncThunk(
         return rejectWithValue("Token not found");
       }
 
-      const response = await axios.get(`${baseUrl}/payment/get-receipt/${paymentId}/${installmentId}`, {
+      const response = await axios.get(`${baseUrl}/payment/get-receipt-data/${paymentId}/${installmentId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -104,7 +104,7 @@ const paymentSlice = createSlice({
     error: null,
     approving: false,
     approveError: null,
-    receipt: null,
+    receiptData: null,
     receiptLoading: false,
     receiptError: null,
     addPayment: null,
@@ -117,7 +117,7 @@ const paymentSlice = createSlice({
       state.error = null;
     },
     clearReceipt: (state) => {
-      state.receipt = null;
+      state.receiptData = null;
       state.receiptError = null;
     },
   },
@@ -156,20 +156,20 @@ const paymentSlice = createSlice({
         state.approving = false;
         state.approveError = action.payload;
       })
-      .addCase(getReceipt.pending, (state) => {
+      .addCase(getReceiptData.pending, (state) => {
         state.receiptLoading = true;
         state.receiptError = null;
-        state.receipt = null;
+        state.receiptData = null;
       })
-      .addCase(getReceipt.fulfilled, (state, action) => {
-        state.receipt = action.payload.receiptUrl;
+      .addCase(getReceiptData.fulfilled, (state, action) => {
+        state.receiptData = action.payload.receiptData;
         state.receiptLoading = false;
         state.receiptError = null;
       })
-      .addCase(getReceipt.rejected, (state, action) => {
+      .addCase(getReceiptData.rejected, (state, action) => {
         state.receiptError = action.payload;
         state.receiptLoading = false;
-        state.receipt = null;
+        state.receiptData = null;
       })
       .addCase(addPayment.pending, (state)=>{
         state.addPaymentLoading = true;
