@@ -12,6 +12,7 @@ import {
   FaBook,
   FaChevronRight,
   FaChevronLeft,
+  FaEye,
 } from "react-icons/fa";
 
 function AdminDashboardLayout() {
@@ -117,6 +118,7 @@ useEffect(() => {
             { to: "/dashboard/teachers", icon: <FaChalkboardTeacher />, label: "Teachers" },
             { to: "/dashboard/students", icon: <FaUsers />, label: "Students" },
             { to: "/dashboard/parents", icon: <FaUsers />, label: "Parents" },
+      
             { to: "/dashboard/billing", icon: <FaMoneyBill />, label: "Billing" },
             { to: "/dashboard/settings", icon: <FaCog />, label: "Settings" },
             { to: "/dashboard/exams", icon: <FaBook />, label: "Exams" },

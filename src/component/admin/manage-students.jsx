@@ -141,7 +141,25 @@ function ManageStudents() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setSelectedParentId(res.data.newUser._id);
-      toast.success("Parent registered successfully!");
+      
+      // Show success message with password information
+      if (res.data.parentInfo) {
+        const { generatedPassword, welcomeEmailSent } = res.data.parentInfo;
+        if (welcomeEmailSent) {
+          toast.success(
+            `Parent registered successfully! Temporary password (${generatedPassword}) has been sent to their email.`,
+            { autoClose: 8000 }
+          );
+        } else {
+          toast.warning(
+            `Parent registered successfully! Temporary password: ${generatedPassword}. Please share this with the parent as email sending failed.`,
+            { autoClose: 10000 }
+          );
+        }
+      } else {
+        toast.success("Parent registered successfully!");
+      }
+      
       setStep(2);
     } catch (err) {
       console.error("Error registering parent:", err);
@@ -788,18 +806,37 @@ function ManageStudents() {
                           </div>
                           <div>
                             <label className="block mb-1 text-sm font-medium text-gray-700">
-                              Password *
+                              Gender *
                             </label>
-                            <input
-                              type="password"
-                              placeholder="Create password"
-                              value={parentForm.password || ""}
+                            <select
+                              value={parentForm.gender || ""}
                               onChange={(e) =>
-                                setParentForm({ ...parentForm, password: e.target.value })
+                                setParentForm({ ...parentForm, gender: e.target.value })
                               }
                               className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                               required
-                            />
+                            >
+                              <option value="">Select Gender</option>
+                              <option value="Male">Male</option>
+                              <option value="Female">Female</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                          <div className="flex items-start">
+                            <div className="flex-shrink-0">
+                              <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                            <div className="ml-3">
+                              <h3 className="text-sm font-medium text-blue-800">
+                                Automatic Password Generation
+                              </h3>
+                              <div className="mt-2 text-sm text-blue-700">
+                                <p>A temporary password will be automatically generated and sent to the parent's email address. The password will be created using their personal information for security.</p>
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <div className="flex justify-end pt-4">

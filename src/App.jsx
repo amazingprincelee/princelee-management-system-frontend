@@ -10,6 +10,15 @@ import Contact from './page/Contact';
 import NavComponent from './component/Nav';
 import Features from './page/Features';
 import AdminDashboardLayout from './component/admin/AdminDashboardLayout';
+import TeacherDashboardLayout from './component/teacher/TeacherDashboardLayout';
+import ParentDashboardLayout from './component/parent/ParentDashboardLayout';
+import TeacherDashboard from './component/teacher/TeacherDashboard';
+import ParentDashboard from './component/parent/ParentDashboard';
+import ViewResults from './component/parent/ViewResults';
+import Notifications from './component/parent/Notifications';
+import MyClasses from './component/teacher/MyClasses';
+import AddScores from './component/teacher/AddScores';
+import GenerateResults from './component/teacher/GenerateResults';
 import StatCard from './component/admin/statcard';
 import MainArea from './component/admin/main-area';
 import AddTeacher from './page/admin/add-teacher';
@@ -24,12 +33,17 @@ import Profile from './page/Profile';
 import AddPayment from './component/admin/modal/add-payment';
 import Exams from './component/admin/exams';
 
+import ParentNotifications from './component/parent/ParentNotifications';
+import TeacherExams from './component/teacher/TeacherExams';
+
 
 import './App.css';
 
 function AppContent() {
   const location = useLocation();
-  const isDashboardRoute = location.pathname.startsWith('/dashboard');
+  const isDashboardRoute = location.pathname.startsWith('/dashboard') || 
+                          location.pathname.startsWith('/teacher-dashboard') || 
+                          location.pathname.startsWith('/parent-dashboard');
 
   return (
     <>
@@ -45,7 +59,7 @@ function AppContent() {
         <Route path="/unauthorized" element={<Unauthorized />} />
        
 
-        {/* Dashboard with nested routes */}
+        {/* Admin Dashboard with nested routes */}
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<AdminDashboardLayout />}>
             <Route index element={<><StatCard /><AddPayment /><MainArea /></>} /> 
@@ -57,9 +71,33 @@ function AppContent() {
             <Route path="settings" element={<Settings />} />
             <Route path="exams" element={<Exams />} />
             <Route path="reports" element={<Reports />} />
-             <Route path='profile' element={<Profile />} />
-          <Route path="approve-payment" element={<ApprovePayment />} />
+            <Route path='profile' element={<Profile />} />
+            <Route path="approve-payment" element={<ApprovePayment />} />
+          </Route>
         </Route>
+
+        {/* Teacher Dashboard with nested routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/teacher-dashboard" element={<TeacherDashboardLayout />}>
+            <Route index element={<TeacherDashboard />} />
+            <Route path="classes" element={<MyClasses />} />
+            <Route path="exams" element={<TeacherExams />} />
+            <Route path="add-scores" element={<AddScores />} />
+            <Route path="add-ca" element={<AddScores />} />
+            <Route path="generate-results" element={<GenerateResults />} />
+            <Route path='profile' element={<Profile />} />
+          </Route>
+        </Route>
+
+        {/* Parent Dashboard with nested routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/parent-dashboard" element={<ParentDashboardLayout />}>
+            <Route index element={<ParentDashboard />} />
+            <Route path="results" element={<ViewResults />} />
+            <Route path="children/:childId/results" element={<ViewResults />} />
+            <Route path="notifications" element={<ParentNotifications />} />
+            <Route path='profile' element={<Profile />} />
+          </Route>
         </Route>
       </Routes>
     </>
