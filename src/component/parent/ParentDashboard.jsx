@@ -47,20 +47,31 @@ const ParentDashboard = () => {
       
       setChildren(childrenResponse.data.children || []);
       setNotifications(notificationsResponse.data.notifications || []);
-      setPaymentSummary(paymentsResponse.data.summary || {});
+      setPaymentSummary({
+        totalPaid: paymentsResponse.data.summary?.totalPayments || 0,
+        outstanding: paymentsResponse.data.summary?.totalOutstanding || 0,
+        currentTerm: paymentsResponse.data.summary?.currentTermFees || 0,
+        ...paymentsResponse.data.summary
+      });
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
       // Set default values for demo purposes
       setChildren([]);
       setNotifications([]);
-      setPaymentSummary({});
+      setPaymentSummary({
+        totalPaid: 0,
+        outstanding: 0,
+        currentTerm: 0
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const formatCurrency = (amount) => {
-    return `₦${amount?.toLocaleString("en-NG", { minimumFractionDigits: 2 }) || "0.00"}`;
+    // Ensure amount is a number and handle undefined/null/object cases
+    const numAmount = typeof amount === 'number' ? amount : 0;
+    return `₦${numAmount.toLocaleString("en-NG", { minimumFractionDigits: 2 })}`;
   };
 
   const quickActions = [
@@ -276,7 +287,9 @@ const ParentDashboard = () => {
                   <p className="text-xs text-gray-600 mt-1">{notification.message}</p>
                 </div>
                 <div className="ml-4 text-right">
-                  <span className="text-xs text-gray-500">{notification.createdAt}</span>
+                  <span className="text-xs text-gray-500">
+                    {notification.createdAt ? new Date(notification.createdAt).toLocaleDateString() : 'N/A'}
+                  </span>
                   {!notification.read && (
                     <div className="w-2 h-2 bg-blue-600 rounded-full mt-1 ml-auto"></div>
                   )}

@@ -14,7 +14,7 @@ function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, token, message } = useSelector((state) => state.auth);
+  const { loading, token, role, message } = useSelector((state) => state.auth);
   const { school, loading: schoolLoading } = useSelector((state) => state.school);
 
   const handleSubmit = (e) => {
@@ -29,10 +29,23 @@ function Login() {
   }, [dispatch, school]);
 
   useEffect(() => {
-    if (token) {
-      navigate("/dashboard");
+    if (token && role) {
+      // Role-based routing
+      switch (role) {
+        case 'admin':
+          navigate("/dashboard");
+          break;
+        case 'parent':
+          navigate("/parent-dashboard");
+          break;
+        case 'teacher':
+          navigate("/teacher-dashboard");
+          break;
+        default:
+          navigate("/dashboard"); // fallback to admin dashboard
+      }
     }
-  }, [message, token, navigate]);
+  }, [message, token, role, navigate]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 bg-gray-50">

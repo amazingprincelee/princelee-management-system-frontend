@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSchoolInfo } from '../../redux/features/schoolSlice';
+import { logout } from '../../redux/features/authSlice';
 import {
   FaSchool,
   FaTachometerAlt,
@@ -13,6 +14,8 @@ import {
   FaChevronRight,
   FaChevronLeft,
   FaEye,
+  FaUser,
+  FaSignOutAlt,
 } from "react-icons/fa";
 
 function AdminDashboardLayout() {
@@ -21,6 +24,12 @@ function AdminDashboardLayout() {
   const sidebarRef = useRef(null);
   const {school, loading, error} = useSelector((state)=> state.school)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
 
   // Close sidebar on mobile when a menu item is clicked
   const handleMenuClick = () => {
@@ -118,10 +127,10 @@ useEffect(() => {
             { to: "/dashboard/teachers", icon: <FaChalkboardTeacher />, label: "Teachers" },
             { to: "/dashboard/students", icon: <FaUsers />, label: "Students" },
             { to: "/dashboard/parents", icon: <FaUsers />, label: "Parents" },
-      
             { to: "/dashboard/billing", icon: <FaMoneyBill />, label: "Billing" },
             { to: "/dashboard/settings", icon: <FaCog />, label: "Settings" },
             { to: "/dashboard/exams", icon: <FaBook />, label: "Exams" },
+            { to: "/dashboard/profile", icon: <FaUser />, label: "Profile" },
           ].map((item) => (
             <Link
               key={item.label}
@@ -135,6 +144,17 @@ useEffect(() => {
               <span className="font-medium">{item.label}</span>
             </Link>
           ))}
+          
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="flex items-center w-full px-4 py-3 space-x-3 text-red-600 transition-all duration-200 rounded-lg hover:bg-red-50 hover:text-red-700 hover:shadow-sm group mt-4"
+          >
+            <span className="text-lg group-hover:scale-110 transition-transform duration-200">
+              <FaSignOutAlt />
+            </span>
+            <span className="font-medium">Logout</span>
+          </button>
         </nav>
       </aside>
 
