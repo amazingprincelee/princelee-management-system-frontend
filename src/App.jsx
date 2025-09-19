@@ -1,6 +1,8 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { Provider } from 'react-redux'
 import store from './redux/store'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import LandingPage from './page/LandingPage';
 import Login from './page/Login';
 import Register from './page/Register';
@@ -36,6 +38,7 @@ import Exams from './component/admin/exams';
 import ParentNotifications from './component/parent/ParentNotifications';
 import ParentPayments from './component/parent/ParentPayments';
 import Messages from './component/parent/Messages';
+import Children from './component/parent/Children';
 import TeacherExams from './component/teacher/TeacherExams';
 import Calendar from './components/Calendar/Calendar';
 
@@ -99,6 +102,7 @@ function AppContent() {
           <Route path="/parent-dashboard" element={<ParentDashboardLayout />}>
             <Route index element={<ParentDashboard />} />
             <Route path="results" element={<ViewResults />} />
+            <Route path="children" element={<Children />} />
             <Route path="children/:childId/results" element={<ViewResults />} />
             <Route path="notifications" element={<ParentNotifications />} />
             <Route path="payments" element={<ParentPayments />} />
@@ -116,6 +120,18 @@ function App() {
   return (
     <Provider store={store}>
       <AppContent />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </Provider>
   )
 }

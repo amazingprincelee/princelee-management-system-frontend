@@ -44,6 +44,7 @@ const ParentDashboardLayout = () => {
 
   const menuItems = [
     { path: "/parent-dashboard", icon: FaHome, label: "Dashboard", exact: true },
+    { path: "/parent-dashboard/children", icon: FaChild, label: "My Children" },
     { path: "/parent-dashboard/results", icon: FaGraduationCap, label: "Results" },
     { path: "/parent-dashboard/payments", icon: FaMoneyBillWave, label: "Payments" },
     { path: "/parent-dashboard/calendar", icon: FaCalendarAlt, label: "School Calendar" },
