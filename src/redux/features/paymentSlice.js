@@ -96,6 +96,19 @@ export const getReceiptData = createAsyncThunk(
   }
 );
 
+// Initiate online payment
+export const initiatePayment = createAsyncThunk(
+  'payment/initiatePayment',
+  async (paymentData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${baseUrl}/payment/online-payment`, paymentData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
 const paymentSlice = createSlice({
   name: 'payment',
   initialState: {
@@ -109,7 +122,10 @@ const paymentSlice = createSlice({
     receiptError: null,
     addPayment: null,
     addPaymentLoading: false,
-    addPaymentError: null
+    addPaymentError: null,
+    initiatePayment: null,
+    initiatePaymentLoading: false,
+    initiatePaymentError: null
   },
   reducers: {
     clearPayment: (state) => {
@@ -180,7 +196,20 @@ const paymentSlice = createSlice({
       })
       .addCase(addPayment.rejected, (state, action)=> {
         state.addPaymentError = action.payload;
-        state.addPaymentError = null
+        state.addPaymentLoading = false;
+      })
+      .addCase(initiatePayment.pending, (state) => {
+        state.initiatePaymentLoading = true;
+        state.initiatePaymentError = null;
+      })
+      .addCase(initiatePayment.fulfilled, (state, action) => {
+        state.initiatePayment = action.payload;
+        state.initiatePaymentLoading = false;
+        state.initiatePaymentError = null;
+      })
+      .addCase(initiatePayment.rejected, (state, action) => {
+        state.initiatePaymentError = action.payload;
+        state.initiatePaymentLoading = false;
       })
   },
 });

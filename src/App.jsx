@@ -34,6 +34,7 @@ import AddPayment from './component/admin/modal/add-payment';
 import Exams from './component/admin/exams';
 
 import ParentNotifications from './component/parent/ParentNotifications';
+import ParentPayments from './component/parent/ParentPayments';
 import TeacherExams from './component/teacher/TeacherExams';
 
 
@@ -96,6 +97,7 @@ function AppContent() {
             <Route path="results" element={<ViewResults />} />
             <Route path="children/:childId/results" element={<ViewResults />} />
             <Route path="notifications" element={<ParentNotifications />} />
+            <Route path="payments" element={<ParentPayments />} />
             <Route path='profile' element={<Profile />} />
           </Route>
         </Route>
