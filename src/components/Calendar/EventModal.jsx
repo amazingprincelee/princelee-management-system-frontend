@@ -53,7 +53,7 @@ const EventModal = ({ event, onClose, onEdit }) => {
 
   const getEventTypeColor = (type) => {
     const colors = {
-      'academic': 'bg-blue-100 text-blue-800',
+      'academic': 'bg-primary text-primary-800',
       'exam': 'bg-red-100 text-red-800',
       'holiday': 'bg-green-100 text-green-800',
       'meeting': 'bg-purple-100 text-purple-800',
@@ -88,7 +88,7 @@ const EventModal = ({ event, onClose, onEdit }) => {
 
   const getStatusColor = (status) => {
     const colors = {
-      'scheduled': 'bg-blue-100 text-blue-800',
+      'scheduled': 'bg-primary text-primary-800',
       'ongoing': 'bg-green-100 text-green-800',
       'completed': 'bg-gray-100 text-gray-800',
       'cancelled': 'bg-red-100 text-red-800'
@@ -166,7 +166,7 @@ const EventModal = ({ event, onClose, onEdit }) => {
           {/* Date and Time */}
           <div className="event-section">
             <div className="section-header">
-              <Calendar className="w-5 h-5 text-blue-600" />
+              <Calendar className="w-5 h-5 text-primary-600" />
               <h3>Date & Time</h3>
             </div>
             <div className="section-content">

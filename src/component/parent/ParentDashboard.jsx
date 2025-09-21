@@ -79,7 +79,7 @@ const ParentDashboard = () => {
       title: "View All Children",
       description: "See detailed information about all your children",
       icon: FaChild,
-      color: "bg-blue-600",
+      color: "bg-primary",
       link: "/parent-dashboard/children"
     },
     {
@@ -131,7 +131,7 @@ const ParentDashboard = () => {
           <h2 className="text-lg font-semibold text-gray-900">My Children</h2>
           <Link
             to="/parent-dashboard/children"
-            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            className="text-primary-600 hover:text-primary-800 text-sm font-medium"
           >
             View All
           </Link>
@@ -149,8 +149,8 @@ const ParentDashboard = () => {
                       className="w-12 h-12 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                      <FaChild className="text-blue-600" size={20} />
+                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
+                      <FaChild className="text-primary-600" size={20} />
                     </div>
                   )}
                   <div>
@@ -179,7 +179,7 @@ const ParentDashboard = () => {
                 <div className="mt-3 pt-3 border-t border-gray-200">
                   <Link
                     to={`/parent-dashboard/children/${child._id}`}
-                    className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                    className="text-primary-600 hover:text-primary-800 text-sm font-medium"
                   >
                     View Details →
                   </Link>
@@ -255,12 +255,12 @@ const ParentDashboard = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">This Term</p>
-              <p className="text-2xl font-bold text-blue-600">
+              <p className="text-2xl font-bold text-primary-600">
                 {formatCurrency(paymentSummary.currentTerm)}
               </p>
             </div>
-            <div className="bg-blue-100 p-3 rounded-lg">
-              <FaCalendarAlt className="text-blue-600" size={24} />
+            <div className="bg-primary p-3 rounded-lg">
+              <FaCalendarAlt className="text-primary-600" size={24} />
             </div>
           </div>
         </div>
@@ -272,7 +272,7 @@ const ParentDashboard = () => {
           <h2 className="text-lg font-semibold text-gray-900">Recent Notifications</h2>
           <Link
             to="/parent-dashboard/notifications"
-            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            className="text-primary-600 hover:text-primary-800 text-sm font-medium"
           >
             View All
           </Link>
@@ -291,7 +291,7 @@ const ParentDashboard = () => {
                     {notification.createdAt ? new Date(notification.createdAt).toLocaleDateString() : 'N/A'}
                   </span>
                   {!notification.read && (
-                    <div className="w-2 h-2 bg-blue-600 rounded-full mt-1 ml-auto"></div>
+                    <div className="w-2 h-2 bg-primary rounded-full mt-1 ml-auto"></div>
                   )}
                 </div>
               </div>

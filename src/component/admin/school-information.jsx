@@ -511,7 +511,7 @@ function SchoolInformation() {
   if (loading && !school) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="w-32 h-32 border-b-2 border-blue-600 rounded-full animate-spin"></div>
+        <div className="w-32 h-32 border-b-2 border-primary-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -542,7 +542,7 @@ function SchoolInformation() {
               onClick={() => setActiveTab(tab.id)}
               className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
+                  ? 'border-primary-500 text-primary-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
@@ -581,7 +581,7 @@ function SchoolInformation() {
                   value={formData.schoolName}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                   placeholder="Enter school name"
                 />
               </div>
@@ -595,7 +595,7 @@ function SchoolInformation() {
                   name="schoolMotto"
                   value={formData.schoolMotto}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                   placeholder="Enter school motto"
                 />
               </div>
@@ -610,7 +610,7 @@ function SchoolInformation() {
                 value={formData.schoolDescription}
                 onChange={handleInputChange}
                 rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                 placeholder="Enter school description"
               />
             </div>
@@ -625,7 +625,7 @@ function SchoolInformation() {
                 value={formData.schoolAddress}
                 onChange={handleInputChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                 placeholder="Enter complete address"
               />
             </div>
@@ -641,7 +641,7 @@ function SchoolInformation() {
                   value={formData.state}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                   placeholder="Enter state"
                 />
               </div>
@@ -656,7 +656,7 @@ function SchoolInformation() {
                   value={formData.country}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                   placeholder="Enter country"
                 />
               </div>
@@ -666,7 +666,7 @@ function SchoolInformation() {
               <button
                 onClick={handleSubmitInfo}
                 disabled={loading}
-                className="px-6 py-2 text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="px-6 py-2 text-white transition duration-200 bg-primary rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 {loading ? 'Saving...' : (school && school._id ? 'Update Information' : 'Save Information')}
               </button>
@@ -722,7 +722,7 @@ function SchoolInformation() {
                     type="file"
                     accept="image/jpeg,image/png,image/jpg"
                     onChange={handleLogoFileChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                   />
                   <p className="mt-1 text-xs text-gray-500">
                     Supported formats: JPEG, JPG, PNG (max 1MB)
@@ -730,7 +730,7 @@ function SchoolInformation() {
                 </div>
 
                 {logoFile && (
-                  <div className="p-2 text-sm text-gray-600 rounded bg-blue-50">
+                  <div className="p-2 text-sm text-gray-600 rounded bg-primary">
                     Selected: {logoFile.name}
                   </div>
                 )}
@@ -738,7 +738,7 @@ function SchoolInformation() {
                 <button
                   onClick={handleLogoUpload}
                   disabled={uploadLoading || !logoFile}
-                  className="w-full px-4 py-2 text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-2 text-white transition duration-200 bg-primary rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
                 >
                   {uploadLoading ? 'Uploading...' : 'Upload Logo'}
                 </button>
@@ -797,7 +797,7 @@ function SchoolInformation() {
                   accept="image/jpeg,image/png,image/jpg"
                   multiple
                   onChange={handleGalleryFilesChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                 />
                 <p className="mt-1 text-xs text-gray-500">
                   Supported formats: JPEG, JPG, PNG (max 1MB each). You can select multiple files.
@@ -813,7 +813,7 @@ function SchoolInformation() {
               <button
                 onClick={handleGalleryUpload}
                 disabled={uploadLoading || galleryFiles.length === 0}
-                className="w-full px-4 py-2 text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="w-full px-4 py-2 text-white transition duration-200 bg-primary rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 {uploadLoading ? 'Uploading...' : 'Upload Images'}
               </button>

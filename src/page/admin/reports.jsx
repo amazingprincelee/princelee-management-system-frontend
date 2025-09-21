@@ -92,7 +92,7 @@ function FinancialReports() {
             name="session"
             value={filters.session}
             onChange={handleFilterChange}
-            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-light"
           >
             <option value="">All Sessions</option>
             <option value="2024/2025">2024/2025</option>
@@ -102,7 +102,7 @@ function FinancialReports() {
             name="term"
             value={filters.term}
             onChange={handleFilterChange}
-            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-light"
           >
             <option value="">All Terms</option>
             <option value="first">First Term</option>
@@ -114,14 +114,14 @@ function FinancialReports() {
             name="startDate"
             value={filters.startDate}
             onChange={handleFilterChange}
-            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-light"
           />
           <input
             type="date"
             name="endDate"
             value={filters.endDate}
             onChange={handleFilterChange}
-            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-light"
           />
           <button
             onClick={exportReport}
@@ -149,7 +149,7 @@ function FinancialReports() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 py-4 px-2 border-b-2 font-medium text-sm ${
                   activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
+                    ? 'border-primary-500 text-primary-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
@@ -164,7 +164,7 @@ function FinancialReports() {
           {/* Loading State */}
           {loading && (
             <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
               <span className="ml-3 text-gray-600">Loading financial reports...</span>
             </div>
           )}
@@ -183,12 +183,12 @@ function FinancialReports() {
             <div className="space-y-6">
               {/* Summary Cards */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="bg-blue-50 p-6 rounded-lg">
+                <div className="bg-primary p-6 rounded-lg">
                   <div className="flex items-center">
-                    <FaMoneyBillWave className="text-blue-600 text-2xl mr-3" />
+                    <FaMoneyBillWave className="text-primary-600 text-2xl mr-3" />
                     <div>
-                      <p className="text-sm font-medium text-blue-600">Total Expected</p>
-                      <p className="text-2xl font-bold text-blue-900">
+                      <p className="text-sm font-medium text-primary-600">Total Expected</p>
+                      <p className="text-2xl font-bold text-primary-900">
                         {formatCurrency(reports.summary.totalFeesExpected)}
                       </p>
                     </div>
@@ -282,7 +282,7 @@ function FinancialReports() {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                              payment.method === 'online' ? 'bg-blue-100 text-blue-800' :
+                              payment.method === 'online' ? 'bg-primary text-primary-800' :
                               payment.method === 'bank transfer' ? 'bg-green-100 text-green-800' :
                               payment.method === 'cash' ? 'bg-yellow-100 text-yellow-800' :
                               'bg-gray-100 text-gray-800'
@@ -312,7 +312,7 @@ function FinancialReports() {
                   {reports.monthlyRevenue.map((month, index) => (
                     <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center">
-                        <FaCalendarAlt className="text-blue-500 mr-3" />
+                        <FaCalendarAlt className="text-primary-500 mr-3" />
                         <span className="font-medium">{month.month}</span>
                       </div>
                       <div className="text-right">
@@ -337,7 +337,7 @@ function FinancialReports() {
                   <div key={index} className="bg-white border rounded-lg p-6">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="text-lg font-semibold text-gray-900 capitalize">{feeType.feeType}</h4>
-                      <span className="text-2xl font-bold text-blue-600">{feeType.collectionRate}%</span>
+                      <span className="text-2xl font-bold text-primary-600">{feeType.collectionRate}%</span>
                     </div>
                     
                     <div className="grid grid-cols-4 gap-4 text-sm">
@@ -362,7 +362,7 @@ function FinancialReports() {
                     <div className="mt-4">
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div 
-                          className="bg-blue-600 h-2 rounded-full" 
+                          className="bg-primary h-2 rounded-full" 
                           style={{ width: `${feeType.collectionRate}%` }}
                         ></div>
                       </div>
@@ -378,7 +378,7 @@ function FinancialReports() {
                   {reports.methodAnalysis.map((method, index) => (
                     <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center">
-                        <FaCreditCard className="text-blue-500 mr-3" />
+                        <FaCreditCard className="text-primary-500 mr-3" />
                         <span className="font-medium capitalize">{method.method}</span>
                       </div>
                       <div className="text-right">
@@ -402,7 +402,7 @@ function FinancialReports() {
                   <div key={index} className="bg-white border rounded-lg p-6">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="text-lg font-semibold text-gray-900">{classData.classLevel}</h4>
-                      <span className="text-2xl font-bold text-blue-600">{classData.collectionRate}%</span>
+                      <span className="text-2xl font-bold text-primary-600">{classData.collectionRate}%</span>
                     </div>
                     
                     <div className="grid grid-cols-4 gap-4 text-sm">
@@ -427,7 +427,7 @@ function FinancialReports() {
                     <div className="mt-4">
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div 
-                          className="bg-blue-600 h-2 rounded-full" 
+                          className="bg-primary h-2 rounded-full" 
                           style={{ width: `${classData.collectionRate}%` }}
                         ></div>
                       </div>

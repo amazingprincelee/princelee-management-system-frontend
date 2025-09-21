@@ -55,14 +55,14 @@ const TeacherDashboardLayout = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-neutral-100">
       {/* Sidebar */}
       <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}>
         
         {/* Logo Section */}
-        <div className="flex items-center justify-between h-16 px-6 bg-blue-600">
+        <div className="flex items-center justify-between h-16 px-6 bg-primary">
           <div className="flex items-center space-x-3">
             {school?.logo && (
               <img src={school.logo} alt="School Logo" className="w-8 h-8 rounded-full" />
@@ -73,24 +73,24 @@ const TeacherDashboardLayout = () => {
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="lg:hidden text-white hover:text-gray-200"
+            className="lg:hidden text-white hover:text-neutral-200"
           >
             <FaTimes size={20} />
           </button>
         </div>
 
         {/* User Info */}
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-              <FaUser className="text-blue-600" />
-            </div>
-            <div>
-              <p className="font-medium text-gray-900">{user?.fullname}</p>
-              <p className="text-sm text-gray-500">Teacher</p>
+        <div className="p-6 border-b border-neutral-200">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                <FaUser className="text-primary-600" />
+              </div>
+              <div>
+                <p className="font-medium text-neutral-900">{user?.fullname}</p>
+                <p className="text-sm text-neutral-500">Teacher</p>
+              </div>
             </div>
           </div>
-        </div>
 
         {/* Navigation Menu */}
         <nav className="mt-6">
@@ -105,8 +105,8 @@ const TeacherDashboardLayout = () => {
                 onClick={() => setSidebarOpen(false)}
                 className={`flex items-center px-6 py-3 text-sm font-medium transition-colors duration-200 ${
                   isActive
-                    ? "bg-blue-50 text-blue-600 border-r-2 border-blue-600"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    ? "bg-primary text-primary-600 border-r-2 border-primary-600"
+                : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900"
                 }`}
               >
                 <Icon className="mr-3" size={18} />
@@ -131,31 +131,31 @@ const TeacherDashboardLayout = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Top Header */}
-        <header className="bg-white shadow-sm border-b border-gray-200">
+        <header className="bg-white shadow-sm border-b border-neutral-200">
           <div className="flex items-center justify-between px-6 py-4">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden text-gray-600 hover:text-gray-900"
+              className="lg:hidden text-neutral-600 hover:text-neutral-900"
             >
               <FaBars size={20} />
             </button>
             
             <div className="flex items-center space-x-4">
-              <h1 className="text-xl font-semibold text-gray-900">
-                Teacher Dashboard
+              <h1 className="text-xl font-semibold text-neutral-900">
+                {getPageTitle()}
               </h1>
             </div>
-
+            
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-neutral-600">
                 Welcome, {user?.fullname}
               </span>
             </div>
           </div>
         </header>
 
-        {/* Main Content Area */}
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+        {/* Main Content */}
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-neutral-100">
           <div className="container mx-auto px-6 py-8">
             <Outlet />
           </div>

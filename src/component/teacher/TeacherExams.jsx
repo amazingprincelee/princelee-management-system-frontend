@@ -152,7 +152,7 @@ const TeacherExams = () => {
       case 'draft':
         return 'bg-yellow-100 text-yellow-800';
       case 'completed':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-primary text-primary-800';
       case 'cancelled':
         return 'bg-red-100 text-red-800';
       default:
@@ -165,7 +165,7 @@ const TeacherExams = () => {
       case 'published':
         return <FaCheckCircle className="text-green-500" />;
       case 'completed':
-        return <FaCheckCircle className="text-blue-500" />;
+        return <FaCheckCircle className="text-primary-500" />;
       case 'cancelled':
         return <FaTimesCircle className="text-red-500" />;
       default:
@@ -188,7 +188,7 @@ const TeacherExams = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
       </div>
     );
   }
@@ -214,7 +214,7 @@ const TeacherExams = () => {
                 onClick={() => setActiveTab(id)}
                 className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === id
-                    ? 'border-blue-500 text-blue-600'
+                    ? 'border-primary-500 text-primary-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
@@ -240,7 +240,7 @@ const TeacherExams = () => {
               placeholder="Search exams and assessments..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
             />
           </div>
 
@@ -250,7 +250,7 @@ const TeacherExams = () => {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
             >
               <option value="all">All Status</option>
               <option value="draft">Draft</option>
@@ -267,7 +267,7 @@ const TeacherExams = () => {
               setFormData(prev => ({ ...prev, type: activeTab.slice(0, -1) }));
               setShowCreateModal(true);
             }}
-            className="flex items-center space-x-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="flex items-center space-x-2 px-6 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors"
           >
             <FaPlus />
             <span>Create {activeTab === 'exams' ? 'Exam' : 'CA'}</span>
@@ -292,7 +292,7 @@ const TeacherExams = () => {
                 setFormData(prev => ({ ...prev, type: activeTab.slice(0, -1) }));
                 setShowCreateModal(true);
               }}
-              className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center space-x-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors"
             >
               <FaPlus />
               <span>Create {activeTab === 'exams' ? 'Exam' : 'CA'}</span>
@@ -314,7 +314,7 @@ const TeacherExams = () => {
 
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
-                        <FaBook className="text-blue-500" />
+                        <FaBook className="text-primary-500" />
                         <span>{item.subject?.name}</span>
                       </div>
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
@@ -347,7 +347,7 @@ const TeacherExams = () => {
                   <div className="flex items-center space-x-2 ml-4">
                     <button
                       onClick={() => handleEdit(item)}
-                      className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+                      className="p-2 text-gray-400 hover:text-primary-600 transition-colors"
                       title="Edit"
                     >
                       <FaEdit />
@@ -395,7 +395,7 @@ const TeacherExams = () => {
                       required
                       value={formData.title}
                       onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
                       placeholder="Enter title"
                     />
                   </div>
@@ -408,7 +408,7 @@ const TeacherExams = () => {
                       required
                       value={formData.subject}
                       onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
                     >
                       <option value="">Select Subject</option>
                       {subjects.map(subject => (
@@ -425,7 +425,7 @@ const TeacherExams = () => {
                       required
                       value={formData.class}
                       onChange={(e) => setFormData(prev => ({ ...prev, class: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
                     >
                       <option value="">Select Class</option>
                       {classes.map(cls => (
@@ -444,7 +444,7 @@ const TeacherExams = () => {
                       min="1"
                       value={formData.totalMarks}
                       onChange={(e) => setFormData(prev => ({ ...prev, totalMarks: parseInt(e.target.value) }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
                     />
                   </div>
 
@@ -458,7 +458,7 @@ const TeacherExams = () => {
                       min="1"
                       value={formData.duration}
                       onChange={(e) => setFormData(prev => ({ ...prev, duration: parseInt(e.target.value) }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
                     />
                   </div>
 
@@ -470,7 +470,7 @@ const TeacherExams = () => {
                       type="date"
                       value={formData.date}
                       onChange={(e) => setFormData(prev => ({ ...prev, date: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
                     />
                   </div>
 
@@ -482,7 +482,7 @@ const TeacherExams = () => {
                       type="time"
                       value={formData.time}
                       onChange={(e) => setFormData(prev => ({ ...prev, time: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
                     />
                   </div>
 
@@ -493,7 +493,7 @@ const TeacherExams = () => {
                     <select
                       value={formData.status}
                       onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
                     >
                       <option value="draft">Draft</option>
                       <option value="published">Published</option>
@@ -511,7 +511,7 @@ const TeacherExams = () => {
                     rows="4"
                     value={formData.instructions}
                     onChange={(e) => setFormData(prev => ({ ...prev, instructions: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
                     placeholder="Enter instructions for students..."
                   />
                 </div>
@@ -526,7 +526,7 @@ const TeacherExams = () => {
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors"
                   >
                     {editingItem ? 'Update' : 'Create'}
                   </button>

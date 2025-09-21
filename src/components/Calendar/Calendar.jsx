@@ -159,14 +159,16 @@ const Calendar = () => {
 
   // Get event type color
   const getEventTypeColor = (type) => {
-    const colors = {
-      'academic': 'bg-blue-500',
+    const eventTypeColors = {
+      'academic': 'bg-primary',
       'exam': 'bg-red-500',
-      'holiday': 'bg-green-500',
+      'holiday': 'bg-accent-500',
       'meeting': 'bg-purple-500',
-      'event': 'bg-yellow-500',
+      'sports': 'bg-secondary-500',
+      'cultural': 'bg-pink-500',
+      'workshop': 'bg-primary',
       'deadline': 'bg-orange-500',
-      'other': 'bg-gray-500'
+      'other': 'bg-neutral-500'
     };
     return colors[type] || colors.other;
   };
@@ -195,7 +197,7 @@ const Calendar = () => {
   if (loading.events && !events.length) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="w-8 h-8 border-b-2 rounded-full animate-spin border-primary-600"></div>
       </div>
     );
   }
@@ -205,8 +207,8 @@ const Calendar = () => {
       {/* Header */}
       <div className="calendar-header">
         <div className="calendar-title">
-          <CalendarIcon className="w-6 h-6 text-blue-600" />
-          <h1 className="text-2xl font-bold text-gray-900">School Calendar</h1>
+          <CalendarIcon className="w-6 h-6 text-primary-600" />
+          <h1 className="text-2xl font-bold text-neutral-900">School Calendar</h1>
         </div>
         
         <div className="calendar-actions">
@@ -222,7 +224,7 @@ const Calendar = () => {
           {userRole === 'admin' && (
             <button
               onClick={handleCreateEvent}
-              className="btn-primary"
+              className="btn-primary bg-primary"
             >
               <Plus className="w-4 h-4" />
               Add Event
@@ -245,7 +247,9 @@ const Calendar = () => {
               <option value="exam">Exam</option>
               <option value="holiday">Holiday</option>
               <option value="meeting">Meeting</option>
-              <option value="event">Event</option>
+              <option value="sports">Sports</option>
+              <option value="cultural">Cultural</option>
+              <option value="workshop">Workshop</option>
               <option value="deadline">Deadline</option>
               <option value="other">Other</option>
             </select>
@@ -267,7 +271,7 @@ const Calendar = () => {
           <div className="filter-group">
             <label>Search:</label>
             <div className="search-input">
-              <Search className="w-4 h-4 text-gray-400" />
+              <Search className="w-4 h-4 text-neutral-400" />
               <input
                 type="text"
                 placeholder="Search events..."
@@ -382,7 +386,7 @@ const Calendar = () => {
             
             {loading.upcomingEvents ? (
               <div className="loading-spinner">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                <div className="w-6 h-6 border-b-2 rounded-full animate-spin border-primary-600"></div>
               </div>
             ) : upcomingEvents.length > 0 ? (
               <div className="events-list">
@@ -425,7 +429,7 @@ const Calendar = () => {
               </div>
             ) : (
               <div className="no-events">
-                <CalendarIcon className="w-8 h-8 text-gray-400" />
+                <CalendarIcon className="w-8 h-8 text-neutral-400" />
                 <p>No upcoming events</p>
               </div>
             )}

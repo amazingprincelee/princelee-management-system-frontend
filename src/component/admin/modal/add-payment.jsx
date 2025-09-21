@@ -85,7 +85,7 @@ function AddPayment() {
       <div className="flex justify-start mt-6">
         <button
           onClick={() => setModalOpen(true)}
-          className="px-4 py-2 text-white bg-[#284ea1] rounded-md hover:bg-blue-700"
+          className="px-4 py-2 text-white bg-[#284ea1] rounded-md hover:bg-blue-600"
         >
           + Add Payment
         </button>
@@ -129,7 +129,7 @@ function AddPayment() {
                           }}
                           className={`p-2 cursor-pointer hover:bg-gray-100 ${
                             formData.studentId === student._id
-                              ? "bg-blue-100"
+                              ? "bg-primary"
                               : ""
                           }`}
                         >
@@ -261,7 +261,7 @@ function AddPayment() {
                 <button
                   type="submit"
                   disabled={addPaymentLoading}
-                  className="px-3 py-2 text-white bg-blue-600 rounded"
+                  className="px-3 py-2 text-white bg-primary rounded"
                 >
                   {addPaymentLoading ? "Saving..." : "Save"}
                 </button>

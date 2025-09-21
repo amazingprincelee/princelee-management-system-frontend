@@ -108,7 +108,7 @@ function AddClassModal({ isOpen, onClose, onSuccess }) {
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 text-sm text-white bg-blue-500 rounded hover:bg-blue-600"
+              className="px-4 py-2 text-sm text-white bg-primary rounded hover:bg-blue-600"
             >
               {loading ? "Saving..." : "Save"}
             </button>

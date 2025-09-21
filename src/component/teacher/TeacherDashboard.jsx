@@ -50,7 +50,7 @@ const TeacherDashboard = () => {
       title: "My Classes",
       value: stats.totalClasses,
       icon: FaUsers,
-      color: "bg-blue-500",
+      color: "bg-primary",
       link: "/teacher-dashboard/my-classes"
     },
     {
@@ -81,7 +81,7 @@ const TeacherDashboard = () => {
       title: "Create New Exam",
       description: "Set up a new exam or continuous assessment",
       icon: FaPlus,
-      color: "bg-blue-600",
+      color: "bg-primary",
       link: "/teacher-dashboard/exams/create"
     },
     {
@@ -110,7 +110,7 @@ const TeacherDashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
       </div>
     );
   }
@@ -161,7 +161,7 @@ const TeacherDashboard = () => {
               <Link
                 key={index}
                 to={action.link}
-                className="p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-sm transition-all duration-200"
+                className="p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:shadow-sm transition-all duration-200"
               >
                 <div className={`${action.color} p-2 rounded-lg w-fit mb-3`}>
                   <Icon className="text-white" size={20} />
@@ -202,9 +202,9 @@ const TeacherDashboard = () => {
         {user?.subjects && user.subjects.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {user.subjects.map((subject, index) => (
-              <div key={index} className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <h3 className="font-medium text-blue-900">{subject}</h3>
-                <p className="text-sm text-blue-700 mt-1">
+              <div key={index} className="p-4 bg-primary rounded-lg border border-primary-200">
+                <h3 className="font-medium text-primary-900">{subject}</h3>
+                <p className="text-sm text-primary-700 mt-1">
                   Click to view classes and manage exams
                 </p>
               </div>

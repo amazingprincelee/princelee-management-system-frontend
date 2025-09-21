@@ -110,7 +110,7 @@ const ProfileSettings = () => {
           <FaUserCircle className="w-32 h-32 text-gray-400" />
         )}
 
-        <label className="absolute p-2 text-white bg-blue-600 rounded-full cursor-pointer bottom-4 right-36 hover:bg-blue-700">
+        <label className="absolute p-2 text-white bg-primary rounded-full cursor-pointer bottom-4 right-36 hover:bg-blue-600">
           <FaCamera />
           <input type="file" className="hidden" onChange={handleImageChange} />
         </label>
@@ -177,7 +177,7 @@ const ProfileSettings = () => {
 
           <button
             type="submit"
-            className="w-full py-2 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700"
+            className="w-full py-2 text-white bg-primary rounded-lg shadow hover:bg-blue-600"
             disabled={changing}
           >
             {changing ? "Updating..." : "Update Password"}

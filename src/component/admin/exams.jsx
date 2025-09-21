@@ -81,7 +81,7 @@ function ExamAnalytics() {
             name="term"
             value={filters.term}
             onChange={handleFilterChange}
-            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-light"
           >
             <option value="">All Terms</option>
             <option value="first">First Term</option>
@@ -94,7 +94,7 @@ function ExamAnalytics() {
             value={filters.session}
             onChange={handleFilterChange}
             placeholder="Session (e.g., 2024/2025)"
-            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-light"
           />
         </div>
       </div>
@@ -114,7 +114,7 @@ function ExamAnalytics() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 py-4 px-2 border-b-2 font-medium text-sm ${
                   activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
+                    ? 'border-primary-500 text-primary-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
@@ -129,7 +129,7 @@ function ExamAnalytics() {
           {/* Loading State */}
           {loading && (
             <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
               <span className="ml-3 text-gray-600">Loading exam analytics...</span>
             </div>
           )}
@@ -148,12 +148,12 @@ function ExamAnalytics() {
             <div className="space-y-6">
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="bg-blue-50 p-6 rounded-lg">
+                <div className="bg-primary p-6 rounded-lg">
                   <div className="flex items-center">
-                    <FaUsers className="text-blue-600 text-2xl mr-3" />
+                    <FaUsers className="text-primary-600 text-2xl mr-3" />
                     <div>
-                      <p className="text-sm font-medium text-blue-600">Total Teachers</p>
-                      <p className="text-2xl font-bold text-blue-900">{analytics.overview.totalTeachers}</p>
+                      <p className="text-sm font-medium text-primary-600">Total Teachers</p>
+                      <p className="text-2xl font-bold text-primary-900">{analytics.overview.totalTeachers}</p>
                     </div>
                   </div>
                 </div>
@@ -220,7 +220,7 @@ function ExamAnalytics() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                               submission.scoreType === 'FINAL' ? 'bg-green-100 text-green-800' :
-                              submission.scoreType === 'EXAM' ? 'bg-blue-100 text-blue-800' :
+                              submission.scoreType === 'EXAM' ? 'bg-primary text-primary-800' :
                               'bg-yellow-100 text-yellow-800'
                             }`}>
                               {submission.scoreType}
@@ -254,7 +254,7 @@ function ExamAnalytics() {
                         index === 0 ? 'bg-yellow-500' :
                         index === 1 ? 'bg-gray-400' :
                         index === 2 ? 'bg-orange-600' :
-                        'bg-blue-500'
+                        'bg-primary'
                       }`}>
                         {index + 1}
                       </div>
@@ -278,7 +278,7 @@ function ExamAnalytics() {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-900">Teacher Result Submission Status</h3>
-                <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                <button className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600">
                   <FaDownload />
                   Export
                 </button>
@@ -297,7 +297,7 @@ function ExamAnalytics() {
                           }`}></div>
                           <h4 className="font-semibold text-gray-900">{teacher.name}</h4>
                           <span className={`px-2 py-1 text-xs rounded-full ${
-                            teacher.status === 'full time' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
+                            teacher.status === 'full time' ? 'bg-primary text-primary-800' : 'bg-gray-100 text-gray-800'
                           }`}>
                             {teacher.status}
                           </span>
@@ -345,7 +345,7 @@ function ExamAnalytics() {
                   <div key={index} className="bg-white border rounded-lg p-4">
                     <div className="flex items-center justify-between mb-3">
                       <h4 className="font-semibold text-gray-900">{subject.subject}</h4>
-                      <span className="text-2xl font-bold text-blue-600">{subject.averageScore}%</span>
+                      <span className="text-2xl font-bold text-primary-600">{subject.averageScore}%</span>
                     </div>
                     
                     <div className="grid grid-cols-3 gap-4 text-sm">
@@ -359,14 +359,14 @@ function ExamAnalytics() {
                       </div>
                       <div>
                         <p className="text-gray-500">Pass Rate</p>
-                        <p className="font-semibold text-blue-600">{subject.passRate}%</p>
+                        <p className="font-semibold text-primary-600">{subject.passRate}%</p>
                       </div>
                     </div>
                     
                     <div className="mt-3">
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div 
-                          className="bg-blue-600 h-2 rounded-full" 
+                          className="bg-primary h-2 rounded-full" 
                           style={{ width: `${subject.passRate}%` }}
                         ></div>
                       </div>

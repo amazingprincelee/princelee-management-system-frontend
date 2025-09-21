@@ -208,7 +208,9 @@ const EventForm = ({ event, initialDate, onClose, onSuccess }) => {
     { value: 'exam', label: 'Exam' },
     { value: 'holiday', label: 'Holiday' },
     { value: 'meeting', label: 'Meeting' },
-    { value: 'event', label: 'Event' },
+    { value: 'sports', label: 'Sports' },
+    { value: 'cultural', label: 'Cultural' },
+    { value: 'workshop', label: 'Workshop' },
     { value: 'deadline', label: 'Deadline' },
     { value: 'other', label: 'Other' }
   ];
@@ -235,22 +237,12 @@ const EventForm = ({ event, initialDate, onClose, onSuccess }) => {
   ];
 
   const predefinedAudiences = [
-    'All Students',
-    'All Teachers',
-    'All Parents',
-    'All Staff',
-    'Grade 1',
-    'Grade 2',
-    'Grade 3',
-    'Grade 4',
-    'Grade 5',
-    'Grade 6',
-    'Grade 7',
-    'Grade 8',
-    'Grade 9',
-    'Grade 10',
-    'Grade 11',
-    'Grade 12'
+    'all',
+    'students',
+    'teachers',
+    'parents',
+    'staff',
+    'administrators'
   ];
 
   return (
@@ -587,9 +579,9 @@ const EventForm = ({ event, initialDate, onClose, onSuccess }) => {
                   className="form-select"
                 >
                   <option value="">Select term</option>
-                  <option value="First Term">First Term</option>
-                  <option value="Second Term">Second Term</option>
-                  <option value="Third Term">Third Term</option>
+                  <option value="first">First Term</option>
+                  <option value="second">Second Term</option>
+                  <option value="third">Third Term</option>
                 </select>
               </div>
             </div>

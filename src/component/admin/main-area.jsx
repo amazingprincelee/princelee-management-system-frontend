@@ -15,7 +15,7 @@ function MainArea() {
   const adminFeatures = [
     {
       label: "Approve Payment",
-      icon: <FaMoneyCheckAlt className="w-8 h-8 text-blue-500" />,
+      icon: <FaMoneyCheckAlt className="w-8 h-8 text-primary-500" />,
       link: "/dashboard/approve-payment",
       description:
         "Approve student payments quickly and efficiently. Review pending transactions and ensure all fees are settled.",
@@ -57,7 +57,7 @@ function MainArea() {
         {adminFeatures.map((feature) => {
           const content = (
             <div
-              className="flex flex-col justify-between p-5 transition-shadow duration-300 bg-white border border-gray-100 rounded-lg shadow-lg cursor-pointer hover:shadow-blue-400 hover:border-blue-300"
+              className="flex flex-col justify-between p-5 transition-shadow duration-300 bg-white border border-gray-100 rounded-lg shadow-lg cursor-pointer hover:shadow-blue-400 hover:border-primary-300"
             >
               <div className="flex items-center gap-3">
                 {feature.icon}

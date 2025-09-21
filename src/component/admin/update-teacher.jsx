@@ -71,7 +71,7 @@ function UpdateTeacher({ teacherId }) {
       <h2 className="mb-4 text-xl font-bold text-center">Update Teacher</h2>
 
       {message && (
-        <div className="p-2 mb-3 text-sm text-center text-white bg-blue-500 rounded">
+        <div className="p-2 mb-3 text-sm text-center text-white bg-primary rounded">
           {message}
         </div>
       )}
@@ -130,7 +130,7 @@ function UpdateTeacher({ teacherId }) {
         <button
           type="submit"
           disabled={loading}
-          className="w-full p-2 text-white transition bg-blue-500 rounded hover:bg-blue-600"
+          className="w-full p-2 text-white transition bg-primary rounded hover:bg-blue-600"
         >
           {loading ? "Updating..." : "Update Teacher"}
         </button>

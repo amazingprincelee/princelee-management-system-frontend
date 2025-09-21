@@ -74,7 +74,7 @@ function Login() {
         <input
           type="text"
           placeholder="Enter phone number or email"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light"
           onChange={(e) => setUsername(e.target.value)}
         />
 
@@ -83,7 +83,7 @@ function Login() {
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Enter password"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light"
             onChange={(e) => setPassword(e.target.value)}
           />
           <button
@@ -98,20 +98,19 @@ function Login() {
         {/* Submit */}
         <button
           type="submit"
-          className="w-full bg-[#284ea1] text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition"
+          className="w-full bg-primary text-white font-semibold py-2 rounded-lg hover:bg-blue-600 transition"
         >
           {loading ? "Loading..." : "Login"}
         </button>
 
         {/* Links */}
         <p className="text-sm text-center text-gray-600">
-          Go back to{" "}
-          <Link to="/" className="text-blue-600 hover:underline">
-            Home
-          </Link>{" "}
-          | Get login details{" "}
-          <Link to="/contact" className="text-blue-600 hover:underline">
-            Details
+          <Link to="/" className="text-primary-600 hover:underline">
+            Back to Home
+          </Link>
+          <span className="text-gray-500">|</span>
+          <Link to="/contact" className="text-primary-600 hover:underline">
+            Contact Support
           </Link>
         </p>
       </form>

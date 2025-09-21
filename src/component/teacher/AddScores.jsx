@@ -481,7 +481,7 @@ const AddScores = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                             gradeInfo.grade === "A" ? "bg-green-100 text-green-800" :
-                            gradeInfo.grade === "B" ? "bg-blue-100 text-blue-800" :
+                            gradeInfo.grade === "B" ? "bg-primary text-primary-800" :
                             gradeInfo.grade === "C" ? "bg-yellow-100 text-yellow-800" :
                             gradeInfo.grade === "D" ? "bg-orange-100 text-orange-800" :
                             gradeInfo.grade === "F" ? "bg-red-100 text-red-800" :

@@ -96,7 +96,7 @@ const MyClasses = () => {
       title: "Add Exam Scores",
       description: "Record exam scores for your students",
       icon: FaGraduationCap,
-      color: "bg-blue-600",
+      color: "bg-primary",
       link: "/teacher-dashboard/add-scores"
     },
     {
@@ -229,7 +229,7 @@ const MyClasses = () => {
                             {classItem.subjects.map((subject, index) => (
                               <span
                                 key={index}
-                                className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded"
+                                className="bg-primary text-primary-800 text-xs font-medium px-2 py-1 rounded"
                               >
                                 {subject}
                               </span>
@@ -248,7 +248,7 @@ const MyClasses = () => {
                         </Link>
                         <Link
                           to={`/teacher-dashboard/class/${classItem._id}/scores`}
-                          className="flex-1 bg-blue-600 text-white text-sm font-medium py-2 px-3 rounded hover:bg-blue-700 transition-colors text-center"
+                          className="flex-1 bg-primary text-white text-sm font-medium py-2 px-3 rounded hover:bg-blue-600 transition-colors text-center"
                         >
                           <FaEdit className="inline mr-1" />
                           Add Scores
@@ -317,7 +317,7 @@ const MyClasses = () => {
                         </Link>
                         <Link
                           to={`/teacher-dashboard/subject/${subject._id}/scores`}
-                          className="flex-1 bg-blue-600 text-white text-sm font-medium py-2 px-3 rounded hover:bg-blue-700 transition-colors text-center"
+                          className="flex-1 bg-primary text-white text-sm font-medium py-2 px-3 rounded hover:bg-blue-600 transition-colors text-center"
                         >
                           <FaPlus className="inline mr-1" />
                           Add Scores

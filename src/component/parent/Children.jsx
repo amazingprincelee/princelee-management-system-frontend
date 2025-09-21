@@ -150,7 +150,7 @@ const Children = () => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <FaSpinner className="animate-spin text-4xl text-blue-600 mx-auto mb-4" />
+          <FaSpinner className="animate-spin text-4xl text-primary-600 mx-auto mb-4" />
           <p className="text-gray-600">Loading children information...</p>
         </div>
       </div>
@@ -162,7 +162,7 @@ const Children = () => {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center mb-4">
-          <FaChild className="text-3xl text-blue-600 mr-3" />
+          <FaChild className="text-3xl text-primary-600 mr-3" />
           <h1 className="text-3xl font-bold text-gray-900">My Children</h1>
         </div>
         <p className="text-gray-600">
@@ -183,7 +183,7 @@ const Children = () => {
               placeholder="Search by name or admission number..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
             />
           </div>
           <div className="md:w-48">
@@ -194,7 +194,7 @@ const Children = () => {
               id="class"
               value={selectedClass}
               onChange={(e) => setSelectedClass(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
             >
               <option value="all">All Classes</option>
               {getClassOptions().map(className => (
@@ -228,7 +228,7 @@ const Children = () => {
           {children.length === 0 && (
             <button
               onClick={() => navigate('/contact')}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors"
             >
               Contact School
             </button>
@@ -249,8 +249,8 @@ const Children = () => {
                         className="w-16 h-16 rounded-full object-cover"
                       />
                     ) : (
-                      <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                        <FaUser className="text-blue-600 text-xl" />
+                      <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center">
+                        <FaUser className="text-primary-600 text-xl" />
                       </div>
                     )}
                   </div>
@@ -333,7 +333,7 @@ const Children = () => {
               <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex space-x-3">
                 <Link
                   to={`/parent-dashboard/children/${child._id}/results`}
-                  className="flex-1 bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                  className="flex-1 bg-primary text-white text-center py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors text-sm font-medium"
                 >
                   <FaGraduationCap className="inline mr-2" />
                   View Results
@@ -356,8 +356,8 @@ const Children = () => {
         <div className="mt-8 bg-white rounded-lg shadow-sm p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Summary</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="text-center p-4 bg-blue-50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">{children.length}</div>
+            <div className="text-center p-4 bg-primary rounded-lg">
+              <div className="text-2xl font-bold text-primary-600">{children.length}</div>
               <div className="text-sm text-gray-600">Total Children</div>
             </div>
             <div className="text-center p-4 bg-green-50 rounded-lg">

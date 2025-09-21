@@ -212,7 +212,7 @@ function PaymentConfiguration() {
   if (loading && !config) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="w-32 h-32 border-b-2 border-blue-600 rounded-full animate-spin"></div>
+        <div className="w-32 h-32 border-b-2 border-primary-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -293,7 +293,7 @@ function PaymentConfiguration() {
               onClick={() => setActiveTab(tab.id)}
               className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
+                  ? 'border-primary-500 text-primary-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
@@ -315,9 +315,9 @@ function PaymentConfiguration() {
           <div className="space-y-6">
             {/* Current Configuration Display */}
             {config?.flutterwaveSecret && (
-              <div className="p-4 border-l-4 border-blue-500 bg-blue-50">
-                <h3 className="mb-2 font-medium text-blue-900">Current Configuration</h3>
-                <div className="space-y-1 text-sm text-blue-800">
+              <div className="p-4 border-l-4 border-primary-500 bg-primary">
+                <h3 className="mb-2 font-medium text-primary-900">Current Configuration</h3>
+                <div className="space-y-1 text-sm text-primary-800">
                   <p><strong>Secret Key:</strong> {maskSecret(config.flutterwaveSecret)}</p>
                   <p><strong>Public Key:</strong> {config.flutterwavePublic || 'Not set'}</p>
                   <p><strong>Callback URL:</strong> {config.callbackUrl || 'Not set'}</p>
@@ -336,7 +336,7 @@ function PaymentConfiguration() {
                   value={flutterwaveData.flutterwaveSecret}
                   onChange={handleFlutterwaveChange}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                   placeholder="Enter Flutterwave secret key"
                 />
               </div>
@@ -350,7 +350,7 @@ function PaymentConfiguration() {
                   name="flutterwavePublic"
                   value={flutterwaveData.flutterwavePublic}
                   onChange={handleFlutterwaveChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                   placeholder="Enter Flutterwave public key"
                 />
               </div>
@@ -366,7 +366,7 @@ function PaymentConfiguration() {
                 value={flutterwaveData.callbackUrl}
                 onChange={handleFlutterwaveChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                 placeholder="https://yourdomain.com/payment/callback"
               />
               <p className="mt-1 text-xs text-gray-500">
@@ -378,7 +378,7 @@ function PaymentConfiguration() {
               <button
                 onClick={handleFlutterwaveSubmit}
                 disabled={loading}
-                className="px-6 py-2 text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="px-6 py-2 text-white transition duration-200 bg-primary rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 {loading ? 'Saving...' : 'Save Flutterwave Config'}
               </button>
@@ -419,7 +419,7 @@ function PaymentConfiguration() {
                   value={paystackData.paystackSecret}
                   onChange={handlePaystackChange}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                   placeholder="Enter Paystack secret key"
                 />
               </div>
@@ -433,7 +433,7 @@ function PaymentConfiguration() {
                   name="paystackPublic"
                   value={paystackData.paystackPublic}
                   onChange={handlePaystackChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                   placeholder="Enter Paystack public key"
                 />
               </div>
@@ -449,7 +449,7 @@ function PaymentConfiguration() {
                 value={paystackData.callbackUrl}
                 onChange={handlePaystackChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                 placeholder="https://yourdomain.com/payment/callback"
               />
               <p className="mt-1 text-xs text-gray-500">

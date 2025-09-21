@@ -131,7 +131,7 @@ const ParentNotifications = () => {
   const getNotificationIcon = (type) => {
     switch (type) {
       case 'result':
-        return <FaGraduationCap className="text-blue-500" />;
+        return <FaGraduationCap className="text-primary-500" />;
       case 'payment':
         return <FaMoneyBillWave className="text-green-500" />;
       case 'event':
@@ -139,7 +139,7 @@ const ParentNotifications = () => {
       case 'alert':
         return <FaExclamationTriangle className="text-red-500" />;
       case 'info':
-        return <FaInfoCircle className="text-blue-400" />;
+        return <FaInfoCircle className="text-primary-400" />;
       default:
         return <FaBell className="text-gray-500" />;
     }

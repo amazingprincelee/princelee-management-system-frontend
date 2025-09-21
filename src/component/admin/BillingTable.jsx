@@ -68,7 +68,7 @@ const BillingTable = () => {
       case "pending":
         return "bg-yellow-200 text-yellow-800";
       case "part payment":
-        return "bg-blue-200 text-blue-800";
+        return "bg-primary text-primary-800";
       case "paid":
         return "bg-green-200 text-green-800";
       default:
@@ -98,7 +98,7 @@ const BillingTable = () => {
             value={filters.studentName}
             onChange={handleFilterChange}
             placeholder="Search by student name"
-            className="flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 sm:w-64"
+            className="flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light sm:w-64"
           />
         </div>
         {["session", "term", "status", "feeType", "classLevel"].map((key) => (
@@ -107,7 +107,7 @@ const BillingTable = () => {
             name={key}
             value={filters[key]}
             onChange={handleFilterChange}
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 sm:w-auto"
+            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light sm:w-auto"
           >
             <option value="">
               All {key.charAt(0).toUpperCase() + key.slice(1)}
@@ -153,9 +153,9 @@ const BillingTable = () => {
       </div>
 
       {/* States */}
-      {loading && <p className="text-blue-600">Loading payments...</p>}
+      {loading && <p className="text-primary-600">Loading payments...</p>}
       {error && <p className="text-red-600">Error: {error.message || error}</p>}
-      {userLoading && <p className="text-blue-600">Loading user profile...</p>}
+      {userLoading && <p className="text-primary-600">Loading user profile...</p>}
       {userError && (
         <p className="text-red-600">User Error: {userError.message || userError}</p>
       )}
@@ -180,7 +180,7 @@ const BillingTable = () => {
                 <a
                   href={selectedProofUrl}
                   download
-                  className="inline-flex items-center gap-2 px-4 py-2 mt-4 text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                  className="inline-flex items-center gap-2 px-4 py-2 mt-4 text-white bg-primary rounded-md hover:bg-blue-600"
                 >
                   <FaDownload /> Download Proof
                 </a>
@@ -205,7 +205,7 @@ const BillingTable = () => {
           <div className="hidden overflow-x-auto shadow-lg rounded-xl md:block">
             <table className="min-w-full text-sm bg-white rounded-lg">
               <thead>
-                <tr className="text-xs text-white uppercase bg-blue-600 sm:text-sm">
+                <tr className="text-xs text-white uppercase bg-primary sm:text-sm">
                   <th className="px-4 py-3 text-left">Student</th>
                   <th className="px-4 py-3 text-left">Class</th>
                   <th className="px-4 py-3 text-left">Term</th>

@@ -163,7 +163,7 @@ function AddTeacherComponent() {
               step < currentStep 
                 ? 'bg-green-500 border-green-500 text-white' 
                 : step === currentStep 
-                  ? 'bg-blue-500 border-blue-500 text-white' 
+                  ? 'bg-primary border-primary-500 text-white' 
                   : 'bg-gray-200 border-gray-300 text-gray-500'
             }`}>
               {step < currentStep ? (
@@ -200,7 +200,7 @@ function AddTeacherComponent() {
   const renderStep1 = () => (
     <div className="space-y-6">
       <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-        <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 mr-2 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
         </svg>
         Personal Information
@@ -215,7 +215,7 @@ function AddTeacherComponent() {
             name="fullname"
             value={form.fullname}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
+            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500 transition-colors duration-200 ${
               errors.fullname ? 'border-red-500' : 'border-gray-300'
             }`}
             required
@@ -231,7 +231,7 @@ function AddTeacherComponent() {
             name="email"
             value={form.email}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
+            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500 transition-colors duration-200 ${
               errors.email ? 'border-red-500' : 'border-gray-300'
             }`}
             required
@@ -248,7 +248,7 @@ function AddTeacherComponent() {
             value={form.password}
             onChange={handleChange}
             placeholder="Create a password for teacher"
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
+            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500 transition-colors duration-200 ${
               errors.password ? 'border-red-500' : 'border-gray-300'
             }`}
             required
@@ -264,7 +264,7 @@ function AddTeacherComponent() {
             name="phone"
             value={form.phone}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
+            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500 transition-colors duration-200 ${
               errors.phone ? 'border-red-500' : 'border-gray-300'
             }`}
             required
@@ -279,7 +279,7 @@ function AddTeacherComponent() {
             name="gender"
             value={form.gender}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
+            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500 transition-colors duration-200 ${
               errors.gender ? 'border-red-500' : 'border-gray-300'
             }`}
             required
@@ -300,7 +300,7 @@ function AddTeacherComponent() {
           value={form.address}
           onChange={handleChange}
           rows="3"
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-primary-light focus:border-blue-500 transition-colors duration-200"
         />
       </div>
     </div>
@@ -324,7 +324,7 @@ function AddTeacherComponent() {
             name="salary"
             value={form.salary}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
+            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500 transition-colors duration-200 ${
               errors.salary ? 'border-red-500' : 'border-gray-300'
             }`}
             required
@@ -341,7 +341,7 @@ function AddTeacherComponent() {
             value={form.designation}
             onChange={handleChange}
             placeholder="e.g., Mathematics Teacher, Head of Science"
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
+            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500 transition-colors duration-200 ${
               errors.designation ? 'border-red-500' : 'border-gray-300'
             }`}
             required
@@ -356,7 +356,7 @@ function AddTeacherComponent() {
             name="status"
             value={form.status}
             onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500 transition-colors duration-200"
           >
             <option value="full time">Full Time</option>
             <option value="part time">Part Time</option>
@@ -373,7 +373,7 @@ function AddTeacherComponent() {
           value={form.subjects}
           onChange={handleChange}
           placeholder="Enter subjects separated by commas (e.g., Mathematics, Physics, Chemistry)"
-          className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
+          className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500 transition-colors duration-200 ${
             errors.subjects ? 'border-red-500' : 'border-gray-300'
           }`}
           required
@@ -392,14 +392,14 @@ function AddTeacherComponent() {
         </svg>
         Banking Information
       </h2>
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+      <div className="bg-primary border border-primary-200 rounded-lg p-4 mb-6">
         <div className="flex">
-          <svg className="w-5 h-5 text-blue-400 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 text-primary-400 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <div>
-            <h3 className="text-sm font-medium text-blue-800">Optional Information</h3>
-            <p className="text-sm text-blue-700 mt-1">
+            <h3 className="text-sm font-medium text-primary-800">Optional Information</h3>
+            <p className="text-sm text-primary-700 mt-1">
               Bank details are optional but recommended for salary payments. You can add or update this information later.
             </p>
           </div>
@@ -415,7 +415,7 @@ function AddTeacherComponent() {
             name="bankName"
             value={form.bankName}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
+            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500 transition-colors duration-200 ${
               errors.bankName ? 'border-red-500' : 'border-gray-300'
             }`}
           />
@@ -430,7 +430,7 @@ function AddTeacherComponent() {
             name="bankAccount"
             value={form.bankAccount}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
+            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500 transition-colors duration-200 ${
               errors.bankAccount ? 'border-red-500' : 'border-gray-300'
             }`}
           />
@@ -445,7 +445,7 @@ function AddTeacherComponent() {
             name="accountName"
             value={form.accountName}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
+            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500 transition-colors duration-200 ${
               errors.accountName ? 'border-red-500' : 'border-gray-300'
             }`}
           />
@@ -498,7 +498,7 @@ function AddTeacherComponent() {
                   <button
                     type="button"
                     onClick={prevStep}
-                    className="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 flex items-center"
+                    className="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-2 focus:ring-primary-light focus:border-blue-500 transition-colors duration-200 flex items-center"
                   >
                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -512,7 +512,7 @@ function AddTeacherComponent() {
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                  className="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-2 focus:ring-primary-light focus:border-blue-500 transition-colors duration-200"
                 >
                   Reset
                 </button>
@@ -521,7 +521,7 @@ function AddTeacherComponent() {
                   <button
                     type="button"
                     onClick={nextStep}
-                    className="px-6 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 flex items-center"
+                    className="px-6 py-2 text-sm font-medium text-white bg-primary border border-transparent rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-primary-light focus:ring-offset-2 transition-colors duration-200 flex items-center"
                   >
                     Next
                     <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

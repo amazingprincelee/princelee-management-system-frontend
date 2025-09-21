@@ -192,7 +192,7 @@ const GenerateResults = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <FaSpinner className="animate-spin text-4xl text-blue-500" />
+        <FaSpinner className="animate-spin text-4xl text-primary-500" />
       </div>
     );
   }
@@ -208,7 +208,7 @@ const GenerateResults = () => {
       {/* Selection Form */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <h2 className="text-xl font-semibold mb-4 flex items-center">
-          <FaCalculator className="mr-2 text-blue-500" />
+          <FaCalculator className="mr-2 text-primary-500" />
           Result Parameters
         </h2>
         
@@ -218,7 +218,7 @@ const GenerateResults = () => {
             <select
               value={selectedClass}
               onChange={(e) => setSelectedClass(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
             >
               <option value="">Select Class</option>
               {classes.map(cls => (
@@ -232,7 +232,7 @@ const GenerateResults = () => {
             <select
               value={selectedSubject}
               onChange={(e) => setSelectedSubject(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
             >
               <option value="">Select Subject</option>
               <option value="Mathematics">Mathematics</option>
@@ -250,7 +250,7 @@ const GenerateResults = () => {
             <select
               value={selectedTerm}
               onChange={(e) => setSelectedTerm(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
             >
               <option value="">Select Term</option>
               <option value="First Term">First Term</option>
@@ -264,7 +264,7 @@ const GenerateResults = () => {
             <select
               value={selectedSession}
               onChange={(e) => setSelectedSession(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
             >
               <option value="">Select Session</option>
               <option value="2023/2024">2023/2024</option>
@@ -277,7 +277,7 @@ const GenerateResults = () => {
           <button
             onClick={generateResults}
             disabled={!selectedClass || !selectedSubject || !selectedTerm || !selectedSession || generating}
-            className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors"
+            className="bg-primary hover:bg-blue-600 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors"
           >
             {generating ? <FaSpinner className="animate-spin" /> : <FaCalculator />}
             {generating ? 'Generating...' : 'Generate Results'}
@@ -340,7 +340,7 @@ const GenerateResults = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                         result.grade === 'A' ? 'bg-green-100 text-green-800' :
-                        result.grade === 'B' ? 'bg-blue-100 text-blue-800' :
+                        result.grade === 'B' ? 'bg-primary text-primary-800' :
                         result.grade === 'C' ? 'bg-yellow-100 text-yellow-800' :
                         result.grade === 'D' ? 'bg-orange-100 text-orange-800' :
                         result.grade === 'E' ? 'bg-red-100 text-red-800' :

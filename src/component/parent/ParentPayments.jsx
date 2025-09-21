@@ -136,7 +136,7 @@ const ParentPayments = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <FaSpinner className="text-4xl text-blue-600 animate-spin" />
+        <FaSpinner className="text-4xl text-primary-600 animate-spin" />
       </div>
     );
   }
@@ -158,7 +158,7 @@ const ParentPayments = () => {
                 onClick={() => setActiveTab('make-payment')}
                 className={`py-2 px-1 border-b-2 font-medium text-sm ${
                   activeTab === 'make-payment'
-                    ? 'border-blue-500 text-blue-600'
+                    ? 'border-primary-500 text-primary-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700'
                 }`}
               >
@@ -169,7 +169,7 @@ const ParentPayments = () => {
                 onClick={() => setActiveTab('history')}
                 className={`py-2 px-1 border-b-2 font-medium text-sm ${
                   activeTab === 'history'
-                    ? 'border-blue-500 text-blue-600'
+                    ? 'border-primary-500 text-primary-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700'
                 }`}
               >
@@ -199,7 +199,7 @@ const ParentPayments = () => {
                     name="studentId"
                     value={paymentForm.studentId}
                     onChange={(e) => handleStudentSelect(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
                     required
                   >
                     <option value="">Choose a student</option>
@@ -220,7 +220,7 @@ const ParentPayments = () => {
                     name="feeType"
                     value={paymentForm.feeType}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
                     required
                   >
                     <option value="">Select fee type</option>
@@ -243,7 +243,7 @@ const ParentPayments = () => {
                     name="session"
                     value={paymentForm.session}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
                     required
                   >
                     <option value="">Select session</option>
@@ -262,7 +262,7 @@ const ParentPayments = () => {
                     name="term"
                     value={paymentForm.term}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
                     required
                   >
                     <option value="">Select term</option>
@@ -282,7 +282,7 @@ const ParentPayments = () => {
                     name="amount"
                     value={paymentForm.amount}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
                     placeholder="Enter amount"
                     min="1"
                     required
@@ -298,7 +298,7 @@ const ParentPayments = () => {
                     name="method"
                     value={paymentForm.method}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
                     required
                   >
                     <option value="flutterwave">Flutterwave (Card, Bank Transfer, USSD)</option>
@@ -317,7 +317,7 @@ const ParentPayments = () => {
                   value={paymentForm.description}
                   onChange={handleInputChange}
                   rows="3"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
                   placeholder="Additional payment details..."
                 />
               </div>
@@ -337,7 +337,7 @@ const ParentPayments = () => {
                 <button
                   type="submit"
                   disabled={initiatePaymentLoading}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center"
+                  className="px-6 py-3 bg-primary text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-primary-light disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center"
                 >
                   {initiatePaymentLoading ? (
                     <>
@@ -360,7 +360,7 @@ const ParentPayments = () => {
         {activeTab === 'history' && (
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-semibold mb-6 flex items-center">
-              <FaHistory className="mr-2 text-blue-600" />
+              <FaHistory className="mr-2 text-primary-600" />
               Payment History
             </h2>
 

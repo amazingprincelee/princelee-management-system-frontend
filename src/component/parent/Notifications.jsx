@@ -104,7 +104,7 @@ const Notifications = () => {
   const getNotificationIcon = (type) => {
     switch (type) {
       case 'result':
-        return <FaGraduationCap className="text-blue-500" />;
+        return <FaGraduationCap className="text-primary-500" />;
       case 'event':
         return <FaCalendarAlt className="text-green-500" />;
       case 'fee':
@@ -183,7 +183,7 @@ const Notifications = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <FaSpinner className="animate-spin text-4xl text-blue-500" />
+        <FaSpinner className="animate-spin text-4xl text-primary-500" />
       </div>
     );
   }
@@ -195,7 +195,7 @@ const Notifications = () => {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-gray-800 mb-2 flex items-center">
-              <FaBell className="mr-3 text-blue-500" />
+              <FaBell className="mr-3 text-primary-500" />
               Notifications
               {unreadCount > 0 && (
                 <span className="ml-2 bg-red-500 text-white text-sm px-2 py-1 rounded-full">
@@ -210,7 +210,7 @@ const Notifications = () => {
             {unreadCount > 0 && (
               <button
                 onClick={markAllAsRead}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+                className="bg-primary hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
               >
                 <FaCheckCircle />
                 Mark All Read
@@ -232,7 +232,7 @@ const Notifications = () => {
       {showSettings && (
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <h2 className="text-xl font-semibold mb-4 flex items-center">
-            <FaEnvelope className="mr-2 text-blue-500" />
+            <FaEnvelope className="mr-2 text-primary-500" />
             Email Notification Preferences
           </h2>
           
@@ -243,7 +243,7 @@ const Notifications = () => {
                 <button
                   onClick={() => updateEmailSettings(key, !value)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    value ? 'bg-blue-500' : 'bg-gray-300'
+                    value ? 'bg-primary' : 'bg-gray-300'
                   }`}
                 >
                   <span
@@ -264,7 +264,7 @@ const Notifications = () => {
           <button
             onClick={() => setFilter('all')}
             className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-colors ${
-              filter === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              filter === 'all' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
             <FaFilter />
@@ -274,7 +274,7 @@ const Notifications = () => {
           <button
             onClick={() => setFilter('unread')}
             className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-colors ${
-              filter === 'unread' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              filter === 'unread' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
             <FaEye />
@@ -288,7 +288,7 @@ const Notifications = () => {
                 key={type}
                 onClick={() => setFilter(type)}
                 className={`px-4 py-2 rounded-lg capitalize transition-colors ${
-                  filter === type ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  filter === type ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
                 {type} ({count})
@@ -313,7 +313,7 @@ const Notifications = () => {
             <div
               key={notification.id}
               className={`bg-white rounded-lg shadow-md border-l-4 ${getPriorityColor(notification.priority)} ${
-                !notification.read ? 'bg-blue-50' : ''
+                !notification.read ? 'bg-primary' : ''
               }`}
             >
               <div className="p-6">
@@ -325,11 +325,11 @@ const Notifications = () => {
                     
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className={`font-semibold ${!notification.read ? 'text-blue-900' : 'text-gray-900'}`}>
+                        <h3 className={`font-semibold ${!notification.read ? 'text-primary-900' : 'text-gray-900'}`}>
                           {notification.title}
                         </h3>
                         {!notification.read && (
-                          <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                          <span className="w-2 h-2 bg-primary rounded-full"></span>
                         )}
                       </div>
                       
@@ -357,7 +357,7 @@ const Notifications = () => {
                     {!notification.read && (
                       <button
                         onClick={() => markAsRead(notification.id)}
-                        className="text-blue-500 hover:text-blue-700 p-2"
+                        className="text-primary-500 hover:text-primary-700 p-2"
                         title="Mark as read"
                       >
                         <FaEyeSlash />

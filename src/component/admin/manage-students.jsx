@@ -205,7 +205,7 @@ function ManageStudents() {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `${baseUrl}/student/${selectedStudent._id}`,
+        `${baseUrl}/student/update/${selectedStudent._id}`,
         studentFormData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -235,7 +235,7 @@ function ManageStudents() {
     }
   };
 
-  const StudentForm = ({ onSubmit, initialData = {}, classes }) => {
+  const StudentForm = ({ onSubmit, initialData = {}, classes, buttonText = "Add Student" }) => {
     const [formData, setFormData] = useState(() => ({ ...initialData }));
     const [studentStep, setStudentStep] = useState(1);
 
@@ -257,7 +257,7 @@ function ManageStudents() {
                 placeholder="Enter First Name"
                 value={formData.firstName || ""}
                 onChange={(e) => handleFormInputChange("firstName", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
                 required
               />
             </div>
@@ -271,7 +271,7 @@ function ManageStudents() {
                 placeholder="Enter Surname"
                 value={formData.surName || ""}
                 onChange={(e) => handleFormInputChange("surName", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
                 required
               />
             </div>
@@ -285,7 +285,7 @@ function ManageStudents() {
                 placeholder="Enter Middle Name"
                 value={formData.middleName || ""}
                 onChange={(e) => handleFormInputChange("middleName", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
               />
             </div>
             <div className="relative w-full">
@@ -297,7 +297,7 @@ function ManageStudents() {
                 type="date"
                 value={formData.dateOfBirth || ""}
                 onChange={(e) => handleFormInputChange("dateOfBirth", e.target.value)}
-                className="w-full p-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
                 required
               />
               <p className="mt-1 text-xs text-gray-500">Select your date of birth</p>
@@ -310,7 +310,7 @@ function ManageStudents() {
                 id="gender"
                 value={formData.gender || ""}
                 onChange={(e) => handleFormInputChange("gender", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
                 required
               >
                 <option value="">Select Gender</option>
@@ -326,7 +326,7 @@ function ManageStudents() {
                 id="classLevel"
                 value={formData.classLevel || ""}
                 onChange={(e) => handleFormInputChange("classLevel", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
                 required
               >
                 <option value="">Select Class Level</option>
@@ -347,7 +347,7 @@ function ManageStudents() {
                 placeholder="Enter Section"
                 value={formData.section || ""}
                 onChange={(e) => handleFormInputChange("section", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
               />
             </div>
             <div className="w-full">
@@ -360,14 +360,14 @@ function ManageStudents() {
                 placeholder="Enter State of Origin"
                 value={formData.stateOfOrigin || ""}
                 onChange={(e) => handleFormInputChange("stateOfOrigin", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
               />
             </div>
             <div className="flex justify-end col-span-2 mt-4 space-x-4">
               <button
                 type="button"
                 onClick={() => setStudentStep(2)}
-                className="px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md hover:bg-blue-600"
+                className="px-4 py-2 text-sm font-semibold text-white rounded-md bg-primary hover:bg-blue-600"
               >
                 Next
               </button>
@@ -386,7 +386,7 @@ function ManageStudents() {
                 placeholder="Enter Nationality"
                 value={formData.nationality || "Nigeria"}
                 onChange={(e) => handleFormInputChange("nationality", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
               />
             </div>
             <div className="w-full">
@@ -399,7 +399,7 @@ function ManageStudents() {
                 placeholder="Enter Father's Name"
                 value={formData.fatherName || ""}
                 onChange={(e) => handleFormInputChange("fatherName", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
               />
             </div>
             <div className="w-full">
@@ -412,7 +412,7 @@ function ManageStudents() {
                 placeholder="Enter Mother's Name"
                 value={formData.motherName || ""}
                 onChange={(e) => handleFormInputChange("motherName", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
               />
             </div>
             <div className="w-full">
@@ -425,7 +425,7 @@ function ManageStudents() {
                 placeholder="Enter Guardian's Name"
                 value={formData.guardianName || ""}
                 onChange={(e) => handleFormInputChange("guardianName", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
               />
             </div>
             <div className="w-full">
@@ -438,7 +438,7 @@ function ManageStudents() {
                 placeholder="Enter Phone Number"
                 value={formData.phoneNumber || ""}
                 onChange={(e) => handleFormInputChange("phoneNumber", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
               />
             </div>
             <div className="w-full">
@@ -451,7 +451,7 @@ function ManageStudents() {
                 placeholder="Enter Email"
                 value={formData.email || ""}
                 onChange={(e) => handleFormInputChange("email", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
               />
             </div>
             <div className="w-full">
@@ -464,7 +464,7 @@ function ManageStudents() {
                 placeholder="Enter Address"
                 value={formData.address || ""}
                 onChange={(e) => handleFormInputChange("address", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
               />
             </div>
             <div className="w-full">
@@ -477,7 +477,7 @@ function ManageStudents() {
                 placeholder="Enter Current Session (e.g., 2025/2026)"
                 value={formData.currentSession || ""}
                 onChange={(e) => handleFormInputChange("currentSession", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
               />
             </div>
             <div className="w-full">
@@ -488,7 +488,7 @@ function ManageStudents() {
                 id="currentTerm"
                 value={formData.currentTerm || ""}
                 onChange={(e) => handleFormInputChange("currentTerm", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
               >
                 <option value="">Select Term</option>
                 <option value="first">First</option>
@@ -508,7 +508,7 @@ function ManageStudents() {
                 type="submit"
                 className="px-4 py-2 text-sm text-white bg-green-500 rounded-md hover:bg-green-600"
               >
-                Add Student
+                {buttonText}
               </button>
             </div>
           </div>
@@ -529,7 +529,7 @@ function ManageStudents() {
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center justify-center px-4 py-2 text-sm font-medium text-white transition-colors duration-200 bg-blue-600 rounded-lg shadow-sm hover:bg-blue-700"
+          className="flex items-center justify-center px-4 py-2 text-sm font-medium text-white transition-colors duration-200 rounded-lg shadow-sm bg-primary hover:bg-blue-500"
         >
           <FaPlus className="w-4 h-4 mr-2" /> Add Student
         </button>
@@ -545,14 +545,14 @@ function ManageStudents() {
               placeholder="Search students..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full py-2 pl-10 pr-4 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full py-2 pl-10 pr-4 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500"
             />
           </div>
           
           <select
             value={filters.classLevel}
             onChange={(e) => setFilters({...filters, classLevel: e.target.value})}
-            className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500"
           >
             <option value="">All Classes</option>
             {classes.map((classItem) => (
@@ -565,7 +565,7 @@ function ManageStudents() {
           <select
             value={filters.section}
             onChange={(e) => setFilters({...filters, section: e.target.value})}
-            className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500"
           >
             <option value="">All Sections</option>
             <option value="A">Section A</option>
@@ -576,7 +576,7 @@ function ManageStudents() {
           <select
             value={filters.gender}
             onChange={(e) => setFilters({...filters, gender: e.target.value})}
-            className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500"
           >
             <option value="">All Genders</option>
             <option value="male">Male</option>
@@ -589,7 +589,7 @@ function ManageStudents() {
       <div className="overflow-hidden bg-white border border-gray-200 rounded-lg shadow-sm">
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="w-8 h-8 border-b-2 border-blue-600 rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-b-2 rounded-full border-primary-600 animate-spin"></div>
             <span className="ml-3 text-gray-600">Loading students...</span>
           </div>
         ) : error ? (
@@ -618,8 +618,8 @@ function ManageStudents() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 w-10 h-10">
-                          <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full">
-                            <span className="text-sm font-medium text-blue-600">
+                          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary">
+                            <span className="text-sm font-medium text-primary-600">
                               {student.firstName?.charAt(0)}{student.surName?.charAt(0)}
                             </span>
                           </div>
@@ -636,7 +636,7 @@ function ManageStudents() {
                     </td>
                     <td className="hidden px-6 py-4 text-sm text-gray-900 whitespace-nowrap sm:table-cell">
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        student.gender === 'male' ? 'bg-blue-100 text-blue-800' : 'bg-pink-100 text-pink-800'
+                        student.gender === 'male' ? 'bg-primary text-primary-800' : 'bg-pink-100 text-pink-800'
                       }`}>
                         {student.gender}
                       </span>
@@ -652,7 +652,7 @@ function ManageStudents() {
                     <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
                       <div className="flex justify-end gap-2">
                         <button
-                          className="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-600 transition-colors duration-200 bg-blue-100 rounded-md hover:bg-blue-200"
+                          className="inline-flex items-center px-3 py-1 text-xs font-medium transition-colors duration-200 rounded-md text-primary-600 bg-primary hover:bg-blue-600"
                           onClick={() => {
                             setSelectedStudent(student);
                             setShowEditModal(true);
@@ -709,7 +709,7 @@ function ManageStudents() {
                     <button
                       className={`p-4 rounded-lg border-2 transition-all duration-200 ${
                         parentOption === "new"
-                          ? "border-blue-500 bg-blue-50 text-blue-700"
+                          ? "border-primary-500 bg-primary text-primary-700"
                           : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
                       }`}
                       onClick={() => setParentOption("new")}
@@ -723,7 +723,7 @@ function ManageStudents() {
                     <button
                       className={`p-4 rounded-lg border-2 transition-all duration-200 ${
                         parentOption === "existing"
-                          ? "border-blue-500 bg-blue-50 text-blue-700"
+                          ? "border-primary-500 bg-primary text-primary-700"
                           : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
                       }`}
                       onClick={() => setParentOption("existing")}
@@ -753,7 +753,7 @@ function ManageStudents() {
                               onChange={(e) =>
                                 setParentForm({ ...parentForm, fullname: e.target.value })
                               }
-                              className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                               required
                             />
                           </div>
@@ -768,7 +768,7 @@ function ManageStudents() {
                               onChange={(e) =>
                                 setParentForm({ ...parentForm, phone: e.target.value })
                               }
-                              className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                               required
                             />
                           </div>
@@ -784,7 +784,7 @@ function ManageStudents() {
                             onChange={(e) =>
                               setParentForm({ ...parentForm, address: e.target.value })
                             }
-                            className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                             required
                           />
                         </div>
@@ -800,7 +800,7 @@ function ManageStudents() {
                               onChange={(e) =>
                                 setParentForm({ ...parentForm, email: e.target.value })
                               }
-                              className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                               required
                             />
                           </div>
@@ -813,7 +813,7 @@ function ManageStudents() {
                               onChange={(e) =>
                                 setParentForm({ ...parentForm, gender: e.target.value })
                               }
-                              className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                               required
                             >
                               <option value="">Select Gender</option>
@@ -822,18 +822,18 @@ function ManageStudents() {
                             </select>
                           </div>
                         </div>
-                        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <div className="p-4 border rounded-lg bg-primary border-primary-200">
                           <div className="flex items-start">
                             <div className="flex-shrink-0">
-                              <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                              <svg className="w-5 h-5 text-primary-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                               </svg>
                             </div>
                             <div className="ml-3">
-                              <h3 className="text-sm font-medium text-blue-800">
+                              <h3 className="text-sm font-medium text-primary-800">
                                 Automatic Password Generation
                               </h3>
-                              <div className="mt-2 text-sm text-blue-700">
+                              <div className="mt-2 text-sm text-primary-700">
                                 <p>A temporary password will be automatically generated and sent to the parent's email address. The password will be created using their personal information for security.</p>
                               </div>
                             </div>
@@ -869,7 +869,7 @@ function ManageStudents() {
                               placeholder="Search by name or email..."
                               value={parentSearchTerm}
                               onChange={(e) => setParentSearchTerm(e.target.value)}
-                              className="w-full py-3 pl-10 pr-10 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              className="w-full py-3 pl-10 pr-10 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500"
                               autoComplete="off"
                             />
                             {parentSearchTerm && (
@@ -893,7 +893,7 @@ function ManageStudents() {
                                     key={parent._id}
                                     className={`px-4 py-3 cursor-pointer transition-colors duration-200 border-b border-gray-100 last:border-b-0 ${
                                       selectedParentId === parent._id
-                                        ? "bg-blue-50 border-blue-200"
+                                        ? "bg-primary border-primary-200"
                                         : "hover:bg-gray-50"
                                     }`}
                                     onClick={() => {
@@ -903,8 +903,8 @@ function ManageStudents() {
                                   >
                                     <div className="flex items-center justify-between">
                                       <div className="flex items-center flex-1 min-w-0">
-                                        <div className="flex items-center justify-center flex-shrink-0 w-8 h-8 mr-3 bg-blue-100 rounded-full">
-                                          <span className="text-sm font-medium text-blue-600">
+                                        <div className="flex items-center justify-center flex-shrink-0 w-8 h-8 mr-3 rounded-full bg-primary">
+                                          <span className="text-sm font-medium text-primary-600">
                                             {parent.fullname?.charAt(0)}
                                           </span>
                                         </div>
@@ -924,7 +924,7 @@ function ManageStudents() {
                                       </div>
                                       {selectedParentId === parent._id && (
                                         <div className="flex-shrink-0 ml-2">
-                                          <div className="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full">
+                                          <div className="flex items-center justify-center w-5 h-5 rounded-full bg-primary">
                                             <div className="w-2 h-2 bg-white rounded-full"></div>
                                           </div>
                                         </div>
@@ -944,7 +944,7 @@ function ManageStudents() {
 
                         {/* Selected parent display and continue button */}
                         {selectedParentId && (
-                          <div className="relative z-10 p-4 mt-6 border border-green-200 rounded-lg bg-green-50 shadow-sm">
+                          <div className="relative z-10 p-4 mt-6 border border-green-200 rounded-lg shadow-sm bg-green-50">
                             <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                               <div className="flex items-center">
                                 <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 mr-3 bg-green-100 rounded-full">
@@ -973,7 +973,7 @@ function ManageStudents() {
                                 </button>
                                 <button
                                   onClick={() => setStep(2)}
-                                  className="px-4 py-2 text-sm font-medium text-white transition-colors duration-200 bg-green-600 rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-sm"
+                                  className="px-4 py-2 text-sm font-medium text-white transition-colors duration-200 bg-green-600 rounded-lg shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                                 >
                                   Continue →
                                 </button>
@@ -1029,16 +1029,8 @@ function ManageStudents() {
               onSubmit={handleUpdateStudent}
               initialData={selectedStudent}
               classes={classes}
+              buttonText="Update Student"
             />
-            <div className="flex justify-end mt-4">
-              <button
-                type="submit"
-                form="studentForm"
-                className="px-3 py-2 text-sm text-white bg-blue-500 rounded"
-              >
-                Update Student
-              </button>
-            </div>
           </div>
         </div>
       )}

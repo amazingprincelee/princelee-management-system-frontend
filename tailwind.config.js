@@ -11,19 +11,13 @@ export default {
         lato: ['Lato', 'sans-serif'],
         grotesk: ['"Space Grotesk"', 'sans-serif'],
       },
-       colors: {
-        primary: {
-          DEFAULT: "#284ea1", 
-          light: "#4a6fc2",   
-          dark: "#1e3c7d",    
-        },
-        secondary: {
-          DEFAULT: "#F59E0B", 
-          light: "#FBBF24",   
-          dark: "#B45309",    
-        },
+      colors: {
+        primary: "#284ea1",
+        secondary: "#F59E0B",
+        accent: "#22c55e",
+        neutral: "#64748b",
       },
     },
-  },
+  }
   plugins: [],
 }

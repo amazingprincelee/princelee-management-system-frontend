@@ -75,7 +75,7 @@ function ManageParents() {
             placeholder="Search by name, email, or phone..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full p-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
           />
           <FaSearch className="absolute text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
         </div>
@@ -83,7 +83,7 @@ function ManageParents() {
           <select
             value={filters.hasChildren}
             onChange={(e) => setFilters({ ...filters, hasChildren: e.target.value })}
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
           >
             <option value="">All Parents</option>
             <option value="yes">With Children</option>
@@ -116,7 +116,7 @@ function ManageParents() {
                   <td className="p-2 border">
                     <button
                       onClick={() => handleViewDetails(parent)}
-                      className="flex items-center px-2 py-1 text-sm text-white bg-blue-500 rounded hover:bg-blue-600"
+                      className="flex items-center px-2 py-1 text-sm text-white bg-primary rounded hover:bg-blue-600"
                     >
                       <FaEye className="mr-1" /> View Details
                     </button>

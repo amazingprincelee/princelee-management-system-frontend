@@ -106,7 +106,7 @@ useEffect(() => {
             className="object-contain w-10 h-10 rounded-full"
           />
         ) : (
-          <FaSchool className="w-10 h-10 text-blue-600" />
+          <FaSchool className="w-10 h-10 text-primary-600" />
         )}
         <span
           className="text-lg font-bold text-gray-800 truncate max-w-[150px] md:max-w-[200px]"
@@ -138,7 +138,7 @@ useEffect(() => {
               key={item.label}
               to={item.to}
               onClick={handleMenuClick}
-              className="flex items-center px-4 py-3 space-x-3 text-gray-700 transition-all duration-200 rounded-lg hover:bg-blue-50 hover:text-blue-700 hover:shadow-sm group"
+              className="flex items-center px-4 py-3 space-x-3 text-gray-700 transition-all duration-200 rounded-lg hover:bg-blue-600 hover:text-primary-700 hover:shadow-sm group"
             >
               <span className="text-lg group-hover:scale-110 transition-transform duration-200">
                 {item.icon}

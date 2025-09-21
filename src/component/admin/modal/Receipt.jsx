@@ -253,7 +253,7 @@ Thank you for your payment!`;
         <div className="flex justify-center gap-4 p-6 border-t bg-gray-50">
           <button
             onClick={handleDownload}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors"
           >
             <FaDownload size={16} />
             Download/Print
