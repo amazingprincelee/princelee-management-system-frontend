@@ -11,6 +11,7 @@ const ParentPayments = () => {
   
   const [children, setChildren] = useState([]);
   const [paymentHistory, setPaymentHistory] = useState([]);
+  const [paymentConfig, setPaymentConfig] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('make-payment');
   
@@ -23,7 +24,7 @@ const ParentPayments = () => {
     term: '',
     totalAmount: '',
     amount: '',
-    method: 'flutterwave', // default to flutterwave
+    method: '', // will be set from admin config
     email: '',
     name: ''
   });
@@ -47,8 +48,20 @@ const ParentPayments = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       
+      // Fetch payment configuration
+      const configResponse = await axios.get(`${baseUrl}/parent/payment-config`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
       setChildren(childrenResponse.data.children || []);
       setPaymentHistory(paymentsResponse.data.payments || []);
+      setPaymentConfig(configResponse.data);
+      
+      // Set the payment method from admin configuration
+      setPaymentForm(prev => ({
+        ...prev,
+        method: configResponse.data.activePaymentGateway || 'flutterwave'
+      }));
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -289,22 +302,7 @@ const ParentPayments = () => {
                   />
                 </div>
 
-                {/* Payment Method */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Payment Method *
-                  </label>
-                  <select
-                    name="method"
-                    value={paymentForm.method}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
-                    required
-                  >
-                    <option value="flutterwave">Flutterwave (Card, Bank Transfer, USSD)</option>
-                    <option value="paystack">Paystack (Card, Bank Transfer)</option>
-                  </select>
-                </div>
+
               </div>
 
               {/* Description */}

@@ -160,17 +160,17 @@ const Calendar = () => {
   // Get event type color
   const getEventTypeColor = (type) => {
     const eventTypeColors = {
-      'academic': 'bg-primary',
+      'academic': 'bg-blue-500',
       'exam': 'bg-red-500',
-      'holiday': 'bg-accent-500',
+      'holiday': 'bg-green-500',
       'meeting': 'bg-purple-500',
-      'sports': 'bg-secondary-500',
+      'sports': 'bg-yellow-500',
       'cultural': 'bg-pink-500',
-      'workshop': 'bg-primary',
+      'workshop': 'bg-indigo-500',
       'deadline': 'bg-orange-500',
-      'other': 'bg-neutral-500'
+      'other': 'bg-gray-500'
     };
-    return colors[type] || colors.other;
+    return eventTypeColors[type] || eventTypeColors.other;
   };
 
   // Get priority icon

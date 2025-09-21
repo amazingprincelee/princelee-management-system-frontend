@@ -144,8 +144,7 @@ function LandingPage() {
             <p className="text-gray-600">
               Customize your school's identity with name, logo, description,
               motto, address, photo gallery, and location details. Configure
-              payment settings, currency (e.g., NGN), and callback URLs for a
-              tailored experience.
+              payment settings and currency (e.g., NGN) for a tailored experience.
             </p>
           </div>
           <div className="flex flex-col items-center p-6 text-center transition bg-white shadow-md rounded-xl hover:shadow-lg">

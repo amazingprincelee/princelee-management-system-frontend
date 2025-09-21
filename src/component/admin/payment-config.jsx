@@ -10,15 +10,15 @@ function PaymentConfiguration() {
 
   const [flutterwaveData, setFlutterwaveData] = useState({
     flutterwaveSecret: "",
-    flutterwavePublic: "",
-    callbackUrl: ""
+    flutterwavePublic: ""
   });
 
   const [paystackData, setPaystackData] = useState({
     paystackSecret: "",
-    paystackPublic: "",
-    callbackUrl: ""
+    paystackPublic: ""
   });
+
+  const [activePaymentGateway, setActivePaymentGateway] = useState("flutterwave");
 
   // Fetch payment configuration
   const fetchPaymentConfig = async () => {
@@ -137,6 +137,45 @@ function PaymentConfiguration() {
     }
   };
 
+  // Update active payment gateway
+  const updateActivePaymentGateway = async (gateway) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const response = await fetch(`${baseUrl}/config/active-gateway/update`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ activePaymentGateway: gateway })
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        setConfig(data.config);
+        alert(data.message || "Default payment gateway updated successfully!");
+        return true;
+      } else {
+        throw new Error(data.message || "Failed to update default payment gateway");
+      }
+    } catch (error) {
+      setError(error.message);
+      alert(`Error: ${error.message}`);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Load payment config on component mount
   useEffect(() => {
     fetchPaymentConfig();
@@ -147,15 +186,15 @@ function PaymentConfiguration() {
     if (config) {
       setFlutterwaveData({
         flutterwaveSecret: config.flutterwaveSecret || "",
-        flutterwavePublic: config.flutterwavePublic || "",
-        callbackUrl: config.callbackUrl || ""
+        flutterwavePublic: config.flutterwavePublic || ""
       });
 
       setPaystackData({
         paystackSecret: config.paystackSecret || "",
-        paystackPublic: config.paystackPublic || "",
-        callbackUrl: config.callbackUrl || ""
+        paystackPublic: config.paystackPublic || ""
       });
+
+      setActivePaymentGateway(config.activePaymentGateway || "flutterwave");
     }
   }, [config]);
 
@@ -178,8 +217,8 @@ function PaymentConfiguration() {
   const handleFlutterwaveSubmit = async (e) => {
     e.preventDefault();
     
-    if (!flutterwaveData.flutterwaveSecret || !flutterwaveData.callbackUrl) {
-      alert('Flutterwave secret key and callback URL are required');
+    if (!flutterwaveData.flutterwaveSecret) {
+      alert('Flutterwave secret key is required');
       return;
     }
 
@@ -192,8 +231,8 @@ function PaymentConfiguration() {
   const handlePaystackSubmit = async (e) => {
     e.preventDefault();
     
-    if (!paystackData.paystackSecret || !paystackData.callbackUrl) {
-      alert('Paystack secret key and callback URL are required');
+    if (!paystackData.paystackSecret) {
+      alert('Paystack secret key is required');
       return;
     }
 
@@ -249,11 +288,18 @@ function PaymentConfiguration() {
                 </div>
               </div>
               <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                config?.flutterwaveSecret 
-                  ? 'bg-green-100 text-green-800' 
-                  : 'bg-red-100 text-red-800'
+                !config?.flutterwaveSecret 
+                  ? 'bg-red-100 text-red-800'
+                  : activePaymentGateway === 'flutterwave'
+                    ? 'bg-blue-100 text-blue-800'
+                    : 'bg-green-100 text-green-800'
               }`}>
-                {config?.flutterwaveSecret ? '✓ Active' : '✗ Inactive'}
+                {!config?.flutterwaveSecret 
+                  ? '✗ Not Configured' 
+                  : activePaymentGateway === 'flutterwave'
+                    ? '🎯 Active'
+                    : '✓ Configured'
+                }
               </div>
             </div>
           </div>
@@ -270,15 +316,55 @@ function PaymentConfiguration() {
                 </div>
               </div>
               <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                config?.paystackSecret 
-                  ? 'bg-green-100 text-green-800' 
-                  : 'bg-red-100 text-red-800'
+                !config?.paystackSecret 
+                  ? 'bg-red-100 text-red-800'
+                  : activePaymentGateway === 'paystack'
+                    ? 'bg-blue-100 text-blue-800'
+                    : 'bg-green-100 text-green-800'
               }`}>
-                {config?.paystackSecret ? '✓ Active' : '✗ Inactive'}
+                {!config?.paystackSecret 
+                  ? '✗ Not Configured' 
+                  : activePaymentGateway === 'paystack'
+                    ? '🎯 Active'
+                    : '✓ Configured'
+                }
               </div>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Active Payment Gateway Selection */}
+      <div className="p-6 mb-6 rounded-lg bg-blue-50">
+        <h2 className="mb-4 text-xl font-semibold text-gray-900">Default Payment Gateway</h2>
+        <div className="flex items-center space-x-4">
+          <label className="text-sm font-medium text-gray-700">
+            Select which payment gateway to use by default:
+          </label>
+          <select
+            value={activePaymentGateway}
+            onChange={(e) => setActivePaymentGateway(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-blue-500"
+          >
+            <option value="flutterwave">💳 Flutterwave</option>
+            <option value="paystack">🏦 Paystack</option>
+          </select>
+          <button
+            onClick={async () => {
+              // We'll implement this function next
+              await updateActivePaymentGateway(activePaymentGateway);
+            }}
+            disabled={loading}
+            className="px-4 py-2 text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            {loading ? 'Saving...' : 'Save Default'}
+          </button>
+        </div>
+        <p className="mt-2 text-sm text-gray-600">
+          Current default: <span className="font-medium text-blue-600">
+            {activePaymentGateway === 'flutterwave' ? '💳 Flutterwave' : '🏦 Paystack'}
+          </span>
+        </p>
       </div>
 
       {/* Tab Navigation */}
@@ -320,7 +406,6 @@ function PaymentConfiguration() {
                 <div className="space-y-1 text-sm text-primary-800">
                   <p><strong>Secret Key:</strong> {maskSecret(config.flutterwaveSecret)}</p>
                   <p><strong>Public Key:</strong> {config.flutterwavePublic || 'Not set'}</p>
-                  <p><strong>Callback URL:</strong> {config.callbackUrl || 'Not set'}</p>
                 </div>
               </div>
             )}
@@ -356,23 +441,7 @@ function PaymentConfiguration() {
               </div>
             </div>
 
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">
-                Callback URL *
-              </label>
-              <input
-                type="url"
-                name="callbackUrl"
-                value={flutterwaveData.callbackUrl}
-                onChange={handleFlutterwaveChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-blue-500"
-                placeholder="https://yourdomain.com/payment/callback"
-              />
-              <p className="mt-1 text-xs text-gray-500">
-                URL where Flutterwave will send payment notifications
-              </p>
-            </div>
+
 
             <div className="flex justify-end">
               <button
@@ -439,23 +508,7 @@ function PaymentConfiguration() {
               </div>
             </div>
 
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">
-                Callback URL *
-              </label>
-              <input
-                type="url"
-                name="callbackUrl"
-                value={paystackData.callbackUrl}
-                onChange={handlePaystackChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-blue-500"
-                placeholder="https://yourdomain.com/payment/callback"
-              />
-              <p className="mt-1 text-xs text-gray-500">
-                URL where Paystack will send payment notifications
-              </p>
-            </div>
+
 
             <div className="flex justify-end">
               <button

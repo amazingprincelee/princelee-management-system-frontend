@@ -39,8 +39,10 @@ import ParentNotifications from './component/parent/ParentNotifications';
 import ParentPayments from './component/parent/ParentPayments';
 import Messages from './component/parent/Messages';
 import Children from './component/parent/Children';
+import ChildDetails from './component/parent/ChildDetails';
 import TeacherExams from './component/teacher/TeacherExams';
 import Calendar from './components/Calendar/Calendar';
+import PaymentStatus from './page/PaymentStatus';
 
 
 import './App.css';
@@ -63,6 +65,7 @@ function AppContent() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/features" element={<Features />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="/payment-status" element={<PaymentStatus />} />
        
 
         {/* Admin Dashboard with nested routes */}
@@ -103,6 +106,7 @@ function AppContent() {
             <Route index element={<ParentDashboard />} />
             <Route path="results" element={<ViewResults />} />
             <Route path="children" element={<Children />} />
+            <Route path="children/:childId" element={<ChildDetails />} />
             <Route path="children/:childId/results" element={<ViewResults />} />
             <Route path="notifications" element={<ParentNotifications />} />
             <Route path="payments" element={<ParentPayments />} />

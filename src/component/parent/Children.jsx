@@ -2,14 +2,12 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { baseUrl } from '../../utils/baseUrl';
 import { 
   FaChild, 
   FaGraduationCap, 
   FaCalendarAlt, 
   FaUser,
-  FaPhone,
-  FaEnvelope,
-  FaMapMarkerAlt,
   FaEdit,
   FaEye,
   FaSpinner
@@ -24,8 +22,6 @@ const Children = () => {
   
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
   useEffect(() => {
     fetchChildren();
@@ -307,26 +303,12 @@ const Children = () => {
                   )}
                 </div>
 
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center text-gray-600">
-                    <FaEnvelope className="mr-2 text-gray-400" />
-                    <span className="truncate">{child.email}</span>
+                {child.dateOfBirth && (
+                  <div className="flex items-center text-gray-600 text-sm">
+                    <FaCalendarAlt className="mr-2 text-gray-400" />
+                    <span>Born: {new Date(child.dateOfBirth).toLocaleDateString()}</span>
                   </div>
-                  <div className="flex items-center text-gray-600">
-                    <FaPhone className="mr-2 text-gray-400" />
-                    <span>{child.phone}</span>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <FaMapMarkerAlt className="mr-2 text-gray-400" />
-                    <span className="truncate">{child.address}</span>
-                  </div>
-                  {child.dateOfBirth && (
-                    <div className="flex items-center text-gray-600">
-                      <FaCalendarAlt className="mr-2 text-gray-400" />
-                      <span>Born: {new Date(child.dateOfBirth).toLocaleDateString()}</span>
-                    </div>
-                  )}
-                </div>
+                )}
               </div>
 
               {/* Action Buttons */}
