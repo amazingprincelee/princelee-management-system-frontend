@@ -18,7 +18,7 @@ import TeacherDashboard from './component/teacher/TeacherDashboard';
 import ParentDashboard from './component/parent/ParentDashboard';
 import ViewResults from './component/parent/ViewResults';
 import Notifications from './component/parent/Notifications';
-import MyClasses from './component/teacher/MyClasses';
+
 import AddScores from './component/teacher/AddScores';
 import GenerateResults from './component/teacher/GenerateResults';
 import StatCard from './component/admin/statcard';
@@ -41,7 +41,10 @@ import Messages from './component/parent/Messages';
 import Children from './component/parent/Children';
 import ChildDetails from './component/parent/ChildDetails';
 import TeacherExams from './component/teacher/TeacherExams';
-import Calendar from './components/Calendar/Calendar';
+import TeacherResults from './component/teacher/TeacherResults';
+import TeacherSubjects from './component/teacher/TeacherSubjects';
+import TeacherReports from './component/teacher/TeacherReports';
+import Calendar from './component/Calendar/Calendar';
 import PaymentStatus from './page/PaymentStatus';
 
 
@@ -90,8 +93,11 @@ function AppContent() {
         <Route element={<ProtectedRoute />}>
           <Route path="/teacher-dashboard" element={<TeacherDashboardLayout />}>
             <Route index element={<TeacherDashboard />} />
-            <Route path="classes" element={<MyClasses />} />
-            <Route path="exams" element={<TeacherExams />} />
+
+            <Route path="subjects" element={<TeacherSubjects />} />
+            <Route path="exams" element={<AddScores />} />
+            <Route path="results" element={<TeacherResults />} />
+            <Route path="reports" element={<TeacherReports />} />
             <Route path="add-scores" element={<AddScores />} />
             <Route path="add-ca" element={<AddScores />} />
             <Route path="generate-results" element={<GenerateResults />} />

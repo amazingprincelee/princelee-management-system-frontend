@@ -29,6 +29,9 @@ const AddScores = () => {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [bulkScore, setBulkScore] = useState("");
+  const [showBulkEntry, setShowBulkEntry] = useState(false);
   
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -235,6 +238,42 @@ const AddScores = () => {
     return caTypes.find(ct => ct.value === caType)?.maxScore || 100;
   };
 
+  // Filter students based on search term
+  const filteredStudents = students.filter(student => 
+    student.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    student.surName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    student.admissionNumber.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Bulk score operations
+  const applyBulkScore = () => {
+    const numericScore = parseFloat(bulkScore);
+    const maxScore = getMaxScore();
+    
+    if (bulkScore === "" || numericScore < 0 || numericScore > maxScore) {
+      setMessage({ type: "error", text: `Please enter a valid score between 0 and ${maxScore}` });
+      return;
+    }
+
+    const newScores = { ...scores };
+    filteredStudents.forEach(student => {
+      newScores[student._id] = bulkScore;
+    });
+    setScores(newScores);
+    setBulkScore("");
+    setShowBulkEntry(false);
+    setMessage({ type: "success", text: `Applied score ${bulkScore} to ${filteredStudents.length} students` });
+  };
+
+  const clearAllScores = () => {
+    const newScores = { ...scores };
+    filteredStudents.forEach(student => {
+      newScores[student._id] = "";
+    });
+    setScores(newScores);
+    setMessage({ type: "success", text: `Cleared scores for ${filteredStudents.length} students` });
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -422,9 +461,63 @@ const AddScores = () => {
               Enter Scores (Max: {getMaxScore()})
             </h2>
             <span className="text-sm text-gray-600">
-              {students.length} students
+              {filteredStudents.length} of {students.length} students
             </span>
           </div>
+
+          {/* Search Input */}
+          <div className="mb-4">
+            <input
+              type="text"
+              placeholder="Search students by name or admission number..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            />
+          </div>
+
+          {/* Bulk Entry Controls */}
+          <div className="mb-4 flex flex-wrap gap-2">
+            <button
+              onClick={() => setShowBulkEntry(!showBulkEntry)}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              {showBulkEntry ? "Hide" : "Show"} Bulk Entry
+            </button>
+            <button
+              onClick={clearAllScores}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            >
+              Clear All Scores
+            </button>
+          </div>
+
+          {/* Bulk Entry Form */}
+          {showBulkEntry && (
+            <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <h3 className="text-sm font-medium text-blue-900 mb-2">
+                Apply Same Score to All {filteredStudents.length} Students
+              </h3>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  min="0"
+                  max={getMaxScore()}
+                  value={bulkScore}
+                  onChange={(e) => setBulkScore(e.target.value)}
+                  placeholder={`Enter score (0-${getMaxScore()})`}
+                  className="flex-1 p-2 border border-blue-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <button
+                  onClick={applyBulkScore}
+                  disabled={!bulkScore}
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                >
+                  Apply to All
+                </button>
+              </div>
+            </div>
+          )}
 
           {loading ? (
             <div className="flex items-center justify-center h-32">
@@ -453,7 +546,7 @@ const AddScores = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {students.map((student) => {
+                  {filteredStudents.map((student) => {
                     const score = scores[student._id];
                     const gradeInfo = score ? getGrade(parseFloat(score)) : { grade: "-", remark: "-" };
                     

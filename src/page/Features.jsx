@@ -7,7 +7,7 @@ function Features() {
     <section className="bg-gray-50 py-12 sm:py-16 text-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-gray-900">
-          Key Features of Our School Management System
+          Key Features of Prince Lee EduSuite
         </h2>
         <p className="text-sm sm:text-base md:text-lg mb-10 text-gray-600 max-w-3xl mx-auto">
           Discover a comprehensive platform designed to streamline every aspect of school administration. From student enrollment to payment tracking and academic performance management, our system empowers educators, parents, and administrators with intuitive tools for success.

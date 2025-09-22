@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
 import { FaPhone, FaEnvelope, FaGlobe } from "react-icons/fa";
 
-function ContactComponent() {
+function Contact() {
 //  const primaryColor = "#284ea1";
 
   return (
     <section className="bg-gray-100 py-12 sm:py-16 text-gray-800">
       <div className=" mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-gray-900">
-          Get Started with Smart School Management
+          Get Started with Prince Lee EduSuite
         </h2>
         <p className="text-sm sm:text-base md:text-lg mb-8 text-gray-600 max-w-3xl mx-auto">
           Ready to transform your school with our powerful management system? Explore your options below and take the first step toward streamlined operations.
@@ -84,4 +84,4 @@ function ContactComponent() {
   );
 }
 
-export default ContactComponent;
+export default Contact;

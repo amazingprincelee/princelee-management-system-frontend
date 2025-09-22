@@ -8,7 +8,9 @@ import {
   FaBookOpen,
   FaPlus,
   FaEye,
-  FaChartLine
+  FaChartLine,
+  FaCheckCircle,
+  FaFileAlt
 } from "react-icons/fa";
 import axios from "axios";
 import { baseUrl } from "../../utils/baseUrl";
@@ -47,18 +49,18 @@ const TeacherDashboard = () => {
 
   const statCards = [
     {
-      title: "My Classes",
-      value: stats.totalClasses,
-      icon: FaUsers,
+      title: "My Subjects",
+      value: user?.subjects?.length || 0,
+      icon: FaBookOpen,
       color: "bg-primary",
-      link: "/teacher-dashboard/my-classes"
+      link: "/teacher-dashboard/subjects"
     },
     {
       title: "Total Students",
       value: stats.totalStudents,
       icon: FaGraduationCap,
       color: "bg-green-500",
-      link: "/teacher-dashboard/my-classes"
+      link: "/teacher-dashboard/subjects"
     },
     {
       title: "Pending Results",
@@ -70,7 +72,7 @@ const TeacherDashboard = () => {
     {
       title: "Completed Exams",
       value: stats.completedExams,
-      icon: FaBookOpen,
+      icon: FaCheckCircle,
       color: "bg-purple-500",
       link: "/teacher-dashboard/exams"
     }
@@ -78,30 +80,30 @@ const TeacherDashboard = () => {
 
   const quickActions = [
     {
-      title: "Create New Exam",
-      description: "Set up a new exam or continuous assessment",
-      icon: FaPlus,
-      color: "bg-primary",
-      link: "/teacher-dashboard/exams/create"
-    },
-    {
-      title: "Enter Results",
-      description: "Input exam scores and CA marks",
+      title: "Add Scores",
+      description: "Enter exam scores and CA marks for students",
       icon: FaClipboardList,
-      color: "bg-green-600",
-      link: "/teacher-dashboard/results/enter"
+      color: "bg-primary",
+      link: "/teacher-dashboard/exams"
     },
     {
-      title: "View My Classes",
-      description: "See all classes you're teaching",
+      title: "View Results",
+      description: "Check and manage student results",
       icon: FaEye,
-      color: "bg-purple-600",
-      link: "/teacher-dashboard/my-classes"
+      color: "bg-green-600",
+      link: "/teacher-dashboard/results"
     },
     {
-      title: "Generate Reports",
-      description: "Create performance reports for your subjects",
+      title: "Generate Results",
+      description: "Create final results for students",
       icon: FaChartLine,
+      color: "bg-blue-600",
+      link: "/teacher-dashboard/generate-results"
+    },
+    {
+      title: "View Reports",
+      description: "Access performance reports and analytics",
+      icon: FaFileAlt,
       color: "bg-orange-600",
       link: "/teacher-dashboard/reports"
     }
@@ -128,7 +130,7 @@ const TeacherDashboard = () => {
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((card, index) => {
           const Icon = card.icon;
           return (
@@ -154,7 +156,7 @@ const TeacherDashboard = () => {
       {/* Quick Actions */}
       <div className="bg-white rounded-lg shadow-sm p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {quickActions.map((action, index) => {
             const Icon = action.icon;
             return (

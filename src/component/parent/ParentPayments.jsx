@@ -11,7 +11,6 @@ const ParentPayments = () => {
   
   const [children, setChildren] = useState([]);
   const [paymentHistory, setPaymentHistory] = useState([]);
-  const [paymentConfig, setPaymentConfig] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('make-payment');
   
@@ -24,7 +23,7 @@ const ParentPayments = () => {
     term: '',
     totalAmount: '',
     amount: '',
-    method: '', // will be set from admin config
+    method: 'flutterwave', // default to flutterwave
     email: '',
     name: ''
   });
@@ -48,20 +47,8 @@ const ParentPayments = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      // Fetch payment configuration
-      const configResponse = await axios.get(`${baseUrl}/parent/payment-config`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
       setChildren(childrenResponse.data.children || []);
       setPaymentHistory(paymentsResponse.data.payments || []);
-      setPaymentConfig(configResponse.data);
-      
-      // Set the payment method from admin configuration
-      setPaymentForm(prev => ({
-        ...prev,
-        method: configResponse.data.activePaymentGateway || 'flutterwave'
-      }));
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {

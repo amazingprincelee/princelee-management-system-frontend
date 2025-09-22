@@ -37,7 +37,6 @@ const TeacherDashboardLayout = () => {
 
   const menuItems = [
     { path: "/teacher-dashboard", icon: FaHome, label: "Dashboard", exact: true },
-    { path: "/teacher-dashboard/my-classes", icon: FaUsers, label: "My Classes" },
     { path: "/teacher-dashboard/exams", icon: FaClipboardList, label: "Exams & CA" },
     { path: "/teacher-dashboard/results", icon: FaGraduationCap, label: "Results" },
     { path: "/teacher-dashboard/generate-results", icon: FaChartLine, label: "Generate Results" },
@@ -142,7 +141,7 @@ const TeacherDashboardLayout = () => {
             
             <div className="flex items-center space-x-4">
               <h1 className="text-xl font-semibold text-neutral-900">
-                {getPageTitle()}
+                Teacher Portal
               </h1>
             </div>
             
