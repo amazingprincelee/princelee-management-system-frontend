@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { baseUrl } from "../../utils/baseUrl";
-import { FaEye, FaTimes, FaSearch } from "react-icons/fa";
+import { FaEye, FaTimes, FaSearch, FaPlus } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 function ManageParents() {
   const [parents, setParents] = useState([]);
@@ -12,6 +13,16 @@ function ManageParents() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
     hasChildren: "",
+  });
+  
+  // Add Parent Modal States
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [parentForm, setParentForm] = useState({
+    fullname: "",
+    email: "",
+    phone: "",
+    address: "",
   });
 
   useEffect(() => {
@@ -64,9 +75,90 @@ function ManageParents() {
     setSelectedParent(null);
   };
 
+  const handleAddParent = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.post(
+        `${baseUrl}/admin/register-parent`,
+        { ...parentForm, role: "parent" },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      
+      // Show success message with password information
+      if (res.data.parentInfo) {
+        const { generatedPassword, welcomeEmailSent } = res.data.parentInfo;
+        if (welcomeEmailSent) {
+          toast.success(
+            `Parent registered successfully! Temporary password (${generatedPassword}) has been sent to their email.`,
+            { autoClose: 8000 }
+          );
+        } else {
+          toast.warning(
+            `Parent registered successfully! Temporary password: ${generatedPassword}. Please share this with the parent as email sending failed.`,
+            { autoClose: 10000 }
+          );
+        }
+      } else {
+        toast.success("Parent registered successfully!");
+      }
+      
+      // Reset form and close modal
+      setParentForm({
+        fullname: "",
+        email: "",
+        phone: "",
+        address: "",
+      });
+      setShowAddModal(false);
+      
+      // Refresh parents list
+      const response = await axios.get(`${baseUrl}/admin/parent-withchildren`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setParents(response.data.parents || []);
+      
+    } catch (err) {
+      console.error("Error registering parent:", err);
+      const errorMessage = err.response?.data?.message || "Failed to register parent. Please try again.";
+      toast.error(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setParentForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleCloseAddModal = () => {
+    setShowAddModal(false);
+    setParentForm({
+      fullname: "",
+      email: "",
+      phone: "",
+      address: "",
+    });
+  };
+
   return (
     <div className="p-4 sm:p-6">
-      <h1 className="mb-4 text-xl font-bold">Manage Parents</h1>
+      <div className="flex flex-col gap-4 mb-4 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-xl font-bold">Manage Parents</h1>
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="flex items-center px-4 py-2 text-white transition-colors duration-200 bg-green-600 rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+        >
+          <FaPlus className="mr-2" />
+          Add Parent
+        </button>
+      </div>
 
       <div className="flex flex-col gap-4 mb-4 sm:flex-row">
         <div className="relative w-full sm:w-1/3">
@@ -158,6 +250,100 @@ function ManageParents() {
                 )}
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Parent Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30">
+          <div className="relative w-full max-w-md p-6 bg-white rounded-lg">
+            <button
+              onClick={handleCloseAddModal}
+              className="absolute text-gray-600 top-2 right-2 hover:text-black"
+            >
+              <FaTimes size={20} />
+            </button>
+            <h2 className="mb-4 text-lg font-bold">Add New Parent</h2>
+            <form onSubmit={handleAddParent} className="space-y-4">
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">
+                  Full Name *
+                </label>
+                <input
+                  type="text"
+                  name="fullname"
+                  value={parentForm.fullname}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  placeholder="Enter full name"
+                />
+              </div>
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={parentForm.email}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  placeholder="Enter email address"
+                />
+              </div>
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">
+                  Phone
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={parentForm.phone}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  placeholder="Enter phone number"
+                />
+              </div>
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">
+                  Address
+                </label>
+                <textarea
+                  name="address"
+                  value={parentForm.address}
+                  onChange={handleInputChange}
+                  rows="3"
+                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  placeholder="Enter address"
+                />
+              </div>
+              <div className="flex gap-2 pt-4">
+                <button
+                  type="button"
+                  onClick={handleCloseAddModal}
+                  className="flex-1 px-4 py-2 text-gray-700 transition-colors duration-200 bg-gray-200 rounded-lg hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="flex items-center justify-center flex-1 px-4 py-2 text-white transition-colors duration-200 bg-green-600 rounded-lg hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Adding...
+                    </>
+                  ) : (
+                    "Add Parent"
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
