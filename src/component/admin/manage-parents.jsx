@@ -20,6 +20,7 @@ function ManageParents() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [parentForm, setParentForm] = useState({
     fullname: "",
+    username: "",
     email: "",
     phone: "",
     address: "",
@@ -89,15 +90,15 @@ function ManageParents() {
       
       // Show success message with password information
       if (res.data.parentInfo) {
-        const { generatedPassword, welcomeEmailSent } = res.data.parentInfo;
-        if (welcomeEmailSent) {
+        const { temporaryPassword, emailSent } = res.data.parentInfo;
+        if (emailSent) {
           toast.success(
-            `Parent registered successfully! Temporary password (${generatedPassword}) has been sent to their email.`,
+            `Parent registered successfully! Temporary password (${temporaryPassword}) has been sent to their email.`,
             { autoClose: 8000 }
           );
         } else {
           toast.warning(
-            `Parent registered successfully! Temporary password: ${generatedPassword}. Please share this with the parent as email sending failed.`,
+            `Parent registered successfully! Temporary password: ${temporaryPassword}. Please share this with the parent as email sending failed.`,
             { autoClose: 10000 }
           );
         }
@@ -108,6 +109,7 @@ function ManageParents() {
       // Reset form and close modal
       setParentForm({
         fullname: "",
+        username: "",
         email: "",
         phone: "",
         address: "",
@@ -141,6 +143,7 @@ function ManageParents() {
     setShowAddModal(false);
     setParentForm({
       fullname: "",
+      username: "",
       email: "",
       phone: "",
       address: "",
@@ -282,16 +285,29 @@ function ManageParents() {
               </div>
               <div>
                 <label className="block mb-1 text-sm font-medium text-gray-700">
-                  Email *
+                  Username (Phone or Email) *
+                </label>
+                <input
+                  type="text"
+                  name="username"
+                  value={parentForm.username}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  placeholder="Enter phone or email"
+                />
+              </div>
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">
+                  Email
                 </label>
                 <input
                   type="email"
                   name="email"
                   value={parentForm.email}
                   onChange={handleInputChange}
-                  required
                   className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="Enter email address"
+                  placeholder="Enter email address (optional)"
                 />
               </div>
               <div>

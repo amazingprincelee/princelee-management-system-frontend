@@ -36,11 +36,23 @@ function ManageStudents() {
   const [parentOption, setParentOption] = useState(""); // "new" | "existing"
   const [parents, setParents] = useState([]);
   const [selectedParentId, setSelectedParentId] = useState(null);
-  const [parentForm, setParentForm] = useState({});
+  const [parentForm, setParentForm] = useState({
+    username: "",
+    fullname: "",
+    email: "",
+    phone: "",
+    address: "",
+    gender: ""
+  });
 
   // parent filtering
   const [parentSearchTerm, setParentSearchTerm] = useState("");
   const [filteredParents, setFilteredParents] = useState([]);
+  
+  // loading states
+  const [isRegisteringParent, setIsRegisteringParent] = useState(false);
+  const [isRegisteringStudent, setIsRegisteringStudent] = useState(false);
+  const [isUpdatingStudent, setIsUpdatingStudent] = useState(false);
 
   // classes state
   const [classes, setClasses] = useState([]);
@@ -133,6 +145,7 @@ function ManageStudents() {
 
   const handleRegisterParent = async (e) => {
     e.preventDefault();
+    setIsRegisteringParent(true);
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
@@ -144,15 +157,15 @@ function ManageStudents() {
       
       // Show success message with password information
       if (res.data.parentInfo) {
-        const { generatedPassword, welcomeEmailSent } = res.data.parentInfo;
-        if (welcomeEmailSent) {
+        const { temporaryPassword, emailSent } = res.data.parentInfo;
+        if (emailSent) {
           toast.success(
-            `Parent registered successfully! Temporary password (${generatedPassword}) has been sent to their email.`,
+            `Parent registered successfully! Temporary password (${temporaryPassword}) has been sent to their email.`,
             { autoClose: 8000 }
           );
         } else {
           toast.warning(
-            `Parent registered successfully! Temporary password: ${generatedPassword}. Please share this with the parent as email sending failed.`,
+            `Parent registered successfully! Temporary password: ${temporaryPassword}. Please share this with the parent as email sending failed.`,
             { autoClose: 10000 }
           );
         }
@@ -164,11 +177,14 @@ function ManageStudents() {
     } catch (err) {
       console.error("Error registering parent:", err);
       toast.error("Failed to register parent. Please try again.");
+    } finally {
+      setIsRegisteringParent(false);
     }
   };
 
   const handleRegisterStudent = async (e, studentFormData) => {
     e.preventDefault();
+    setIsRegisteringStudent(true);
     try {
       const token = localStorage.getItem("token");
       const finalData = {
@@ -186,6 +202,8 @@ function ManageStudents() {
     } catch (err) {
       console.error("Error registering student:", err);
       toast.error("Failed to register student. Please try again.");
+    } finally {
+      setIsRegisteringStudent(false);
     }
   };
 
@@ -193,7 +211,14 @@ function ManageStudents() {
     setShowAddModal(false);
     setStep(1);
     setParentOption("");
-    setParentForm({});
+    setParentForm({
+      username: "",
+      fullname: "",
+      email: "",
+      phone: "",
+      address: "",
+      gender: ""
+    });
     setSelectedParentId(null);
     setParentSearchTerm("");
     setFilteredParents([]);
@@ -202,6 +227,7 @@ function ManageStudents() {
   // ---------- STUDENT HANDLERS ----------
   const handleUpdateStudent = async (e, studentFormData) => {
     e.preventDefault();
+    setIsUpdatingStudent(true);
     try {
       const token = localStorage.getItem("token");
       await axios.put(
@@ -216,6 +242,8 @@ function ManageStudents() {
     } catch (err) {
       console.error("Error updating student:", err);
       toast.error("Failed to update student. Please try again.");
+    } finally {
+      setIsUpdatingStudent(false);
     }
   };
 
@@ -235,7 +263,7 @@ function ManageStudents() {
     }
   };
 
-  const StudentForm = ({ onSubmit, initialData = {}, classes, buttonText = "Add Student" }) => {
+  const StudentForm = ({ onSubmit, initialData = {}, classes, buttonText = "Add Student", isLoading = false }) => {
     const [formData, setFormData] = useState(() => ({ ...initialData }));
     const [studentStep, setStudentStep] = useState(1);
 
@@ -506,9 +534,24 @@ function ManageStudents() {
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 text-sm text-white bg-green-500 rounded-md hover:bg-green-600"
+                disabled={isLoading}
+                className={`px-4 py-2 text-sm text-white rounded-md transition-colors duration-200 ${
+                  isLoading 
+                    ? 'bg-green-400 cursor-not-allowed' 
+                    : 'bg-green-500 hover:bg-green-600'
+                }`}
               >
-                {buttonText}
+                {isLoading ? (
+                  <div className="flex items-center">
+                    <svg className="w-4 h-4 mr-2 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Processing...
+                  </div>
+                ) : (
+                  buttonText
+                )}
               </button>
             </div>
           </div>
@@ -741,6 +784,21 @@ function ManageStudents() {
                     <div className="p-6 rounded-lg bg-gray-50">
                       <h3 className="mb-4 text-lg font-medium text-gray-900">Create New Parent Account</h3>
                       <form onSubmit={handleRegisterParent} className="space-y-4">
+                        <div>
+                          <label className="block mb-1 text-sm font-medium text-gray-700">
+                            Username (Phone or Email) *
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Enter phone or email"
+                            value={parentForm.username || ""}
+                            onChange={(e) =>
+                              setParentForm({ ...parentForm, username: e.target.value })
+                            }
+                            className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500"
+                            required
+                          />
+                        </div>
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                           <div>
                             <label className="block mb-1 text-sm font-medium text-gray-700">
@@ -759,17 +817,16 @@ function ManageStudents() {
                           </div>
                           <div>
                             <label className="block mb-1 text-sm font-medium text-gray-700">
-                              Phone Number *
+                              Phone Number
                             </label>
                             <input
                               type="text"
-                              placeholder="Enter phone number"
+                              placeholder="Enter phone number (optional)"
                               value={parentForm.phone || ""}
                               onChange={(e) =>
                                 setParentForm({ ...parentForm, phone: e.target.value })
                               }
                               className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500"
-                              required
                             />
                           </div>
                         </div>
@@ -791,17 +848,16 @@ function ManageStudents() {
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                           <div>
                             <label className="block mb-1 text-sm font-medium text-gray-700">
-                              Email Address *
+                              Email Address
                             </label>
                             <input
                               type="email"
-                              placeholder="Enter email address"
+                              placeholder="Enter email address (optional)"
                               value={parentForm.email || ""}
                               onChange={(e) =>
                                 setParentForm({ ...parentForm, email: e.target.value })
                               }
                               className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-blue-500"
-                              required
                             />
                           </div>
                           <div>
@@ -842,9 +898,24 @@ function ManageStudents() {
                         <div className="flex justify-end pt-4">
                           <button
                             type="submit"
-                            className="px-6 py-2 text-sm font-medium text-white transition-colors duration-200 bg-green-600 rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                            disabled={isRegisteringParent}
+                            className={`px-6 py-2 text-sm font-medium text-white transition-colors duration-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
+                              isRegisteringParent 
+                                ? 'bg-green-400 cursor-not-allowed' 
+                                : 'bg-green-600 hover:bg-green-700'
+                            }`}
                           >
-                            Register Parent & Continue
+                            {isRegisteringParent ? (
+                              <div className="flex items-center">
+                                <svg className="w-4 h-4 mr-2 animate-spin" fill="none" viewBox="0 0 24 24">
+                                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Registering...
+                              </div>
+                            ) : (
+                              'Register Parent & Continue'
+                            )}
                           </button>
                         </div>
                       </form>
@@ -991,6 +1062,7 @@ function ManageStudents() {
                 <StudentForm
                   onSubmit={handleRegisterStudent}
                   classes={classes}
+                  isLoading={isRegisteringStudent}
                 />
               )}
             </div>
@@ -1030,6 +1102,7 @@ function ManageStudents() {
               initialData={selectedStudent}
               classes={classes}
               buttonText="Update Student"
+              isLoading={isUpdatingStudent}
             />
           </div>
         </div>
