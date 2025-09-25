@@ -1,4 +1,4 @@
-In'l { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSchoolInfo } from '../../redux/features/schoolSlice';
