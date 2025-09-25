@@ -721,26 +721,26 @@ function ManageStudents() {
 
       {/* Add Student Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
-          <div className="w-full max-w-2xl bg-white rounded-xl shadow-2xl max-h-[90vh] overflow-hidden flex flex-col">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black bg-opacity-50">
+          <div className="w-full sm:max-w-2xl lg:max-w-4xl bg-white rounded-t-xl sm:rounded-xl shadow-2xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col">
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-gray-50">
-              <div>
-                <h2 className="text-xl font-semibold text-gray-900">Add New Student</h2>
-                <p className="mt-1 text-sm text-gray-600">
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-gray-50">
+              <div className="flex-1 min-w-0">
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 truncate">Add New Student</h2>
+                <p className="mt-1 text-xs sm:text-sm text-gray-600">
                   Step {step} of 2: {step === 1 ? 'Select Parent' : 'Student Information'}
                 </p>
               </div>
               <button
                 onClick={resetAddModal}
-                className="p-2 text-gray-400 transition-colors duration-200 rounded-lg hover:text-gray-600 hover:bg-gray-200"
+                className="p-2 ml-2 text-gray-400 transition-colors duration-200 rounded-lg hover:text-gray-600 hover:bg-gray-200 flex-shrink-0"
               >
-                <FaTimes size={18} />
+                <FaTimes size={16} className="sm:w-[18px] sm:h-[18px]" />
               </button>
             </div>
 
             {/* Modal Body */}
-            <div className="flex-1 p-6 overflow-y-auto">
+            <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
               {step === 1 && (
                 <>
                   <div className="p-4 mb-6 border border-orange-200 rounded-lg bg-orange-50">
@@ -781,8 +781,8 @@ function ManageStudents() {
 
                   {/* new parent form */}
                   {parentOption === "new" && (
-                    <div className="p-6 rounded-lg bg-gray-50">
-                      <h3 className="mb-4 text-lg font-medium text-gray-900">Create New Parent Account</h3>
+                    <div className="p-4 sm:p-6 rounded-lg bg-gray-50">
+                      <h3 className="mb-4 text-base sm:text-lg font-medium text-gray-900">Create New Parent Account</h3>
                       <form onSubmit={handleRegisterParent} className="space-y-4">
                         <div>
                           <label className="block mb-1 text-sm font-medium text-gray-700">
@@ -878,18 +878,18 @@ function ManageStudents() {
                             </select>
                           </div>
                         </div>
-                        <div className="p-4 border rounded-lg bg-primary border-primary-200">
+                        <div className="p-3 sm:p-4 border rounded-lg bg-primary border-primary-200">
                           <div className="flex items-start">
                             <div className="flex-shrink-0">
-                              <svg className="w-5 h-5 text-primary-400" fill="currentColor" viewBox="0 0 20 20">
+                              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-primary-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                               </svg>
                             </div>
-                            <div className="ml-3">
-                              <h3 className="text-sm font-medium text-primary-800">
+                            <div className="ml-2 sm:ml-3">
+                              <h3 className="text-xs sm:text-sm font-medium text-primary-800">
                                 Automatic Password Generation
                               </h3>
-                              <div className="mt-2 text-sm text-primary-700">
+                              <div className="mt-1 sm:mt-2 text-xs sm:text-sm text-primary-700">
                                 <p>A temporary password will be automatically generated and sent to the parent's email address. The password will be created using their personal information for security.</p>
                               </div>
                             </div>
@@ -899,7 +899,7 @@ function ManageStudents() {
                           <button
                             type="submit"
                             disabled={isRegisteringParent}
-                            className={`px-6 py-2 text-sm font-medium text-white transition-colors duration-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
+                            className={`w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-2 text-sm font-medium text-white transition-colors duration-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
                               isRegisteringParent 
                                 ? 'bg-green-400 cursor-not-allowed' 
                                 : 'bg-green-600 hover:bg-green-700'
@@ -924,8 +924,8 @@ function ManageStudents() {
 
                   {/* existing parent search */}
                   {parentOption === "existing" && (
-                    <div className="p-6 rounded-lg bg-gray-50">
-                      <h3 className="mb-4 text-lg font-medium text-gray-900">Select Existing Parent</h3>
+                    <div className="p-4 sm:p-6 rounded-lg bg-gray-50">
+                      <h3 className="mb-4 text-base sm:text-lg font-medium text-gray-900">Select Existing Parent</h3>
                       <div className="space-y-4">
                         <div className="relative">
                           <label className="block mb-2 text-sm font-medium text-gray-700">
@@ -1068,11 +1068,11 @@ function ManageStudents() {
             </div>
 
             {/* Modal Footer */}
-            <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
+            <div className="flex flex-col sm:flex-row items-center justify-between p-4 sm:p-6 border-t border-gray-200 bg-gray-50 space-y-2 sm:space-y-0">
               {step === 2 && (
                 <button
                   onClick={() => setStep(1)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 transition-colors duration-200 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 transition-colors duration-200 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
                 >
                   Back to Parent Selection
                 </button>
@@ -1088,15 +1088,15 @@ function ManageStudents() {
 
       {/* Edit Student Modal */}
       {showEditModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 bg-black/30">
-          <div className="relative w-full max-w-md p-4 bg-white rounded-lg sm:max-w-2xl sm:p-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/30">
+          <div className="relative w-full max-w-md p-4 bg-white rounded-lg sm:max-w-2xl sm:p-6 max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setShowEditModal(false)}
-              className="absolute text-gray-600 top-2 right-2 hover:text-black"
+              className="absolute text-gray-600 top-3 right-3 hover:text-black z-10"
             >
-              <FaTimes size={20} />
+              <FaTimes size={18} className="sm:w-5 sm:h-5" />
             </button>
-            <h2 className="mb-4 text-lg font-bold">Edit Student</h2>
+            <h2 className="mb-4 text-base sm:text-lg font-bold pr-8">Edit Student</h2>
             <StudentForm
               onSubmit={handleUpdateStudent}
               initialData={selectedStudent}
