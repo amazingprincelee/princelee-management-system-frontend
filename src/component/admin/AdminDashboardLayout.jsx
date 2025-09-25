@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+In'l { useState, useEffect, useRef } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSchoolInfo } from '../../redux/features/schoolSlice';
@@ -20,7 +20,7 @@ import {
 } from "react-icons/fa";
 
 function AdminDashboardLayout() {
-  const [schoolName, setSchoolName] = useState("Bedetels In'l Academy");
+  const [schoolName, setSchoolName] = useState("Bedetels Int'l Academy");
   const [isOpen, setIsOpen] = useState(false);
   const sidebarRef = useRef(null);
   const {school, loading, error} = useSelector((state)=> state.school)
