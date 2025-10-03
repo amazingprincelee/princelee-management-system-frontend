@@ -11,8 +11,7 @@ function Contact() {
           </h2>
           <p className="max-w-2xl mx-auto mt-4 text-lg text-gray-600">
             We’d love to hear from you! Whether you’re a parent seeking
-            admission information, a guardian with questions, or a visitor,
-            feel free to reach out.
+            to add more features, or want to know more about the system.
           </p>
         </div>
 
@@ -23,8 +22,8 @@ function Contact() {
             <FaMapMarkerAlt className="text-[#284ea1] text-3xl mx-auto mb-4" />
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Our Location</h3>
             <p className="text-gray-600">
-              Bedetels Triumphant International Academy <br />
-              No. 1 Kogam Street, Bori Ogoni, Rivers State, Nigeria
+              Nigeria <br />
+              Port Harcourt, Rivers State
             </p>
           </div>
 
@@ -33,15 +32,14 @@ function Contact() {
             <FaPhone className="text-[#284ea1] text-3xl mx-auto mb-4" />
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Call Us</h3>
             <p className="text-gray-600">+234 803 542 1019</p>
-            <p className="text-gray-600">+234 816 234 5678</p>
+            <p className="text-gray-600">+234 913 387 9083</p>
           </div>
 
           {/* Email */}
           <div className="p-6 text-center bg-white shadow-md rounded-xl">
             <FaEnvelope className="text-[#284ea1] text-3xl mx-auto mb-4" />
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Email Us</h3>
-            <p className="text-gray-600">info@bedetelsacademy.com</p>
-            <p className="text-gray-600">admissions@bedetelsacademy.com</p>
+            <p className="text-gray-600">princeleepraise@gmail.com</p>
           </div>
         </div>
 

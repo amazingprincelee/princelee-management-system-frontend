@@ -18,6 +18,7 @@ import {
   FaGlobe,
   FaMobile,
   FaShieldAlt,
+  FaWhatsapp,
 } from "react-icons/fa";
 
 
@@ -25,6 +26,14 @@ function LandingPage() {
   const primaryColor = "#284ea1";
 
   const { token } = useSelector((state)=> state.auth)
+
+   // Function to handle WhatsApp redirect
+  const handleGetApplication = () => {
+    const phoneNumber = "+2349133879083";
+    const message = "Hello! I'm interested in getting the Prince Lee EduSuite application for my school. Can you provide me with more information?";
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
 
   return (
     <div className="text-gray-800 bg-gray-50">
@@ -549,13 +558,13 @@ function LandingPage() {
            </div>
 
            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-             <Link
-               to="/pricing"
-               className="bg-yellow-400 text-[#284ea1] px-10 py-4 rounded-lg font-bold text-lg hover:bg-yellow-300 transition transform hover:scale-105 shadow-lg flex items-center"
+             <button
+               onClick={handleGetApplication}
+               className="flex items-center px-10 py-4 text-lg font-bold text-white transition transform bg-green-600 rounded-lg shadow-lg hover:bg-green-500 hover:scale-105"
              >
+               <FaWhatsapp className="mr-2" />
                Get this application
-               <FaPlay className="ml-2" />
-             </Link>
+             </button>
              <Link
                to="/login"
                className="flex items-center px-8 py-4 font-semibold text-white transition border-2 rounded-lg bg-white/10 backdrop-blur border-white/30 hover:bg-white/20"
