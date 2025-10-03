@@ -9,6 +9,7 @@ function AddTeacherComponent() {
   const [form, setForm] = useState({
     fullname: "",
     username: "",
+    email: "",
     phone: "",
     gender: "",
     address: "",
@@ -85,14 +86,22 @@ function AddTeacherComponent() {
       case 1:
         // Basic Information
         { if (!form.fullname.trim()) newErrors.fullname = "Full name is required";
-        if (!form.username.trim()) newErrors.username = "Username (email or phone) is required";
-        // Validate if username is either email or phone
-        const isEmail = form.username.includes("@");
-        const isPhone = /^\+?[\d\s-()]+$/.test(form.username);
-        if (!isEmail && !isPhone) {
-          newErrors.username = "Username must be a valid email or phone number";
+        if (!form.username.trim()) newErrors.username = "Username is required";
+        if (!form.email.trim()) newErrors.email = "Email is required";
+        
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (form.email.trim() && !emailRegex.test(form.email)) {
+          newErrors.email = "Please enter a valid email address";
         }
+        
+        // Validate phone
         if (!form.phone.trim()) newErrors.phone = "Phone number is required";
+        const phoneRegex = /^\+?[\d\s-()]{10,}$/;
+        if (form.phone.trim() && !phoneRegex.test(form.phone)) {
+          newErrors.phone = "Please enter a valid phone number";
+        }
+        
         if (!form.gender) newErrors.gender = "Gender is required";
         break; }
 
@@ -124,6 +133,7 @@ function AddTeacherComponent() {
     setForm({
       fullname: "",
       username: "",
+      email: "",
       phone: "",
       gender: "",
       address: "",
@@ -167,6 +177,7 @@ function AddTeacherComponent() {
       const teacherData = {
         fullname: form.fullname,
         username: form.username.trim().toLowerCase(),
+        email: form.email.trim().toLowerCase(),
         phone: form.phone,
         gender: form.gender,
         address: form.address,
@@ -195,7 +206,7 @@ function AddTeacherComponent() {
       // Reset form and navigate after successful submission
       resetForm();
       
-      // Navigate to the add teacher page (refresh the form)
+      // Navigate to the teachers list page
       setTimeout(() => {
         navigate("/dashboard/teachers");
       }, 1500);
@@ -322,14 +333,14 @@ function AddTeacherComponent() {
 
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-700">
-            Username (Email or Phone) *
+            Username *
           </label>
           <input
             type="text"
             name="username"
             value={form.username}
             onChange={handleChange}
-            placeholder="email@example.com or phone number"
+            placeholder="Enter username"
             className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
               errors.username ? "border-red-500" : "border-gray-300"
             }`}
@@ -339,7 +350,30 @@ function AddTeacherComponent() {
             <p className="mt-1 text-sm text-red-600">{errors.username}</p>
           )}
           <p className="mt-1 text-xs text-gray-500">
-            This will be used for login. Password will be auto-generated and sent via email.
+            This will be used for login.
+          </p>
+        </div>
+
+        <div>
+          <label className="block mb-2 text-sm font-medium text-gray-700">
+            Email Address *
+          </label>
+          <input
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            placeholder="email@example.com"
+            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
+              errors.email ? "border-red-500" : "border-gray-300"
+            }`}
+            required
+          />
+          {errors.email && (
+            <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+          )}
+          <p className="mt-1 text-xs text-gray-500">
+            Password will be auto-generated and sent to this email.
           </p>
         </div>
 
@@ -352,6 +386,7 @@ function AddTeacherComponent() {
             name="phone"
             value={form.phone}
             onChange={handleChange}
+            placeholder="+1234567890"
             className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
               errors.phone ? "border-red-500" : "border-gray-300"
             }`}
@@ -394,6 +429,7 @@ function AddTeacherComponent() {
           value={form.address}
           onChange={handleChange}
           rows="3"
+          placeholder="Enter full address"
           className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
       </div>

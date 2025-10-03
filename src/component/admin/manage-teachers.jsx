@@ -3,7 +3,7 @@ import axios from "axios";
 import { baseUrl } from "../../utils/baseUrl";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchTeachers } from "../../redux/features/teacherSlice";
-import { FaEdit, FaTrash, FaPlus, FaSearch, FaTimes } from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus, FaSearch, FaTimes, FaEye, FaKey, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -115,6 +115,7 @@ function ManageTeachers() {
   const dispatch = useDispatch();
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [formData, setFormData] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
@@ -141,7 +142,8 @@ function ManageTeachers() {
       result = result.filter(
         (teacher) =>
           teacher.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          teacher.email.toLowerCase().includes(searchTerm.toLowerCase())
+          teacher.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          teacher.username?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -264,10 +266,146 @@ function ManageTeachers() {
     navigate("/dashboard/add-teachers");
   };
 
-
+  const handleViewTeacher = (teacher) => {
+    setSelectedTeacher(teacher);
+    setShowViewModal(true);
+  };
 
   const designations = [...new Set(teachers?.map((t) => t.designation) || [])].sort();
   const subjects = [...new Set(teachers?.flatMap((t) => t.subjects || []) || [])].sort();
+
+  // Teacher Details Modal Component
+  const TeacherDetailsModal = ({ teacher, onClose }) => (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30">
+      <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-xl shadow-2xl">
+        <div className="sticky top-0 px-6 py-4 bg-white border-b border-gray-200 rounded-t-xl">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-gray-900">Teacher Details</h2>
+            <button
+              onClick={onClose}
+              className="text-gray-400 transition-colors duration-200 hover:text-gray-600"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div className="p-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {/* Personal Information */}
+            <div className="space-y-4">
+              <h3 className="pb-2 text-lg font-semibold text-gray-900 border-b">Personal Information</h3>
+              <div className="space-y-3">
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Full Name</label>
+                  <p className="text-gray-900">{teacher.fullname}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Username</label>
+                  <p className="text-gray-900">{teacher.username}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Email</label>
+                  <p className="text-gray-900">{teacher.email}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Phone</label>
+                  <p className="text-gray-900">{teacher.phone || 'Not provided'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Gender</label>
+                  <p className="text-gray-900">{teacher.gender || 'Not specified'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Address</label>
+                  <p className="text-gray-900">{teacher.address || 'Not provided'}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Professional Information */}
+            <div className="space-y-4">
+              <h3 className="pb-2 text-lg font-semibold text-gray-900 border-b">Professional Information</h3>
+              <div className="space-y-3">
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Designation</label>
+                  <p className="text-gray-900">{teacher.designation || 'Not assigned'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Salary</label>
+                  <p className="text-gray-900">{teacher.salary ? `₦${teacher.salary.toLocaleString()}` : 'Not set'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Employment Status</label>
+                  <p className="text-gray-900 capitalize">{teacher.status || 'full time'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Password Status</label>
+                  <div className="flex items-center space-x-2">
+                    {teacher.updatedPassword ? (
+                      <>
+                        <FaCheckCircle className="text-green-500" />
+                        <span className="font-medium text-green-700">Updated by Teacher</span>
+                      </>
+                    ) : (
+                      <>
+                        <FaTimesCircle className="text-orange-500" />
+                        <span className="font-medium text-orange-700">Using Generated Password</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+                {teacher.generatedParentPassword && (
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Generated Password</label>
+                    <p className="p-2 font-mono text-gray-900 bg-gray-100 rounded">{teacher.generatedParentPassword}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Subjects Section - Full width */}
+            <div className="space-y-4 md:col-span-2">
+              <h3 className="pb-2 text-lg font-semibold text-gray-900 border-b">Subjects</h3>
+              <div className="flex flex-wrap gap-2">
+                {teacher.subjects && teacher.subjects.length > 0 ? (
+                  teacher.subjects.map((subject, idx) => (
+                    <span key={idx} className="inline-flex px-3 py-2 text-sm font-medium text-blue-800 bg-blue-100 border border-blue-200 rounded-full">
+                      {subject}
+                    </span>
+                  ))
+                ) : (
+                  <p className="italic text-gray-500">No subjects assigned</p>
+                )}
+              </div>
+            </div>
+
+            {/* Bank Details */}
+            {(teacher.bankDetails?.bankName || teacher.bankDetails?.bankAccount || teacher.bankDetails?.accountName) && (
+              <div className="space-y-4 md:col-span-2">
+                <h3 className="pb-2 text-lg font-semibold text-gray-900 border-b">Bank Details</h3>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Bank Name</label>
+                    <p className="text-gray-900">{teacher.bankDetails.bankName}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Account Number</label>
+                    <p className="text-gray-900">{teacher.bankDetails.bankAccount}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Account Name</label>
+                    <p className="text-gray-900">{teacher.bankDetails.accountName}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="space-y-6">
@@ -279,7 +417,6 @@ function ManageTeachers() {
         </div>
         <button
           onClick={handleAddTeacherRoute}
-          
           className="flex items-center justify-center px-4 py-2 text-sm font-medium text-white transition-colors duration-200 rounded-l bg-primary hover:bg-blue-600"
         >
           <FaPlus className="w-4 h-4 mr-2" /> Add Teacher
@@ -293,7 +430,7 @@ function ManageTeachers() {
             <FaSearch className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
             <input
               type="text"
-              placeholder="Search by name or email..."
+              placeholder="Search by name, email, or username..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full py-2 pl-10 pr-4 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-300 focus:border-orange-400"
@@ -371,10 +508,17 @@ function ManageTeachers() {
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-medium text-gray-900 truncate">{teacher.fullname}</div>
                         <div className="text-sm text-gray-500 truncate">{teacher.email}</div>
-                        <div className="text-xs text-gray-400">{teacher.phone || 'No phone'}</div>
+                        <div className="text-xs text-gray-400">{teacher.username}</div>
                       </div>
                     </div>
                     <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleViewTeacher(teacher)}
+                        className="p-2 text-blue-600 transition-colors duration-200 rounded hover:text-blue-900 hover:bg-blue-50"
+                        title="View details"
+                      >
+                        <FaEye className="w-4 h-4" />
+                      </button>
                       <button
                         onClick={() => {
                           setSelectedTeacher(teacher);
@@ -414,22 +558,25 @@ function ManageTeachers() {
                         <span className="text-xs font-medium text-gray-900">₦{teacher.salary.toLocaleString()}</span>
                       </div>
                     )}
-                    <div className="flex items-start justify-between">
-                      <span className="text-xs text-gray-500">Subjects:</span>
-                      <div className="flex flex-wrap max-w-xs gap-1">
-                        {teacher.subjects && teacher.subjects.length > 0 ? (
-                          teacher.subjects.slice(0, 3).map((subject, idx) => (
-                            <span key={idx} className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-primary text-primary-800">
-                              {subject}
-                            </span>
-                          ))
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500">Password:</span>
+                      <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
+                        teacher.updatedPassword 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-orange-100 text-orange-800'
+                      }`}>
+                        {teacher.updatedPassword ? (
+                          <>
+                            <FaCheckCircle className="w-3 h-3 mr-1" />
+                            Updated
+                          </>
                         ) : (
-                          <span className="text-xs italic text-gray-400">No subjects</span>
+                          <>
+                            <FaKey className="w-3 h-3 mr-1" />
+                            Generated
+                          </>
                         )}
-                        {teacher.subjects && teacher.subjects.length > 3 && (
-                          <span className="text-xs text-gray-500">+{teacher.subjects.length - 3} more</span>
-                        )}
-                      </div>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -451,12 +598,12 @@ function ManageTeachers() {
             <thead>
               <tr className="border-b border-gray-200 bg-gray-50">
                 <th className="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Name</th>
+                <th className="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Username</th>
                 <th className="hidden px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase md:table-cell">Email</th>
                 <th className="hidden px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase lg:table-cell">Phone</th>
-                <th className="hidden px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase xl:table-cell">Address</th>
                 <th className="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Designation</th>
                 <th className="hidden px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase lg:table-cell">Salary</th>
-                <th className="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Subjects</th>
+                <th className="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Password Status</th>
                 <th className="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Actions</th>
               </tr>
             </thead>
@@ -481,19 +628,19 @@ function ManageTeachers() {
                       </div>
                     </td>
                     
+                    {/* Username Column */}
+                    <td className="px-3 py-4 text-sm text-gray-900 whitespace-nowrap">
+                      {teacher.username}
+                    </td>
+                    
                     {/* Email Column - Hidden on small screens */}
-                    <td className="hidden px-3 py-4 text-sm text-gray-900 whitespace-nowrap md:table-cell">{teacher.email}</td>
+                    <td className="hidden px-3 py-4 text-sm text-gray-900 whitespace-nowrap md:table-cell">
+                      {teacher.email}
+                    </td>
                     
                     {/* Phone Column - Hidden on medium and smaller screens */}
                     <td className="hidden px-3 py-4 text-sm text-gray-900 whitespace-nowrap lg:table-cell">
                       {teacher.phone || 'Not provided'}
-                    </td>
-                    
-                    {/* Address Column - Hidden on large and smaller screens */}
-                    <td className="hidden px-3 py-4 text-sm text-gray-900 xl:table-cell">
-                      <div className="max-w-xs truncate" title={teacher.address || 'Not provided'}>
-                        {teacher.address || 'Not provided'}
-                      </div>
                     </td>
                     
                     {/* Designation Column */}
@@ -508,46 +655,37 @@ function ManageTeachers() {
                       {teacher.salary ? `₦${teacher.salary.toLocaleString()}` : 'Not set'}
                     </td>
                     
-                    {/* Subjects Column - Responsive design for multiple subjects */}
-                    <td className="px-3 py-4 text-sm text-gray-900">
-                      <div className="max-w-xs">
-                        {teacher.subjects && teacher.subjects.length > 0 ? (
-                          teacher.subjects.length <= 2 ? (
-                            <div className="flex flex-wrap gap-1">
-                              {teacher.subjects.map((subject, idx) => (
-                                <span key={idx} className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-primary text-primary-800">
-                                  {subject}
-                                </span>
-                              ))}
-                            </div>
-                          ) : (
-                            <div className="relative group">
-                              <div className="flex flex-wrap gap-1">
-                                {teacher.subjects.slice(0, 2).map((subject, idx) => (
-                                  <span key={idx} className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-primary text-primary-800">
-                                    {subject}
-                                  </span>
-                                ))}
-                                <span className="inline-flex px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full cursor-pointer">
-                                  +{teacher.subjects.length - 2} more
-                                </span>
-                              </div>
-                              {/* Tooltip for all subjects */}
-                              <div className="absolute left-0 z-10 invisible px-3 py-2 mb-2 text-xs text-white bg-gray-900 rounded-lg shadow-lg group-hover:visible bottom-full whitespace-nowrap">
-                                All subjects: {teacher.subjects.join(", ")}
-                                <div className="absolute w-0 h-0 border-t-4 border-l-4 border-r-4 border-transparent top-full left-4 border-t-gray-900"></div>
-                              </div>
-                            </div>
-                          )
+                    {/* Password Status Column */}
+                    <td className="px-3 py-4 whitespace-nowrap">
+                      <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
+                        teacher.updatedPassword 
+                          ? 'bg-green-100 text-green-800 border border-green-200' 
+                          : 'bg-orange-100 text-orange-800 border border-orange-200'
+                      }`}>
+                        {teacher.updatedPassword ? (
+                          <>
+                            <FaCheckCircle className="w-3 h-3 mr-1" />
+                            Updated
+                          </>
                         ) : (
-                          <span className="italic text-gray-500">No subjects assigned</span>
+                          <>
+                            <FaKey className="w-3 h-3 mr-1" />
+                            Generated
+                          </>
                         )}
-                      </div>
+                      </span>
                     </td>
                     
                     {/* Actions Column */}
                     <td className="px-3 py-4 text-sm font-medium whitespace-nowrap">
                       <div className="flex space-x-2">
+                        <button
+                          onClick={() => handleViewTeacher(teacher)}
+                          className="p-1 text-blue-600 transition-colors duration-200 rounded hover:text-blue-900 hover:bg-blue-50"
+                          title="View details"
+                        >
+                          <FaEye className="w-4 h-4" />
+                        </button>
                         <button
                           onClick={() => {
                             setSelectedTeacher(teacher);
@@ -651,6 +789,14 @@ function ManageTeachers() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* View Teacher Details Modal */}
+      {showViewModal && selectedTeacher && (
+        <TeacherDetailsModal 
+          teacher={selectedTeacher} 
+          onClose={() => setShowViewModal(false)} 
+        />
       )}
     </div>
   );
