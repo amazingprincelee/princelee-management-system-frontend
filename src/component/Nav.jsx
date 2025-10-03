@@ -77,7 +77,7 @@ function NavComponent() {
                 {schoolLoading ? (
                   <span className="animate-pulse">Loading...</span>
                 ) : (
-                  school?.schoolName || "BEDETELS TRIUMPHANT INT'L ACADEMY"
+                  school?.schoolName || "PRINCELEE SCHOOL MGT SYSTEM"
                 )}
               </Link>
             </div>
