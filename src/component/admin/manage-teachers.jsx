@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchTeachers } from "../../redux/features/teacherSlice";
 import { FaEdit, FaTrash, FaPlus, FaSearch, FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 // TeacherForm component moved outside to prevent recreation on every render
 const TeacherForm = ({ onSubmit, initialData = {}, formData, setFormData, isLoading = false }) => (
@@ -126,6 +127,8 @@ function ManageTeachers() {
   const [filterError, setFilterError] = useState(null);
   const [isAddingTeacher, setIsAddingTeacher] = useState(false);
   const [isUpdatingTeacher, setIsUpdatingTeacher] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchTeachers());
@@ -257,6 +260,10 @@ function ManageTeachers() {
     setFilterError(null);
   };
 
+  const handleAddTeacherRoute = () => {
+    navigate("/dashboard/add-teachers");
+  };
+
 
 
   const designations = [...new Set(teachers?.map((t) => t.designation) || [])].sort();
@@ -271,7 +278,8 @@ function ManageTeachers() {
           <p className="mt-1 text-sm text-gray-600">Add, edit, and manage teacher records</p>
         </div>
         <button
-          onClick={() => setShowAddModal(true)}
+          onClick={handleAddTeacherRoute}
+          
           className="flex items-center justify-center px-4 py-2 text-sm font-medium text-white transition-colors duration-200 rounded-l bg-primary hover:bg-blue-600"
         >
           <FaPlus className="w-4 h-4 mr-2" /> Add Teacher
