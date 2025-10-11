@@ -29,7 +29,7 @@ function LandingPage() {
 
    // Function to handle WhatsApp redirect
   const handleGetApplication = () => {
-    const phoneNumber = "+2349133879083";
+    const phoneNumber = "+2348035421019";
     const message = "Hello! I'm interested in getting the Prince Lee EduSuite application for my school. Can you provide me with more information?";
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
